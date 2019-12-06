@@ -9,7 +9,11 @@ tk = Tk()
 tk.title('Traffic Simulation')
 canvas = Canvas(tk, width=WIDTH, height=HEIGHT, bg="lightgreen")
 
-map = Map(canvas)
+road_map =   [['0', '0'],
+        ['0', '0']]
+
+map = Map(canvas, road_map)
+map.createRoads(road_map)
 map.addVeichle()
 
 #Timer(0, map.update).start()

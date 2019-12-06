@@ -1,6 +1,7 @@
 from tkinter import Tk, Canvas
 from threading import Timer
 from map import Map
+from render import RenderEngine
 
 WIDTH = 500
 HEIGHT = 500
@@ -9,10 +10,13 @@ tk = Tk()
 tk.title('Traffic Simulation')
 canvas = Canvas(tk, width=WIDTH, height=HEIGHT, bg="lightgreen")
 
-road_map =   [['0', '0'],
-        ['0', '0']]
+renderEngine = RenderEngine(canvas, WIDTH, HEIGHT)
 
-map = Map(canvas, road_map)
+road_map    =  [['|', '='],
+                ['#', '='],
+                ['|', '#']]
+
+map = Map(renderEngine, road_map, 100)
 map.createRoads(road_map)
 map.addVeichle()
 

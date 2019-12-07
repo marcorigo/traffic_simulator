@@ -20,7 +20,7 @@ def game():
                     ['#',  0],
                     [ 0 , '#']]
 
-    map = Map(renderEngine, road_map, 100)
+    map = Map(renderEngine, clock, road_map, 100)
     map.createRoads(road_map)
     car1 = map.addVeichle()
 
@@ -38,6 +38,8 @@ def game():
                     car1.controls["left"] = True
                 elif ev.key == ord('d'):
                     car1.controls["rigth"] = True
+                elif ev.key == [pygame.K_SPACE]:
+                    car1.controls["space"] = True
             if ev.type == pygame.KEYUP:
                 if ev.key == ord('w'):
                     car1.controls["up"] = False
@@ -47,10 +49,12 @@ def game():
                     car1.controls["left"] = False
                 elif ev.key == ord('d'):
                     car1.controls["rigth"] = False
+                elif ev.key == [pygame.K_SPACE]:
+                    car1.controls["space"] = False
         canvas.fill((173,216,230))
         map.update()
         # print(clock.get_fps())
         # pygame.display.flip()
         pygame.display.update()
-        clock.tick(40)
+        clock.tick(60)
 game()

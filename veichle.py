@@ -1,81 +1,65 @@
 from tkinter import Canvas
 from random import Random
-import math
+from math import sin, radians, degrees, copysign
+from pygame.math import Vector2
 
 class Veichle:
-    def __init__(self, posx = 0, posy = 0):
-        self.x = posx
-        self.y = posy
+    def __init__(self, posx, posy, angle=0.0, length=4, max_steering=100, max_acceleration=5.0):
         self.model = None
-        self.speed = 1
-        self.vx = 0
-        self.vy = 0
-        self.ax = 0
-        self.ay = 0
-        self.rv = 0
-        self.angle = 0
-        self.accelerationAmount = 0.005
-        self.decelerationAmount = 0.005
-        self.friction = 0.97
-        self.rotation = 2
-        self.controls = { "up": False, "down": False, "left": False, "rigth": False }
+        self.dt = 0
+        self.position = Vector2(posx, posy)
+        self.velocity = Vector2(0.0, 0.0)
+        self.angle = angle
+        self.length = length
+        self.max_acceleration = max_acceleration
+        self.max_steering = max_steering
+        self.max_velocity = 10
+        self.brake_deceleration = 10
+        self.free_deceleration = 5
+        self.acceleration = 0.0
+        self.steering = 0.0
+        self.controls = { "up": False, "down": False, "left": False, "rigth": False, "space": False }
     
     def move(self):
-        print(self.angle)
-        if self.controls["up"]:
-            self.accelerate(False)
-        if self.controls["down"]:
-            self.accelerate(True)
-        if self.controls["left"]:
-            self.rotate('left')
-        if self.controls["rigth"]:
-            self.rotate('rigth')
-
-    def accelerate(self, backwards):
-        if backwards:
-            self.ax -= math.cos(math.radians(self.angle)) * self.decelerationAmount
-            self.ay -= math.sin(math.radians(self.angle)) * self.decelerationAmount
+        if self.controls['up']:
+            if self.velocity.x < 0:
+                self.acceleration = self.brake_deceleration
+            else:
+                self.acceleration += 1 * self.dt
+        elif self.controls['down']:
+            if self.velocity.x > 0:
+                self.acceleration = -self.brake_deceleration
+            else:
+                self.acceleration -= 1 * self.dt
+        elif self.controls['space']:
+            if abs(self.velocity.x) > self.dt * self.brake_deceleration:
+                self.acceleration = -copysign(self.brake_deceleration, self.velocity.x)
+            else:
+                self.acceleration = -self.velocity.x / self.dt
         else:
-            self.ax += math.cos(math.radians(self.angle)) * self.accelerationAmount
-            self.ay += math.sin(math.radians(self.angle)) * self.accelerationAmount
+            if abs(self.velocity.x) > self.dt * self.free_deceleration:
+                self.acceleration = -copysign(self.free_deceleration, self.velocity.x)
+            else:
+                if self.dt != 0:
+                    self.acceleration = -self.velocity.x / self.dt
+        self.acceleration = max(-self.max_acceleration, min(self.acceleration, self.max_acceleration))
+        if self.controls['left']:
+            self.steering += 60 * self.dt
+        if self.controls['rigth']:
+            self.steering -= 60 * self.dt
 
-    def updatePosition(self):
-        self.vx += self.ax
-        self.vy += self.ay
+        self.steering = max(-self.max_steering, min(self.steering, self.max_steering))
 
-        # if(self.x + 20 + self.vx > width):
-        #   self.x = width - 20
-        #   self.vx = 0
-        #   self.ax = 0
+    def update(self, dt):
+        self.dt = dt
+        self.velocity += (self.acceleration * self.dt, 0)
+        self.velocity.x = max(-self.max_velocity, min(self.velocity.x, self.max_velocity))
 
-        # if(self.x + self.vx < 0):
-        #   self.x = 0
-        #   self.vx = 0
-        #   self.ax = 0
+        if self.steering:
+            turning_radius = self.length / sin(radians(self.steering))
+            angular_velocity = self.velocity.x / turning_radius
+        else:
+            angular_velocity = 0
 
-        # if(self.y + self.vy < 0):
-        #   self.y = 0
-        #   self.vy = 0
-        #   self.ay = 0
-
-        # if(self.y + 20 + self.vy > height):
-        #   self.y = height - 20
-        #   self.vy = 0
-        #   self.ay = 0
-
-        #Update position
-        self.x += self.vx
-        self.y += self.vy
-        self.applyFriction()
-
-    def applyFriction(self):
-        self.vx *= self.friction
-        self.vy *= self.friction
-        self.ax *= self.friction
-        self.ay *= self.friction
-
-    def rotate(self, dir):
-        if(dir == 'left'): 
-            self.angle += self.rotation
-        else: 
-            self.angle -= self.rotation
+        self.position += self.velocity.rotate(-self.angle) * self.dt
+        self.angle += degrees(angular_velocity) * self.dt

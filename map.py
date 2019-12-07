@@ -17,11 +17,11 @@ class Map:
                 road.draw(self.renderEngine)
 
     def addVeichle(self):
-        veichle = Car()
-        veichle.model = self.renderEngine.drawRect(veichle.posx, veichle.posy, veichle.posx + veichle.width, veichle.posy + veichle.heigth, 'red')
+        veichle = Car( cell_width = self.cell_width)
+        veichle.model = self.renderEngine.drawRect(veichle.x, veichle.y, veichle.x + veichle.width, veichle.y + veichle.heigth, 'red')
         self.veichles.append(veichle)
 
     def update(self):
         for veichle in self.veichles:
-            veichle.move()
+            veichle.accelerate()
             self.renderEngine.move(veichle.model, veichle.speed, 0)

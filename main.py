@@ -27,7 +27,6 @@ def update():
     tk.after(2, update)
 
 update()
-
 #tk.after(2, map.update)
 
 canvas.focus_set()

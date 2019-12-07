@@ -16,15 +16,15 @@ class Veichle:
         self.ay = 0
         self.rv = 0
         self.angle = rotation
-        self.accelerationAmount = 0.01
-        self.decelerationAmount = 0.005
+        self.accelerationAmount = 0.001
+        self.decelerationAmount = 0.002
         self.angleDiff = 90 * math.pi / 180
         self.friction = 0.97
         self.rotation = 0.1
     
     def accelerate(self):
-      self.ax += math.cos(self.angle) * self.accelerationAmount
-      self.ay += math.sin(self.angle) * self.accelerationAmount
+        self.ax += math.cos(self.angle) * self.accelerationAmount
+        self.ay += math.sin(self.angle) * self.accelerationAmount
 
     def updatePosition(self):
         self.vx += self.ax

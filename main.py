@@ -9,35 +9,48 @@ HEIGHT = 500
 
 def game():
     pygame.init()
+    clock = pygame.time.Clock()
     canvas = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('A bit Racey')
-    clock = pygame.time.Clock()
     font = pygame.font.Font(None, 30)
 
     renderEngine = RenderEngine(canvas, pygame, WIDTH, HEIGHT)
 
-    road_map    =  [['=', '|'],
-                    [0, 0],
-                    [0, 0]]
+    road_map    =  [['|', '='],
+                    ['#',  0],
+                    [ 0 , '#']]
 
     map = Map(renderEngine, road_map, 100)
     map.createRoads(road_map)
-    map.addVeichle()
+    car1 = map.addVeichle()
 
     while True:
-        ev = pygame.event.poll()
-        if ev.type == pygame.QUIT:
-            break
-        if ev.type == pygame.KEYDOWN:
-            if ev.key == pygame.K_a:
-                view.move('a')
-            elif ev.key == pygame.K_d:
-                view.move('d')
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                raise SystemExit
+            if ev.type == pygame.KEYDOWN:
+                if ev.key == ord('w'):
+                    car1.controls["up"] = True
+                elif ev.key == ord('s'):
+                    car1.controls["down"] = True
+                elif ev.key == ord('a'):
+                    car1.controls["left"] = True
+                elif ev.key == ord('d'):
+                    car1.controls["rigth"] = True
+            if ev.type == pygame.KEYUP:
+                if ev.key == ord('w'):
+                    car1.controls["up"] = False
+                elif ev.key == ord('s'):
+                    car1.controls["down"] = False
+                elif ev.key == ord('a'):
+                    car1.controls["left"] = False
+                elif ev.key == ord('d'):
+                    car1.controls["rigth"] = False
         canvas.fill((173,216,230))
         map.update()
         # print(clock.get_fps())
-        #pygame.display.flip()
+        # pygame.display.flip()
         pygame.display.update()
-        clock.tick(60)
-    pygame.quit()
+        clock.tick(40)
 game()

@@ -1,8 +1,8 @@
 from veichle import Veichle
 
 class Car(Veichle):
-    def __init__(self, cell_width, posx = 0, posy = 0, rotation = 0, view_heigth = 30, view_width = 30):
-        super().__init__(view_heigth, view_width, posx, posy, rotation)
+    def __init__(self, cell_width, posx = 0, posy = 0):
+        super().__init__(posx, posy,)
         self.cell_width = cell_width
-        self.width = self.cell_width / 7
-        self.heigth = self.cell_width / 10
+        self.width = int(self.cell_width / 3)
+        self.heigth = int(self.cell_width / 5)

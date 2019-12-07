@@ -4,14 +4,17 @@ class RenderEngine:
         self.canvas = canvas
         self.width = width
         self.heigth = heigth
-        self.car = self.pygame.image.load('car.png')
-        self.car = pygame.transform.scale(self.car, (45, 20))
+        self.car = self.pygame.image.load('car.png').convert_alpha()
 
-    def drawVeichle(self, x, y, width, heigth, color, rotation):
-        surf = self.pygame.transform.rotate(self.car, rotation)
+    def drawVeichle(self, x, y, width, heigth, angle):
+        if(angle < 0):
+            angle = angle * -1
+        else:
+            angle = -angle
+        self.car = self.pygame.transform.scale(self.car, (width, heigth))
+        surf = self.pygame.transform.rotate(self.car, angle)
         self.canvas.blit(surf, (x, y))
-        # s = self.pygame.draw.rect(self.canvas, (0, 137, 238), (x, y, width, heigth))
-        # self.pygame.transform.rotate(s, 10)
+        # self.pygame.draw.rect(self.canvas, (0,100,100), (x, y, width, heigth))
 
     def drawRect(self, x, y, width, heigth, color):
         self.pygame.draw.rect(self.canvas, color, (x, y, width, heigth))

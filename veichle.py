@@ -4,16 +4,16 @@ from math import sin, radians, degrees, copysign
 from pygame.math import Vector2
 
 class Veichle:
-    def __init__(self, posx, posy, angle=0.0, length=4, max_steering=100, max_acceleration=5.0):
+    dt = 0
+    def __init__(self, posx, posy, angle=0.0, length=4, max_steering=50, max_acceleration=80.0):
         self.model = None
-        self.dt = 0
         self.position = Vector2(posx, posy)
         self.velocity = Vector2(0.0, 0.0)
         self.angle = angle
         self.length = length
         self.max_acceleration = max_acceleration
         self.max_steering = max_steering
-        self.max_velocity = 10
+        self.max_velocity = 50
         self.brake_deceleration = 10
         self.free_deceleration = 5
         self.acceleration = 0.0
@@ -45,13 +45,14 @@ class Veichle:
         self.acceleration = max(-self.max_acceleration, min(self.acceleration, self.max_acceleration))
         if self.controls['left']:
             self.steering += 60 * self.dt
-        if self.controls['rigth']:
+        elif self.controls['rigth']:
             self.steering -= 60 * self.dt
+        else:
+            self.steering = 0
 
         self.steering = max(-self.max_steering, min(self.steering, self.max_steering))
 
-    def update(self, dt):
-        self.dt = dt
+    def update(self):
         self.velocity += (self.acceleration * self.dt, 0)
         self.velocity.x = max(-self.max_velocity, min(self.velocity.x, self.max_velocity))
 

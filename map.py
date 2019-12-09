@@ -2,8 +2,7 @@ from car import Car
 from roads import roadBuilder
 
 class Map:
-    def __init__(self, renderEngine, clock, road_map, cell_width):
-        self.clock = clock
+    def __init__(self, renderEngine, road_map, cell_width):
         self.renderEngine = renderEngine
         self.veichles = []
         self.map = road_map
@@ -22,14 +21,13 @@ class Map:
         return veichle
 
     def update(self):
-        dt = self.clock.get_time() / 1000
         for x in range(len(self.map)):
             for y in range(len(self.map[x])):
                 road = self.map[x][y]
                 if road:
                     road.draw(self.renderEngine)
         for veichle in self.veichles:
-            self.renderEngine.drawVeichle(veichle.position, veichle.width, veichle.heigth, veichle.angle)
             veichle.move()
-            veichle.update(dt)
+            veichle.update()
+            veichle.draw(self.renderEngine)
             # self.renderEngine.move(veichle.model, veichle.speed, 0)

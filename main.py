@@ -3,9 +3,10 @@ from threading import Timer
 from map import Map
 from render import RenderEngine
 import pygame
+from veichle import Veichle
 
-WIDTH = 500
-HEIGHT = 500
+WIDTH = 800
+HEIGHT = 800
 
 def game():
     pygame.init()
@@ -16,11 +17,14 @@ def game():
 
     renderEngine = RenderEngine(canvas, pygame, WIDTH, HEIGHT)
 
-    road_map    =  [['|', '='],
-                    ['#',  0],
-                    [ 0 , '#']]
+    road_map    =  [[ 0 ,  0,  '|',  0,   0],
+                    [ 0 ,  0,  '|',  0,   0],
+                    ['=', '=', '#', '=', '='],
+                    [ 0 ,  0,  '|',  0,   0],
+                    [ 0 ,  0,  '|',  0,   0]]
 
-    map = Map(renderEngine, clock, road_map, 100)
+    map = Map(renderEngine, road_map, 100)
+    
     map.createRoads(road_map)
     car1 = map.addVeichle()
 
@@ -51,8 +55,13 @@ def game():
                     car1.controls["rigth"] = False
                 elif ev.key == [pygame.K_SPACE]:
                     car1.controls["space"] = False
+                    
         canvas.fill((173,216,230))
+
+        Veichle.dt = clock.get_time() / 1000
+
         map.update()
+
         # print(clock.get_fps())
         # pygame.display.flip()
         pygame.display.update()

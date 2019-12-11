@@ -4,11 +4,11 @@ class RenderEngine:
         self.canvas = canvas
         self.width = width
         self.height = height
-        # self.car = self.pygame.image.load('car.png').convert_alpha()
-        self.car = self.pygame.Surface((50, 50), self.pygame.SRCALPHA)
+        self.car = self.pygame.image.load('car.png').convert_alpha()
+        # self.car = self.pygame.Surface((50, 50), self.pygame.SRCALPHA)
 
     def drawVeichle(self, position, width, height, angle, fvW, fvH):
-        self.car.fill((0, 50, 90))
+        # self.car.fill((0, 50, 90))
         self.car = self.pygame.transform.scale(self.car, (width, height))
         # self.car.convert()
         surf = self.pygame.transform.rotate(self.car, angle)

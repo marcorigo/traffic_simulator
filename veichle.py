@@ -44,9 +44,9 @@ class Veichle:
                     self.acceleration = -self.velocity.x / self.dt
         self.acceleration = max(-self.max_acceleration, min(self.acceleration, self.max_acceleration))
         if self.controls['left']:
-            self.steering += 60 * self.dt
+            self.steering += 30 * self.dt
         elif self.controls['rigth']:
-            self.steering -= 60 * self.dt
+            self.steering -= 30 * self.dt
         else:
             self.steering = 0
 

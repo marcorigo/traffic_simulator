@@ -5,16 +5,17 @@ from pygame.math import Vector2
 
 class Veichle:
     dt = 0
-    def __init__(self, posx, posy, angle=0.0, length=30, max_steering=50, max_acceleration=80.0):
+    def __init__(self, path, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=200.0):
         self.model = None
         self.position = Vector2(posx, posy)
+        self.path = path
         self.velocity = Vector2(0.0, 0.0)
         self.angle = angle
         self.length = length
         self.max_acceleration = max_acceleration
         self.max_steering = max_steering
-        self.max_velocity = 50
-        self.brake_deceleration = 10
+        self.max_velocity = 150
+        self.brake_deceleration = 30
         self.free_deceleration = 5
         self.acceleration = 0.0
         self.steering = 0.0

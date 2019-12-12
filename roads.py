@@ -1,9 +1,10 @@
 class Road:
+    borderProp = 7
     def __init__(self, cellX, cellY, cell_width):
         self.cellX = cellX
         self.cellY = cellY
         self.cell_width = cell_width
-        self.border = int(self.cell_width / 7)
+        self.border = int(self.cell_width / self.borderProp)
 
 class StraightRoad(Road):
     def __init__(self, cellX, cellY, cell_width, rotation = 1):

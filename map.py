@@ -1,5 +1,6 @@
 from car import Car
 from roads import roadBuilder
+from roads import Road
 
 class Map:
     def __init__(self, renderEngine, road_map, cell_width):
@@ -16,7 +17,8 @@ class Map:
                 self.map[x][y] = road
 
     def addVeichle(self):
-        veichle = Car( self.cell_width, 0, 0)
+        path = [2,5,8,11]
+        veichle = Car( self.cell_width, path, path[0] * self.cell_width + Road.borderProp, 0, angle = 270)
         self.veichles.append(veichle)
         return veichle
 
@@ -27,7 +29,9 @@ class Map:
                 if road:
                     road.draw(self.renderEngine)
         for veichle in self.veichles:
+            veichle.controls["up"] = True
+            if int(veichle.position.y) == 2*self.cell_width + Road.borderProp * 2:
+                veichle.angle = 180
             veichle.move()
             veichle.update()
             veichle.draw(self.renderEngine)
-            # self.renderEngine.move(veichle.model, veichle.speed, 0)

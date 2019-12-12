@@ -8,20 +8,47 @@ class RenderEngine:
         # self.car = self.pygame.Surface((50, 50), self.pygame.SRCALPHA)
 
     def drawVeichle(self, position, width, height, angle, fvW, fvH):
-        # self.car.fill((0, 50, 90))
         self.car = self.pygame.transform.scale(self.car, (width, height))
-        # self.car.convert()
-        surf = self.pygame.transform.rotate(self.car, angle)
-        surf_rect = self.car.get_rect()
-        surf_rect.center = position
-        self.canvas.blit(surf, surf_rect)
+        image_orig = self.car.convert().convert_alpha()
+
+        image = image_orig.copy() 
+
+        rect = image.get_rect()  
+        rect.center = ( position.x + (width // 2) , position.y + ( height // 2))   
+        old_center = rect.center  
+        rot = angle
+        new_image = self.pygame.transform.rotate(image_orig , rot)  
+        rect = new_image.get_rect()  
+        rect.center = old_center   
+        self.canvas.blit(new_image , rect)  
+
+        # surf_rect = self.car.get_rect()
+        # old_center = surf_rect.center
+        # surf = self.pygame.transform.rotate(self.car, angle)
+        # rect = surf.get_rect()
+        # rect.center = old_center
+        # surf_rect.center = (position.x + width/2 , position.y + height/ 2)
+        # self.canvas.blit(surf, surf_rect)
 
         # self.pygame.draw.rect(self.canvas, (20, 60, 30), (position.x, position.y, 4, 4))
 
-        sqr =  self.pygame.Surface((10, 10), self.pygame.SRCALPHA)
-        sqr.fill((150, 50, 20))
-        surf = self.pygame.transform.rotate(sqr, angle)
-        self.canvas.blit(surf, position + (width / 2, height / 2))
+        #quadrato
+        # sqr =  self.pygame.Surface((10, 10), self.pygame.SRCALPHA)
+        # sqr.fill((150, 50, 20))
+        # surf
+        # surf = self.pygame.transform.rotate(sqr, angle)
+        # self.canvas.blit(surf, (position.x + width , position.y + height))
+
+        # sqr =  self.pygame.Surface((10, 10), self.pygame.SRCALPHA)
+        # sqr.fill((150, 50, 20))
+        # rect = sqr.get_rect()  
+        # rect.center = (position.x + width , position.y + height) 
+        # old_center = rect.center  
+        # rot = angle
+        # new_image = self.pygame.transform.rotate(sqr , rot)  
+        # rect = new_image.get_rect()  
+        # rect.center = old_center   
+        # self.canvas.blit(new_image , rect) 
 
         # # self.car = self.pygame.transform.scale(self.car, (width, height))
         # self.car =  self.pygame.Surface((50, 50))

@@ -56,7 +56,7 @@ def game():
                 elif ev.key == [pygame.K_SPACE]:
                     car1.controls["space"] = False
                     
-        canvas.fill((173,216,230))
+        canvas.fill((120, 226, 104))
 
         Veichle.dt = clock.get_time() / 1000
 

@@ -5,8 +5,8 @@ from render import RenderEngine
 import pygame
 from veichle import Veichle
 
-WIDTH = 800
-HEIGHT = 800
+WIDTH = 500
+HEIGHT = 500
 
 def game():
     pygame.init()

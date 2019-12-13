@@ -49,8 +49,6 @@ class Map:
                     road.draw(self.renderEngine)
         for veichle in self.veichles:
             veichle.controls["up"] = True
-            # if int(veichle.position.y) == 2*self.cell_width + self.side_walk * 2:
-            #     veichle.angle = 180
             veichle.move()
             veichle.update()
             veichle.draw(self.renderEngine)

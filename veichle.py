@@ -5,11 +5,7 @@ from pygame.math import Vector2
 
 class Veichle:
     dt = 0
-<<<<<<< HEAD
-    def __init__(self, posx, posy, angle=0.0, length=4, max_steering=30, max_acceleration=80.0):
-=======
     def __init__(self, path, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=200.0):
->>>>>>> test
         self.model = None
         self.position = Vector2(posx, posy)
         self.path = path

@@ -26,7 +26,14 @@ def game():
     map = Map(renderEngine, road_map, 100)
     
     map.createRoads(road_map)
-    car1 = map.addVeichle()
+    path = [[2,0],[5,0],[8,0],[11,0]]
+    car1 = map.addVeichle(path, 3)
+    path = [[2,4],[5,0],[8,0],[11,0]]
+    map.addVeichle(path, 1)
+    path = [[0,2],[5,0],[8,0],[11,0]]
+    map.addVeichle(path, 2)
+    path = [[4,2],[5,0],[8,0],[11,0]]
+    map.addVeichle(path, 4)
 
     while True:
         for ev in pygame.event.get():

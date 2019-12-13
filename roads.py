@@ -1,13 +1,13 @@
 class Road:
-    def __init__(self, cellX, cellY, cell_width):
+    def __init__(self, cellX, cellY, cell_width, side_walk):
         self.cellX = cellX
         self.cellY = cellY
         self.cell_width = cell_width
-        self.border = int(self.cell_width / 7)
+        self.border = side_walk
 
 class StraightRoad(Road):
-    def __init__(self, cellX, cellY, cell_width, rotation = 1):
-        super().__init__(cellX, cellY, cell_width)
+    def __init__(self, cellX, cellY, cell_width, border, rotation = True):
+        super().__init__(cellX, cellY, cell_width, border)
         self.rotation = rotation
         self.icon = '='
 
@@ -26,8 +26,8 @@ class StraightRoad(Road):
             renderEngine.drawRect(x, y + self.cell_width - self.border, self.cell_width, self.border, (94, 94, 94))
 
 class Intersection(Road):
-    def __init__(self, cellX, cellY, cell_width):
-        super().__init__(cellX, cellY, cell_width)
+    def __init__(self, cellX, cellY, cell_width, border):
+        super().__init__(cellX, cellY, cell_width, border)
         self.icon = '#'
 
     def draw(self, renderEngine):
@@ -36,13 +36,13 @@ class Intersection(Road):
         #Background
         renderEngine.drawRect(x, y, self.cell_width, self.cell_width, (170, 170, 170))
 
-def roadBuilder(road_type, cellX, cellY, cell_width, rotation = True):
+def roadBuilder(road_type, cellX, cellY, cell_width, border, rotation = True):
     if road_type == '=':
-        return StraightRoad(cellX, cellY, cell_width, rotation = True )
+        return StraightRoad(cellX, cellY, cell_width, border, rotation = True )
     if road_type == '|':
-        return StraightRoad(cellX, cellY, cell_width, rotation = False )
+        return StraightRoad(cellX, cellY, cell_width, border, rotation = False )
     if road_type == '#':
-        return Intersection(cellX, cellY, cell_width)
+        return Intersection(cellX, cellY, cell_width, border)
     return 0
 
 

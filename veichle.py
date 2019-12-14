@@ -13,7 +13,7 @@ class Veichle:
         self.length = length
         self.max_acceleration = max_acceleration
         self.max_steering = max_steering
-        self.max_velocity = 200
+        self.max_velocity = 150
         self.brake_deceleration = 30
         self.free_deceleration = 5
         self.acceleration = 0.0

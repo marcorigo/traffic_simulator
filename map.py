@@ -1,5 +1,6 @@
 from car import Car
 from roads import roadBuilder
+from autoVeichle import AutoVeichle
 
 class Map:
     def __init__(self, renderEngine, road_map, cell_width):
@@ -11,6 +12,7 @@ class Map:
         self.road_way = (self.cell_width - self.side_walk * 2) / 2
         self.car_width = int(self.cell_width / 3)
         self.car_height = int(self.cell_width / 5)
+        self.bots = []
 
     def createRoads(self, road_map):
         for x in range(len(road_map)):
@@ -19,7 +21,7 @@ class Map:
                 road = roadBuilder(road_type, x, y, self.cell_width, self.side_walk, rotation = road_type)
                 self.map[x][y] = road
 
-    def addVeichle(self, path, facing):
+    def addVeichle(self, path, facing, autoPilot):
         if facing == 1:
             x = path[0][0] * self.cell_width + self.side_walk + self.road_way * 2 - self.car_width
             y = path[0][1] * self.cell_width + self.cell_width - self.car_height
@@ -37,8 +39,10 @@ class Map:
             y = path[0][1] * self.cell_width + self.side_walk + self.road_way * 2 - self.car_width
             angle = 180
         
-        veichle = Car(self.car_width, self.car_height, path, x, y, angle)
+        veichle = Car(self.car_width, self.car_height, x, y, angle)
         self.veichles.append(veichle)
+        if autoPilot:
+            self.bots.append(AutoVeichle(veichle, path, self.cell_width))
         return veichle
 
     def update(self):
@@ -47,8 +51,9 @@ class Map:
                 road = self.map[x][y]
                 if road:
                     road.draw(self.renderEngine)
+        for bot in self.bots:
+            bot.update()
         for veichle in self.veichles:
-            veichle.controls["up"] = True
             veichle.move()
             veichle.update()
             veichle.draw(self.renderEngine)

@@ -5,21 +5,20 @@ from pygame.math import Vector2
 
 class Veichle:
     dt = 0
-    def __init__(self, path, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=200.0):
+    def __init__(self, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=500.0):
         self.model = None
         self.position = Vector2(posx, posy)
-        self.path = path
         self.velocity = Vector2(0.0, 0.0)
         self.angle = angle
         self.length = length
         self.max_acceleration = max_acceleration
         self.max_steering = max_steering
-        self.max_velocity = 150
+        self.max_velocity = 200
         self.brake_deceleration = 30
         self.free_deceleration = 5
         self.acceleration = 0.0
         self.steering = 0.0
-        self.controls = { "up": False, "down": False, "left": False, "rigth": False, "space": False }
+        self.controls = { "up": False, "down": False, "left": False, "right": False, "space": False }
     
     def move(self):
         if self.controls['up']:
@@ -46,7 +45,7 @@ class Veichle:
         self.acceleration = max(-self.max_acceleration, min(self.acceleration, self.max_acceleration))
         if self.controls['left']:
             self.steering += 30 * self.dt
-        elif self.controls['rigth']:
+        elif self.controls['right']:
             self.steering -= 30 * self.dt
         else:
             self.steering = 0

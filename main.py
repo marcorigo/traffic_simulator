@@ -4,9 +4,10 @@ from map import Map
 from render import RenderEngine
 import pygame
 from veichle import Veichle
+from autoVeichle import AutoVeichle
 
-WIDTH = 500
-HEIGHT = 500
+WIDTH = 750
+HEIGHT = 750
 
 def game():
     pygame.init()
@@ -23,17 +24,19 @@ def game():
                     [ 0 ,  0,  '|',  0,   0],
                     [ 0 ,  0,  '|',  0,   0]]
 
-    map = Map(renderEngine, road_map, 100)
+    map = Map(renderEngine, road_map, 150)
     
     map.createRoads(road_map)
     path = [[2,0],[5,0],[8,0],[11,0]]
-    car1 = map.addVeichle(path, 3)
-    path = [[2,4],[5,0],[8,0],[11,0]]
-    map.addVeichle(path, 1)
-    path = [[0,2],[5,0],[8,0],[11,0]]
-    map.addVeichle(path, 2)
-    path = [[4,2],[5,0],[8,0],[11,0]]
-    map.addVeichle(path, 4)
+    car1 = map.addVeichle(path, 3, False)
+    path = [[2,4],[2,3],[2,2],[3,2], [1, 1], [1, 0]]
+    map.addVeichle(path, 1, True)
+    path = [[2,0],[2,1],[2,2],[1,2], [0, 2], [1, 0]]
+    map.addVeichle(path, 3, True)
+    path = [[0,2],[1,2],[2,2],[2,3], [2, 4], [1, 0]]
+    map.addVeichle(path, 2, True)
+    # path = [[4,2],[5,0],[8,0],[11,0]]
+    # map.addVeichle(path, 4, True)
 
     while True:
         for ev in pygame.event.get():
@@ -48,7 +51,7 @@ def game():
                 elif ev.key == ord('a'):
                     car1.controls["left"] = True
                 elif ev.key == ord('d'):
-                    car1.controls["rigth"] = True
+                    car1.controls["right"] = True
                 elif ev.key == [pygame.K_SPACE]:
                     car1.controls["space"] = True
             if ev.type == pygame.KEYUP:

@@ -15,11 +15,11 @@ class Map:
         self.bots = []
 
     def createRoads(self, road_map):
-        for x in range(len(road_map)):
-            for y in range(len(road_map[0])):
-                road_type = road_map[x][y]
+        for y in range(len(road_map)):
+            for x in range(len(road_map[y])):
+                road_type = road_map[y][x]
                 road = roadBuilder(road_type, x, y, self.cell_width, self.side_walk, rotation = road_type)
-                self.map[x][y] = road
+                self.map[y][x] = road
 
     def addVeichle(self, path, facing, autoPilot):
         if facing == 1:
@@ -46,9 +46,9 @@ class Map:
         return veichle
 
     def update(self):
-        for x in range(len(self.map)):
-            for y in range(len(self.map[x])):
-                road = self.map[x][y]
+        for y in range(len(self.map)):
+            for x in range(len(self.map[y])):
+                road = self.map[y][x]
                 if road:
                     road.draw(self.renderEngine)
         for bot in self.bots:

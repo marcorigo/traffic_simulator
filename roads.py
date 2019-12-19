@@ -18,12 +18,12 @@ class StraightRoad(Road):
         renderEngine.drawRect(x, y, self.cell_width, self.cell_width, (170, 170, 170))
 
         if self.rotation:
-            renderEngine.drawRect(x, y, self.border, self.cell_width, (94, 94, 94))
-            renderEngine.drawRect(x + self.cell_width - self.border, y, self.border, self.cell_width, (94, 94, 94))
-
-        else:
             renderEngine.drawRect(x, y, self.cell_width, self.border, (94, 94, 94))
             renderEngine.drawRect(x, y + self.cell_width - self.border, self.cell_width, self.border, (94, 94, 94))
+
+        else:
+            renderEngine.drawRect(x, y, self.border, self.cell_width, (94, 94, 94))
+            renderEngine.drawRect(x + self.cell_width - self.border, y, self.border, self.cell_width, (94, 94, 94))
 
 class Intersection(Road):
     def __init__(self, cellX, cellY, cell_width, border):

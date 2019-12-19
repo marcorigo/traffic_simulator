@@ -6,8 +6,8 @@ import pygame
 from veichle import Veichle
 from autoVeichle import AutoVeichle
 
-WIDTH = 750
-HEIGHT = 750
+WIDTH = 600
+HEIGHT = 700
 
 def game():
     pygame.init()
@@ -18,27 +18,39 @@ def game():
 
     renderEngine = RenderEngine(canvas, pygame, WIDTH, HEIGHT)
 
-    road_map    =  [[ 0 ,  0,  '|',  0,   0],
-                    [ 0 ,  0,  '|',  0,   0],
-                    ['=', '=', '#', '=', '='],
-                    [ 0 ,  0,  '|',  0,   0],
-                    [ 0 ,  0,  '|',  0,   0]]
+    road_map    =  [[ 0 ,  0,  '#', '=', '=', '#'],
+                    [ 0 ,  0,  '|',  0,   0,  '|'],
+                    ['=', '=', '#', '=', '=', '#'],
+                    [ 0 ,  0,  '|',  0,   0,   0],
+                    [ 0 ,  0,  '|',  0,   0,   0]]
 
-    map = Map(renderEngine, road_map, 150)
+    map = Map(renderEngine, road_map, 100)
     
     map.createRoads(road_map)
     path = [[2,0],[5,0],[8,0],[11,0]]
     car1 = map.addVeichle(path, 3, False)
-    path = [[2,4],[2,3],[2,2],[3,2], [4, 2]]
-    map.addVeichle(path, 1, True)
-    path = [[2,4],[2,3],[2,2],[1,2], [0, 2]]
-    map.addVeichle(path, 1, True)
-    path = [[2,0],[2,1],[2,2],[1,2], [0, 2]]
-    map.addVeichle(path, 3, True)
+
+    #Bottom
+    # path = [[2,4],[2,3],[2,2],[3,2], [4, 2]]
+    # map.addVeichle(path, 1, True)
+    # path = [[2,4],[2,3],[2,2],[1,2], [0, 2]]
+    # map.addVeichle(path, 1, True)
+
+    #top
     path = [[2,0],[2,1],[2,2],[3,2], [4, 2]]
     map.addVeichle(path, 3, True)
-    # path = [[0,2],[1,2],[2,2],[2,3], [2, 4], [1, 0]]
+    # path = [[2,0], [2,1], [2,2], [1,2], [0, 2]]
+    # map.addVeichle(path, 3, True)
+
+    #lEFT
+    path = [[0,2],[1,2],[2,2],[2,1], [2, 0], [3, 0], [4, 0], [5, 0], [5, 1], [5, 2], [4, 2], [3, 2], [2, 2], [2, 1]]
+    map.addVeichle(path, 2, True)
+    # path = [[0,2],[1,2],[2,2],[2,3], [2, 4], [2, 5], [1, 5], [0, 5], [0, 4], [0, 3], [0, 2], [1, 2]]
     # map.addVeichle(path, 2, True)
+
+    # path = [[0,0],[0,1],[1,1],[1,0],[0, 0], [0, 1]]
+    # map.addVeichle(path, 3, True)
+
     # path = [[4,2],[5,0],[8,0],[11,0]]
     # map.addVeichle(path, 4, True)
 

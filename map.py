@@ -28,7 +28,7 @@ class Map:
             angle = 90
         if facing == 2:
             x = path[0][0] * self.cell_width
-            y = path[0][1] * self.cell_width + self.side_walk + self.road_way - self.car_width
+            y = path[0][1] * self.cell_width + self.side_walk + self.road_way + self.car_height / 2
             angle = 0
         if facing == 3:
             x = path[0][0] * self.cell_width + self.side_walk + self.road_way - self.car_width

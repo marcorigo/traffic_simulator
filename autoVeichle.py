@@ -1,3 +1,4 @@
+from render import RenderEngine
 class AutoVeichle:
     def __init__(self, veichle, path, cell_width, border_right, border_left):
         self.veichle = veichle
@@ -14,8 +15,8 @@ class AutoVeichle:
     def update(self):
         self.checkPath()
         self.veichle.controls['up'] = True
-        self.veichle.controls['right'] = False
-        self.veichle.controls['left'] = False
+        # self.veichle.controls['right'] = False
+        # self.veichle.controls['left'] = False
 
         self.checkMove()
         self.move()
@@ -28,7 +29,7 @@ class AutoVeichle:
             nextPos = self.pathStatus + 1
         else:
             nextPos = actualPos
-
+            
         # Top
         if actualPos > 0:
             if self.path[beforePos][1] < self.path[actualPos][1]:

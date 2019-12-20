@@ -6,8 +6,17 @@ import pygame
 from veichle import Veichle
 from autoVeichle import AutoVeichle
 
-WIDTH = 600
-HEIGHT = 500
+ROAD_MAP    =  [[ 0 ,  0,  '╔', '═', '═', '╗'],
+                [ 0 ,  0,  '║',  0,   0,  '║'],
+                ['═', '═', '╬', '═', '═', '╝'],
+                [ 0 ,  0,  '║',  0,   0,   0 ],
+                [ 0 ,  0,  '║',  0,   0,   0 ]]
+
+BLOCK_SIZE = 150
+
+WIDTH = len(ROAD_MAP[0]) * BLOCK_SIZE
+HEIGHT = len(ROAD_MAP) * BLOCK_SIZE
+
 
 def game():
     pygame.init()
@@ -18,15 +27,9 @@ def game():
 
     renderEngine = RenderEngine(canvas, pygame, WIDTH, HEIGHT)
 
-    road_map    =  [[ 0 ,  0,  '#', '=', '=', '#'],
-                    [ 0 ,  0,  '|',  0,   0,  '|'],
-                    ['=', '=', '#', '=', '=', '#'],
-                    [ 0 ,  0,  '|',  0,   0,   0],
-                    [ 0 ,  0,  '|',  0,   0,   0]]
-
-    map = Map(renderEngine, road_map, 100)
+    map = Map(renderEngine, ROAD_MAP, BLOCK_SIZE)
     
-    map.createRoads(road_map)
+    map.createRoads(ROAD_MAP)
     path = [[2,0],[5,0],[8,0],[11,0]]
     car1 = map.addVeichle(path, 3, False)
 
@@ -62,7 +65,7 @@ def game():
                 elif ev.key == ord('a'):
                     car1.controls["left"] = False
                 elif ev.key == ord('d'):
-                    car1.controls["rigth"] = False
+                    car1.controls["right"] = False
                 elif ev.key == [pygame.K_SPACE]:
                     car1.controls["space"] = False
                     

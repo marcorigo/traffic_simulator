@@ -1,5 +1,5 @@
 class AutoVeichle:
-    def __init__(self, veichle, path, cell_width):
+    def __init__(self, veichle, path, cell_width, road_way, side_walk):
         self.veichle = veichle
         self.path = path
         self.pathLength = len(self.path) 
@@ -8,6 +8,8 @@ class AutoVeichle:
         self.slowing = False
         self.movingToAngle = self.veichle.angle
         self.curve = False
+        self.border_right = side_walk + road_way + road_way / 2
+        self.border_left = side_walk + road_way / 2
 
     def update(self):
         self.checkPath()
@@ -27,86 +29,47 @@ class AutoVeichle:
         else:
             nextPos = actualPos
 
-        # if next2Pos == actualPos + 2:
-        #     if self.path[actualPos][0] == self.path[nextPos][0] or self.path[beforePos][0] == self.path[actualPos][0]:
-        #         if self.path[nextPos][1] < self.path[actualPos][1]:
-        #             #Bottom to right
-        #             if self.path[actualPos][1] > self.path[nextPos][1] and self.path[next2Pos][0] > self.path[nextPos][0]:
-        #                 if self.veichle.position.y < ((self.cell_width * self.path[actualPos][1]) + self.cell_width / 4):
-        #                     self.movingToAngle = 0
-        #                     self.curve = 'right'
-
-        #         if self.path[actualPos][1] < self.path[beforePos][1]:
-        #             #Bottom to left
-        #             if self.path[beforePos][1] > self.path[actualPos][1] and self.path[nextPos][0] < self.path[actualPos][0]:
-        #                 if int(self.veichle.position.y) < ((self.cell_width * self.path[beforePos][1]) - self.cell_width / 6):
-        #                     self.movingToAngle = 180
-        #                     self.curve = 'left'
-        #         else:
-        #             #top to rigth
-        #             if self.path[actualPos][1] < self.path[nextPos][1] and self.path[next2Pos][0] < self.path[nextPos][0]:
-        #                 if self.veichle.position.y > ((self.cell_width * self.path[nextPos][1]) - self.cell_width / 2.5):
-        #                     self.movingToAngle = 180
-        #                     self.curve = 'right'
-                    
-        #             #Bottom to left
-        #             if self.path[beforePos][1] < self.path[actualPos][1] and self.path[nextPos][0] > self.path[actualPos][0]:
-        #                 if int(self.veichle.position.y) > ((self.cell_width * self.path[beforePos][1]) - self.cell_width / 4):
-        #                     self.movingToAngle = 360
-        #                     self.curve = 'left'
-        #     else:
-        #         if self.path[nextPos][0] > self.path[actualPos][0] or self.path[beforePos][0] > self.path[actualPos][0]:
-        #             #left to top
-        #             if self.path[beforePos][0] < self.path[actualPos][0] and self.path[nextPos][1] < self.path[actualPos][1]:
-        #                 print(self.veichle.x)
-        #                 if self.veichle.position.x > ((self.cell_width * self.path[beforePos][0]) - self.cell_width / 2 ):
-        #                     self.movingToAngle = 90
-        #                     self.curve = 'left'
-
         # Top
         if actualPos > 0:
             if self.path[beforePos][1] < self.path[actualPos][1]:
                 # Top to right
                 if self.path[actualPos][0] < self.path[nextPos][0]:
-                    if int(self.veichle.position.y) >= int(((self.cell_width * (self.path[actualPos][1])) + self.cell_width / 2 )):
+                    if int(self.veichle.position.y) >= int(((self.cell_width * (self.path[actualPos][1])) + self.border_right )):
                         self.veichle.angle = 0
                 #top to left
                 if self.path[actualPos][0] > self.path[nextPos][0]:
-                    if int(self.veichle.position.y) >= int((self.cell_width * (self.path[actualPos][1]) + 30)):
+                    if int(self.veichle.position.y) >= int((self.cell_width * (self.path[actualPos][1]) + self.border_left )):
                         self.veichle.angle = 180
-            # Right
-            if self.path[beforePos][0] < self.path[actualPos][0]:
+            # # Right
+            if self.path[beforePos][0] > self.path[actualPos][0]:
                 # Right to top
                 if self.path[actualPos][1] < self.path[nextPos][1]:
-                    if int(self.veichle.position.x) <= int(((self.cell_width * (self.path[actualPos][0])))):
-                        self.veichle.angle = 90
+                    if int(self.veichle.position.x) <= int((self.cell_width * (self.path[actualPos][0]) + self.border_left )):
+                        self.veichle.angle = 270
                 # Right to bottom
                 if self.path[actualPos][1] > self.path[nextPos][1]:
-                    pass
+                    if int(self.veichle.position.x) <= int((self.cell_width * (self.path[actualPos][0]) + self.border_right )):
+                        self.veichle.angle = 90
             # Bottom
             if self.path[beforePos][1] > self.path[actualPos][1]:
                 # Bottom to right
                 if self.path[actualPos][0] < self.path[nextPos][0]:
-                    if int(self.veichle.position.y) <= int(((self.cell_width * (self.path[actualPos][1])) + self.cell_width / 2 )):
+                    if int(self.veichle.position.y) <= int(((self.cell_width * (self.path[actualPos][1])) + self.border_right )):
                         self.veichle.angle = 0
                 # Bottom to left
                 if self.path[actualPos][0] > self.path[nextPos][0]:
-                    if int(self.veichle.position.y) <= int(((self.cell_width * (self.path[actualPos][1])) + 30 )):
+                    if int(self.veichle.position.y) <= int(((self.cell_width * (self.path[actualPos][1])) + self.border_left )):
                         self.veichle.angle = 180
             # Left   
             if self.path[beforePos][0] < self.path[actualPos][0]:
                 # Left to top
                 if self.path[actualPos][1] > self.path[nextPos][1]:
-                    if int(self.veichle.position.x) >= int(((self.cell_width * (self.path[actualPos][0])) + self.cell_width / 2 )):
+                    if int(self.veichle.position.x) >= int(((self.cell_width * (self.path[actualPos][0])) + self.border_right )):
                         self.veichle.angle = 90
                 # Left to bottom
                 if self.path[actualPos][1] < self.path[nextPos][1]:
-                    if int(self.veichle.position.x) >= int(((self.cell_width * (self.path[actualPos][0])) + 30 )):
+                    if int(self.veichle.position.x) >= int(((self.cell_width * (self.path[actualPos][0])) + self.border_left )):
                         self.veichle.angle = 270
-
-
-
-
 
 
     def move(self):

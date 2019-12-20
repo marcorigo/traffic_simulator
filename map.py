@@ -22,27 +22,29 @@ class Map:
                 self.map[y][x] = road
 
     def addVeichle(self, path, facing, autoPilot):
+        border_right = self.side_walk + self.road_way + self.road_way / 2
+        border_left = self.side_walk + self.road_way / 2
         if facing == 1:
-            x = path[0][0] * self.cell_width + self.side_walk + self.road_way * 2 - self.car_width
+            x = path[0][0] * self.cell_width + border_right
             y = path[0][1] * self.cell_width + self.cell_width - self.car_height
             angle = 90
         if facing == 2:
             x = path[0][0] * self.cell_width
-            y = path[0][1] * self.cell_width + self.side_walk + self.road_way + self.car_height / 2
+            y = path[0][1] * self.cell_width + border_left
             angle = 0
         if facing == 3:
-            x = path[0][0] * self.cell_width + self.side_walk + self.road_way - self.car_width
+            x = path[0][0] * self.cell_width + border_left
             y = path[0][1] * self.cell_width
             angle = 270
         if facing == 4:
             x = path[0][0] * self.cell_width + self.cell_width - self.car_width
-            y = path[0][1] * self.cell_width + self.side_walk + self.road_way * 2 - self.car_width
+            y = path[0][1] * self.cell_width + border_right
             angle = 180
         
         veichle = Car(self.car_width, self.car_height, x, y, angle)
         self.veichles.append(veichle)
         if autoPilot:
-            self.bots.append(AutoVeichle(veichle, path, self.cell_width))
+            self.bots.append(AutoVeichle(veichle, path, self.cell_width, self.road_way, self.side_walk))
         return veichle
 
     def update(self):

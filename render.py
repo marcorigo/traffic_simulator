@@ -5,16 +5,14 @@ class RenderEngine:
         self.width = width
         self.height = height
         self.car = self.pygame.image.load('car.png').convert_alpha()
-        # self.car = self.pygame.Surface((50, 50), self.pygame.SRCALPHA)
 
-    def drawVeichle(self, position, width, height, angle, fvW, fvH):
+    def drawVeichle(self, x, y, width, height, angle, fvW, fvH):
         self.car = self.pygame.transform.scale(self.car, (width, height))
         image_orig = self.car.convert().convert_alpha()
-
-        image = image_orig.copy() 
+        image = image_orig.copy()
 
         rect = image.get_rect()  
-        rect.center = ( position.x + (width // 2) , position.y + ( height // 2))   
+        rect.center = ( x + (width // 2) , y + ( height // 2))   
         old_center = rect.center  
         rot = angle
         new_image = self.pygame.transform.rotate(image_orig , rot)  
@@ -22,27 +20,20 @@ class RenderEngine:
         rect.center = old_center   
         self.canvas.blit(new_image , rect)  
 
-        # surf_rect = self.car.get_rect()
-        # old_center = surf_rect.center
-        # surf = self.pygame.transform.rotate(self.car, angle)
-        # rect = surf.get_rect()
-        # rect.center = old_center
-        # surf_rect.center = (position.x + width/2 , position.y + height/ 2)
-        # self.canvas.blit(surf, surf_rect)
 
-        # self.pygame.draw.rect(self.canvas, (20, 60, 30), (position.x, position.y, 4, 4))
+        # self.pygame.draw.rect(self.canvas, (20, 60, 30), (x, y, 4, 4))
 
         #quadrato
         # sqr =  self.pygame.Surface((10, 10), self.pygame.SRCALPHA)
         # sqr.fill((150, 50, 20))
         # surf
         # surf = self.pygame.transform.rotate(sqr, angle)
-        # self.canvas.blit(surf, (position.x + width , position.y + height))
+        # self.canvas.blit(surf, (x + width , y + height))
 
         # sqr =  self.pygame.Surface((10, 10), self.pygame.SRCALPHA)
         # sqr.fill((150, 50, 20))
         # rect = sqr.get_rect()  
-        # rect.center = (position.x + width , position.y + height) 
+        # rect.center = (x + width , y + height) 
         # old_center = rect.center  
         # rot = angle
         # new_image = self.pygame.transform.rotate(sqr , rot)  

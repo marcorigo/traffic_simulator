@@ -9,4 +9,6 @@ class Car(Veichle):
         self.heigth = heigth
 
     def draw(self, renderEngine):
-        renderEngine.drawVeichle(self.position, self.width, self.heigth, self.angle, self.field_vision_width, self.field_vision_height)
+        x = self.position.x - self.width / 2
+        y = self.position.y - self.heigth / 2
+        renderEngine.drawVeichle(x, y, self.width, self.heigth, self.angle, self.field_vision_width, self.field_vision_height)

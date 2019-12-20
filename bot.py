@@ -1,5 +1,5 @@
 from render import RenderEngine
-class AutoVeichle:
+class Bot:
     def __init__(self, veichle, path, cell_width, border_right, border_left):
         self.veichle = veichle
         self.path = path

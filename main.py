@@ -4,7 +4,6 @@ from map import Map
 from render import RenderEngine
 import pygame
 from veichle import Veichle
-from autoVeichle import AutoVeichle
 
 ROAD_MAP    =  [[ 0 ,  0,  '╔', '═', '═', '╗'],
                 [ 0 ,  0,  '║',  0,   0,  '║'],

@@ -1,6 +1,6 @@
 from car import Car
 from roads import roadBuilder
-from autoVeichle import AutoVeichle
+from bot import Bot
 
 class Map:
     def __init__(self, renderEngine, road_map, cell_width):
@@ -44,7 +44,7 @@ class Map:
         veichle = Car(self.car_width, self.car_height, x, y, angle)
         self.veichles.append(veichle)
         if autoPilot:
-            self.bots.append(AutoVeichle(veichle, path, self.cell_width, self.border_right, self.border_left))
+            self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left ))
         return veichle
 
     def update(self):

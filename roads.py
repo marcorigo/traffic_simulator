@@ -4,6 +4,33 @@ class Road:
         self.cellY = cellY
         self.cell_width = cell_width
         self.border = side_walk
+        self.x = self.cellX * self.cell_width
+        self.y = self.cellY * self.cell_width
+        self.side_walk_color = (94, 94, 94)
+    
+    def leftSideWalk(self, renderEngine):
+        renderEngine.drawRect(self.x, self.y, self.border, self.cell_width, self.side_walk_color)
+
+    def rightSideWalk(self, renderEngine):
+        renderEngine.drawRect(self.x + self.cell_width - self.border, self.y, self.border, self.cell_width, self.side_walk_color)
+
+    def topSideWalk(self, renderEngine):
+        renderEngine.drawRect(self.x, self.y, self.cell_width, self.border, self.side_walk_color)
+    
+    def bottomSideWalk(self, renderEngine):
+        renderEngine.drawRect(self.x, self.y + self.cell_width - self.border, self.cell_width, self.border, self.side_walk_color)
+
+    def topLeftSideWalk(self,renderEngine):
+        renderEngine.drawRect(self.x, self.y, self.border, self.border, self.side_walk_color)
+
+    def topRightSideWalk(self, renderEngine):
+        renderEngine.drawRect(self.x + self.cell_width - self.border, self.y, self.border, self.border, self.side_walk_color)
+
+    def bottomLeftSideWalk(self, renderEngine):
+        renderEngine.drawRect(self.x, self.y + self.cell_width - self.border, self.border, self.border, self.side_walk_color)
+
+    def bottomRightSideWalk(self, renderEngine):
+        renderEngine.drawRect(self.x + self.cell_width  - self.border, self.y + self.cell_width - self.border, self.border, self.border, self.side_walk_color)
 
 class StraightRoad(Road):
     def __init__(self, cellX, cellY, cell_width, border, rotation = True):
@@ -16,13 +43,15 @@ class StraightRoad(Road):
         #Background
         renderEngine.drawRect(x, y, self.cell_width, self.cell_width, (170, 170, 170))
 
+        # ═
         if self.rotation:
-            renderEngine.drawRect(x, y, self.cell_width, self.border, (94, 94, 94))
-            renderEngine.drawRect(x, y + self.cell_width - self.border, self.cell_width, self.border, (94, 94, 94))
+            self.topSideWalk(renderEngine)
+            self.bottomSideWalk(renderEngine)
 
+        # ║
         else:
-            renderEngine.drawRect(x, y, self.border, self.cell_width, (94, 94, 94))
-            renderEngine.drawRect(x + self.cell_width - self.border, y, self.border, self.cell_width, (94, 94, 94))
+            self.rightSideWalk(renderEngine)
+            self.leftSideWalk(renderEngine)
 
 class Intersection(Road):
     def __init__(self, cellX, cellY, cell_width, border):
@@ -33,6 +62,11 @@ class Intersection(Road):
         y = self.cellY * self.cell_width
         #Background
         renderEngine.drawRect(x, y, self.cell_width, self.cell_width, (170, 170, 170))
+
+        self.topLeftSideWalk(renderEngine)
+        self.topRightSideWalk(renderEngine)
+        self.bottomLeftSideWalk(renderEngine)
+        self.bottomRightSideWalk(renderEngine)
 
 class Curve(Road):
     def __init__(self, cellX, cellY, cell_width, border, rotation = 0):
@@ -45,21 +79,30 @@ class Curve(Road):
         #Background
         renderEngine.drawRect(x, y, self.cell_width, self.cell_width, (170, 170, 170))
 
+        # ╔
         if self.rotation == 1:
-            renderEngine.drawRect(x, y, self.cell_width, self.border, (94, 94, 94))
-            renderEngine.drawRect(x, y, self.border, self.cell_width, (94, 94, 94))
+            self.leftSideWalk(renderEngine)
+            self.topSideWalk(renderEngine)
+            self.bottomRightSideWalk(renderEngine)
 
+        # ╚
         if self.rotation == 2:
-            renderEngine.drawRect(x, y + self.cell_width - self.border, self.cell_width, self.border, (94, 94, 94))
-            renderEngine.drawRect(x, y, self.border, self.cell_width, (94, 94, 94))
+            self.leftSideWalk(renderEngine)
+            self.bottomSideWalk(renderEngine)
+            self.topRightSideWalk(renderEngine)
 
+
+        # ╗
         if self.rotation == 3:
-            renderEngine.drawRect(x + self.cell_width - self.border, y, self.border, self.cell_width, (94, 94, 94))
-            renderEngine.drawRect(x, y, self.cell_width, self.border, (94, 94, 94))
-            
+            self.topSideWalk(renderEngine)
+            self.rightSideWalk(renderEngine)
+            self.bottomLeftSideWalk(renderEngine)
+
+        #  ╝ 
         if self.rotation == 4:
-            renderEngine.drawRect(x + self.cell_width - self.border, y, self.border, self.cell_width, (94, 94, 94))
-            renderEngine.drawRect(x, y + self.cell_width - self.border, self.cell_width, self.border, (94, 94, 94))
+            self.rightSideWalk(renderEngine)
+            self.bottomSideWalk(renderEngine)
+            self.topLeftSideWalk(renderEngine)
 
 
 

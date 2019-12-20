@@ -1,5 +1,5 @@
 class AutoVeichle:
-    def __init__(self, veichle, path, cell_width, road_way, side_walk):
+    def __init__(self, veichle, path, cell_width, border_right, border_left):
         self.veichle = veichle
         self.path = path
         self.pathLength = len(self.path) 
@@ -8,8 +8,8 @@ class AutoVeichle:
         self.slowing = False
         self.movingToAngle = self.veichle.angle
         self.curve = False
-        self.border_right = side_walk + road_way + road_way / 2
-        self.border_left = side_walk + road_way / 2
+        self.border_right = border_right
+        self.border_left = border_left
 
     def update(self):
         self.checkPath()

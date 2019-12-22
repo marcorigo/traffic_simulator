@@ -52,6 +52,20 @@ class Veichle:
 
         self.steering = max(-self.max_steering, min(self.steering, self.max_steering))
 
+    def changeDegree(self, facing):
+        if facing == 1:
+            self.angle = 90
+        if facing == 2:
+            self.angle = 0
+        if facing == 3:
+            self.angle = 270
+        if facing == 4:
+            self.angle = 180
+
+    def setPosition(self, x, y):
+        self.position.x = x
+        self.position.y = y
+
     def update(self):
         self.velocity += (self.acceleration * self.dt, 0)
         self.velocity.x = max(-self.max_velocity, min(self.velocity.x, self.max_velocity))

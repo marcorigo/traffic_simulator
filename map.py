@@ -23,38 +23,69 @@ class Map:
                 road = roadBuilder(road_type, x, y, self.cell_width, self.side_walk, rotation = road_type)
                 self.map[y][x] = road
 
-    def addVeichle(self, path, facing, autoPilot):
+    def addVeichle(self, path, facing = 1, autoPilot = True):
+        # Find degree
+        if autoPilot and path:
+            if path[0][0] < path[1][0]:
+                facing = 2
+            if path[0][0] > path[1][0]:
+                facing = 4
+            if path[0][1] < path[1][1]:
+                facing = 3
+            if path[0][1] > path[1][1]:
+                facing = 1
+
+        # Calc initial car position
         if facing == 1:
             x = path[0][0] * self.cell_width + self.border_right
             y = path[0][1] * self.cell_width + self.cell_width - self.car_height
-            angle = 90
         if facing == 2:
             x = path[0][0] * self.cell_width
             y = path[0][1] * self.cell_width + self.border_left
-            angle = 0
         if facing == 3:
             x = path[0][0] * self.cell_width + self.border_left
             y = path[0][1] * self.cell_width
-            angle = 270
         if facing == 4:
             x = path[0][0] * self.cell_width + self.cell_width - self.car_width
             y = path[0][1] * self.cell_width + self.border_right
-            angle = 180
         
-        veichle = Car(self.car_width, self.car_height, x, y, angle)
+        veichle = Car(self.car_width, self.car_height, x, y)
+        # Set cat degree
+        veichle.changeDegree(facing)
+        # Adding to map veichles
         self.veichles.append(veichle)
+        # If is bot
         if autoPilot:
-            self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left ))
+            self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots ))
+
         return veichle
 
+    def createVeichleSpawnPoint(self):
+        pass
+
+    def checkCollision(self):
+        vW = self.car_height
+        vH = self.car_height
+        for i in self.bots:
+            for j in self.bots:
+                if(i.veichle.position.x - vW/2 > j.veichle.position.x - vW/2 and i.veichle.position.x - vW/2 < j.veichle.position.x - vW/2 + vW and i.veichle.position.y - vH/2 > j.veichle.position.y - vH/2 and i.veichle.position.y - vH/2 < j.veichle.position.y - vH/2 + vH):
+                    del self.bots[i]
+                    print('collisione')
+                
+            
+
     def update(self):
+        #Drawing roads
         for y in range(len(self.map)):
             for x in range(len(self.map[y])):
                 road = self.map[y][x]
                 if road:
                     road.draw(self.renderEngine)
+        self.checkCollision()
+        #Update bots
         for bot in self.bots:
             bot.update()
+        #Update cars
         for veichle in self.veichles:
             veichle.move()
             veichle.update()

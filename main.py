@@ -29,15 +29,16 @@ def game():
     map = Map(renderEngine, ROAD_MAP, BLOCK_SIZE)
     
     map.createRoads(ROAD_MAP)
-    path = [[2,0],[5,0],[8,0],[11,0]]
+    
+    path = [[2,0]]
     car1 = map.addVeichle(path, 3, False)
 
     #Path 1
     path = [[2,0],[2,1],[2,2],[3,2], [4, 2], [5, 2], [5, 1], [5, 0], [4, 0], [3, 0], [2, 0], [2, 1], [2, 2], [1, 2], [0, 2]]
-    map.addVeichle(path, 3, True)
+    map.addVeichle(path)
     #Path 2
     path = [[0,2],[1,2],[2,2],[2,1], [2, 0], [3, 0], [4, 0], [5, 0], [5, 1], [5, 2], [4, 2], [3, 2], [2, 2], [2, 3], [2, 4], [2, 5]]
-    map.addVeichle(path, 2, True)
+    map.addVeichle(path)
 
 
     while True:

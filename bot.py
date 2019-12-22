@@ -1,6 +1,7 @@
 from render import RenderEngine
+
 class Bot:
-    def __init__(self, veichle, path, cell_width, border_right, border_left):
+    def __init__(self, veichle, path, cell_width, border_right, border_left, bots):
         self.veichle = veichle
         self.path = path
         self.pathLength = len(self.path) 
@@ -11,6 +12,8 @@ class Bot:
         self.curve = False
         self.border_right = border_right
         self.border_left = border_left
+        self.vision_field = 100
+        self.map_bots = bots
 
     def update(self):
         self.checkPath()
@@ -88,6 +91,13 @@ class Bot:
         
         # else:
         #     self.curve = False
+
+    def dashcam(self):
+        vW = self.vision_field
+        vH = self.vision_field
+        for veichle in self.map_bots:
+            if( self.veichle.position.x - vW/2 > veichle.position.x - vW/2 and self.veichle.position.x - vW/2 < veichle.position.x - vW/2 + vW and self.veichle.position.y - vH/2 > veichle.position.y - vH/2 and self.veichle.position.y - vH/2 < veichle.position.y - vH/2 + vH):
+                print('collisione')
 
     def checkPath(self):
         if self.pathStatus < self.pathLength - 1:

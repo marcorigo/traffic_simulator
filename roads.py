@@ -7,6 +7,11 @@ class Road:
         self.x = self.cellX * self.cell_width
         self.y = self.cellY * self.cell_width
         self.side_walk_color = (94, 94, 94)
+
+        self.road_line_quantity = 5
+        self.road_line_height = (self.cell_width - self.border * 2) / 15
+        self.road_line_section = int(self.cell_width / self.road_line_quantity)
+        self.road_line_width = int((self.cell_width / self.road_line_quantity) / 2)
     
     def leftSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x, self.y, self.border, self.cell_width, self.side_walk_color)
@@ -32,6 +37,14 @@ class Road:
     def bottomRightSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x + self.cell_width  - self.border, self.y + self.cell_width - self.border, self.border, self.border, self.side_walk_color)
 
+    def orizontalRoadLines(self, renderEngine):
+        for i in range(self.road_line_quantity):
+            renderEngine.drawRect(self.x + self.road_line_section * i, self.y + self.cell_width / 2 - self.road_line_height / 2, self.road_line_width, self.road_line_height, (242, 242, 242))
+        
+    def verticalRoadLines(self, renderEngine):
+        for i in range(self.road_line_quantity):
+            renderEngine.drawRect(self.x + self.cell_width / 2 - self.road_line_height / 2, self.y + self.road_line_section * i, self.road_line_height, self.road_line_width, (242, 242, 242))
+
 class StraightRoad(Road):
     def __init__(self, cellX, cellY, cell_width, border, rotation = True):
         super().__init__(cellX, cellY, cell_width, border)
@@ -47,11 +60,13 @@ class StraightRoad(Road):
         if self.rotation:
             self.topSideWalk(renderEngine)
             self.bottomSideWalk(renderEngine)
+            self.orizontalRoadLines(renderEngine)
 
         # ║
         else:
             self.rightSideWalk(renderEngine)
             self.leftSideWalk(renderEngine)
+            self.verticalRoadLines(renderEngine)
 
 class Intersection(Road):
     def __init__(self, cellX, cellY, cell_width, border):

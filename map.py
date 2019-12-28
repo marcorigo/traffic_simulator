@@ -10,6 +10,8 @@ class Map:
         self.veichles = []
         self.map = road_map
         self.cell_width = cell_width
+        self.map_width = len(self.map[0])
+        self.map_height = len(self.map)
         self.side_walk = int(self.cell_width / 7)
         self.road_way = (self.cell_width - self.side_walk * 2) / 2
         self.car_width = int(self.cell_width / 3)
@@ -85,7 +87,10 @@ class Map:
                     print('collisione')
                     # return
                 
-            
+    def outsideEges(self, veichle):
+        if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or
+            veichle.position.y < - 100 or veichle.position.y > self.map_height * self.cell_width + 100):
+            return True
 
     def update(self):
         #Drawing roads
@@ -94,10 +99,13 @@ class Map:
                 road = self.map[y][x]
                 if road:
                     road.draw(self.renderEngine)
+
         #Update bots
         for bot in self.bots:
             bot.update()
+            # Test
             self.renderEngine.drawRect( x = bot.veichle.position.x - 50, y = bot.veichle.position.y - 50, width = 100, height = 100, color = (216, 17, 17))
+     
         #Update cars
         for veichle in self.veichles:
             veichle.move()
@@ -105,3 +113,13 @@ class Map:
             veichle.draw(self.renderEngine)
             #Testing
             # self.checkCollision()
+
+        #Testing deleting ents
+        for i in range(len(self.veichles)):
+            if self.outsideEges(self.veichles[i]):
+                for index in range(len(self.bots)):
+                    if self.veichles[i].id == self.bots[index].veichle.id:
+                        del self.bots[index]
+                del self.veichles[i]
+        print(len(self.veichles), len(self.bots))
+               

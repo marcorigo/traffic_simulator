@@ -5,7 +5,8 @@ from pygame.math import Vector2
 
 class Veichle:
     dt = 0
-    def __init__(self, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=500.0):
+    def __init__(self,id, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=500.0):
+        self.id = id
         self.model = None
         self.position = Vector2(posx, posy)
         self.velocity = Vector2(0.0, 0.0)
@@ -14,11 +15,12 @@ class Veichle:
         self.max_acceleration = max_acceleration
         self.max_steering = max_steering
         self.max_velocity = 150
-        self.brake_deceleration = 30
+        self.brake_deceleration = 5
         self.free_deceleration = 5
         self.acceleration = 0.0
         self.steering = 0.0
         self.controls = { "up": False, "down": False, "left": False, "right": False, "space": False }
+        self.facing = 1
     
     def move(self):
         if self.controls['up']:
@@ -61,6 +63,8 @@ class Veichle:
             self.angle = 270
         if facing == 4:
             self.angle = 180
+        
+        self.facing = facing
 
     def setPosition(self, x, y):
         self.position.x = x

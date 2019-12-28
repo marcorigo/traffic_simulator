@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, './veichles')
 from car import Car
 from roads import roadBuilder
 from bot import Bot
@@ -36,21 +38,24 @@ class Map:
                 facing = 1
 
         # Calc initial car position
+        x = path[0][0]
+        y = path[0][1]
+
         if facing == 1:
-            x = path[0][0] * self.cell_width + self.border_right
-            y = path[0][1] * self.cell_width + self.cell_width - self.car_height
+            x = x * self.cell_width + self.border_right
+            y = y * self.cell_width + self.cell_width - self.car_height
         if facing == 2:
-            x = path[0][0] * self.cell_width
-            y = path[0][1] * self.cell_width + self.border_left
+            x = x * self.cell_width
+            y = y * self.cell_width + self.border_left
         if facing == 3:
-            x = path[0][0] * self.cell_width + self.border_left
-            y = path[0][1] * self.cell_width
+            x = x * self.cell_width + self.border_left
+            y = y * self.cell_width
         if facing == 4:
-            x = path[0][0] * self.cell_width + self.cell_width - self.car_width
-            y = path[0][1] * self.cell_width + self.border_right
+            x = x * self.cell_width + self.cell_width - self.car_width
+            y = y * self.cell_width + self.border_right
         
-        veichle = Car(self.car_width, self.car_height, x, y)
-        # Set cat degree
+        veichle = Car(len(self.veichles), self.car_width, self.car_height, x, y)
+        # Set car degree
         veichle.changeDegree(facing)
         # Adding to map veichles
         self.veichles.append(veichle)
@@ -66,11 +71,19 @@ class Map:
     def checkCollision(self):
         vW = self.car_height
         vH = self.car_height
-        for i in self.bots:
-            for j in self.bots:
-                if(i.veichle.position.x - vW/2 > j.veichle.position.x - vW/2 and i.veichle.position.x - vW/2 < j.veichle.position.x - vW/2 + vW and i.veichle.position.y - vH/2 > j.veichle.position.y - vH/2 and i.veichle.position.y - vH/2 < j.veichle.position.y - vH/2 + vH):
-                    del self.bots[i]
+        for i in range(len(self.veichles)):
+            for j in range(len(self.veichles)):
+                # Test
+                self.renderEngine.drawRect( x = self.veichles[i].position.x - vW/2, y = self.veichles[i].position.y - vH/2, width = vW, height = vH, color = (19, 20, 48))
+
+                if( self.veichles[i].position.x - vW/2 < self.veichles[j].position.x + vW/2 and
+                    self.veichles[i].position.x + vW/2 > self.veichles[j].position.x - vW/2 and
+                    self.veichles[i].position.y - vH/2 < self.veichles[j].position.y + vH/2 and
+                    self.veichles[i].position.y + vH/2 > self.veichles[j].position.y - vH/2):
+                    # del self.veichles[i]    
+                    # del self.veichles[j]          
                     print('collisione')
+                    # return
                 
             
 
@@ -81,12 +94,14 @@ class Map:
                 road = self.map[y][x]
                 if road:
                     road.draw(self.renderEngine)
-        self.checkCollision()
         #Update bots
         for bot in self.bots:
             bot.update()
+            self.renderEngine.drawRect( x = bot.veichle.position.x - 50, y = bot.veichle.position.y - 50, width = 100, height = 100, color = (216, 17, 17))
         #Update cars
         for veichle in self.veichles:
             veichle.move()
             veichle.update()
             veichle.draw(self.renderEngine)
+            #Testing
+            # self.checkCollision()

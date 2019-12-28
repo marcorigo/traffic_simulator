@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, './veichles')
 from tkinter import Tk, Canvas
 from threading import Timer
 from map import Map
@@ -30,14 +32,14 @@ def game():
     
     map.createRoads(ROAD_MAP)
     
-    path = [[2,0]]
-    car1 = map.addVeichle(path, 3, False)
+    # path = [[2,0]]
+    # car1 = map.addVeichle(path, 3, False)
 
     #Path 1
     path = [[2,0],[2,1],[2,2],[3,2], [4, 2], [5, 2], [5, 1], [5, 0], [4, 0], [3, 0], [2, 0], [2, 1], [2, 2], [1, 2], [0, 2]]
     map.addVeichle(path)
     #Path 2
-    path = [[0,2],[1,2],[2,2],[2,1], [2, 0], [3, 0], [4, 0], [5, 0], [5, 1], [5, 2], [4, 2], [3, 2], [2, 2], [2, 3], [2, 4], [2, 5]]
+    path = [[1,2],[2,2],[2,1], [2, 0], [3, 0], [4, 0], [5, 0], [5, 1], [5, 2], [4, 2], [3, 2], [2, 2], [2, 3], [2, 4], [2, 5]]
     map.addVeichle(path)
 
 

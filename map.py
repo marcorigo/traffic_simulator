@@ -104,7 +104,7 @@ class Map:
         for bot in self.bots:
             bot.update()
             # Test
-            self.renderEngine.drawRect( x = bot.veichle.position.x - 50, y = bot.veichle.position.y - 50, width = 100, height = 100, color = (216, 17, 17))
+            # self.renderEngine.drawRect( x = bot.veichle.position.x - 50, y = bot.veichle.position.y - 50, width = 100, height = 100, color = (216, 17, 17))
      
         #Update cars
         for veichle in self.veichles:
@@ -120,6 +120,4 @@ class Map:
                 for index in range(len(self.bots)):
                     if self.veichles[i].id == self.bots[index].veichle.id:
                         del self.bots[index]
-                del self.veichles[i]
-        print(len(self.veichles), len(self.bots))
                

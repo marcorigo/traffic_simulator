@@ -94,7 +94,10 @@ class Bot:
                     self.veichle.position.x + vW/2 > bot.veichle.position.x - vW/2 and
                     self.veichle.position.y - vH/2 < bot.veichle.position.y + vH/2 and
                     self.veichle.position.y + vH/2 > bot.veichle.position.y - vH/2):
-                    print('collisione')
+                    
+                    if self.veichle.facing == bot.veichle.facing:
+                        print('collisione')
+                        self.veichle.controls['space']
 
     def checkPath(self):
         if self.pathStatus < self.pathLength - 1:

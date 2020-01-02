@@ -19,11 +19,21 @@ class Map:
         self.border_right = self.side_walk + self.road_way + self.road_way / 2
         self.border_left = self.side_walk + self.road_way / 2
         self.bots = []
+        self.spawners = []
 
     def createRoads(self, road_map):
         for y in range(len(road_map)):
             for x in range(len(road_map[y])):
                 road_type = road_map[y][x]
+
+                if road_type == '>':
+                    spawner = {
+                        'x': x,
+                        'y': y,
+                        'facing': 2
+                    }
+                    self.spawners.append(spawner)
+
                 road = roadBuilder(road_type, x, y, self.cell_width, self.side_walk, rotation = road_type)
                 self.map[y][x] = road
 
@@ -48,7 +58,7 @@ class Map:
             y = y * self.cell_width + self.cell_width - self.car_height
         if facing == 2:
             x = x * self.cell_width
-            y = y * self.cell_width + self.border_left
+            y = y * self.cell_width + self.cell_width - self.car_width 
         if facing == 3:
             x = x * self.cell_width + self.border_left
             y = y * self.cell_width
@@ -123,3 +133,12 @@ class Map:
             if self.outsideEdges(self.veichles[i]):
                 del self.veichles[i]
                
+        for spawner in self.spawners:
+            occupied = False
+            for bot in self.bots:
+                if bot.veichle.facing == spawner['facing'] and bot.path[bot.pathStatus][0] == spawner['x'] and bot.path[bot.pathStatus][1] == spawner['y']:
+                    occupied = True
+            if not occupied:
+                path = [[spawner['x'], spawner['y']], [spawner['x'] + 1, spawner['y']]]
+                self.addVeichle(path = path, facing = spawner['facing'])
+

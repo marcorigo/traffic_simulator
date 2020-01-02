@@ -122,7 +122,7 @@ class Curve(Road):
 
 
 def roadBuilder(road_type, cellX, cellY, cell_width, border, rotation = True):
-    if road_type == '═':
+    if road_type == '═' or road_type == '>':
         return StraightRoad(cellX, cellY, cell_width, border, rotation = True )
     if road_type == '║':
         return StraightRoad(cellX, cellY, cell_width, border, rotation = False )

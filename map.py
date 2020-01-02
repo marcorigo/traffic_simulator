@@ -87,7 +87,7 @@ class Map:
                     print('collisione')
                     # return
                 
-    def outsideEges(self, veichle):
+    def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or
             veichle.position.y < - 100 or veichle.position.y > self.map_height * self.cell_width + 100):
             return True
@@ -115,9 +115,11 @@ class Map:
             # self.checkCollision()
 
         #Testing deleting ents
-        for i in range(len(self.veichles)):
-            if self.outsideEges(self.veichles[i]):
-                for index in range(len(self.bots)):
-                    if self.veichles[i].id == self.bots[index].veichle.id:
-                        del self.bots[index]
+        for i in range(len(self.bots) - 1):
+            if self.bots[i].pathLength - 1 == self.bots[i].pathStatus:
+                del self.bots[i]
+
+        for i in range(len(self.veichles) - 1):
+            if self.outsideEdges(self.veichles[i]):
+                del self.veichles[i]
                

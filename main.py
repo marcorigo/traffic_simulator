@@ -31,6 +31,7 @@ def game():
     map = Map(renderEngine, ROAD_MAP, BLOCK_SIZE)
     
     map.createRoads(ROAD_MAP)
+    # map.addVeichle([[2, 2]], True, False)
 
     while True:
         for ev in pygame.event.get():

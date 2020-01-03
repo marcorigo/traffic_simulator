@@ -2,7 +2,7 @@ from render import RenderEngine
 import random
 
 class Bot:
-    def __init__(self, veichle, path, cell_width, border_right, border_left, bots, map):
+    def __init__(self, veichle, path, cell_width, border_right, border_left, bots, map, renderEngine, active = True):
         self.veichle = veichle
         self.path = path
         self.pathLength = len(self.path) 
@@ -12,9 +12,17 @@ class Bot:
         self.movingToAngle = self.veichle.angle
         self.border_right = border_right
         self.border_left = border_left
-        self.vision_field = 100
+        self.vision_field_width = 100
+        self.vision_field_height = self.veichle.height
+        self.vision_field_x = 0
+        self.vision_field_y = 0
+        self.avoidAccident = False
+        self.speed_to_slow_down = 10
         self.map_bots = bots
         self.map = map
+        self.renderEngine = renderEngine
+        self.debug_mode = True
+        self.active = active
 
         # if the path has not been given
         self.auto_generate = len(self.path) <= 1
@@ -25,10 +33,10 @@ class Bot:
         # If path need to be auto-generated
         if self.auto_generate and self.generate_path:
             self.generatePath()
-        
         self.pathLength = len(self.path) 
         self.checkPath()
         self.checkMove()
+        self.setViewPoints()
         self.dashcam()
         self.move()
         
@@ -104,11 +112,13 @@ class Bot:
             nextPos = self.pathStatus + 1
         else:
             nextPos = actualPos
-            
+        
+        slowing = False
+
         # Top
         if actualPos > 0:
             if self.path[beforePos][1] < self.path[actualPos][1]:
-                self.slowing = True
+                slowing = True
                 # Top to right
                 if self.path[actualPos][0] < self.path[nextPos][0]:
                     if int(self.veichle.position.y) >= int(((self.cell_width * (self.path[actualPos][1])) + self.border_right )):
@@ -118,8 +128,8 @@ class Bot:
                     if int(self.veichle.position.y) >= int((self.cell_width * (self.path[actualPos][1]) + self.border_left )):
                         self.veichle.changeDegree(4)
             # # Right
-            if self.path[beforePos][0] > self.path[actualPos][0]:
-                self.slowing = True
+            elif self.path[beforePos][0] > self.path[actualPos][0]:
+                slowing = True
                 # Right to top
                 if self.path[actualPos][1] < self.path[nextPos][1]:
                     if int(self.veichle.position.x) <= int((self.cell_width * (self.path[actualPos][0]) + self.border_left )):
@@ -129,8 +139,8 @@ class Bot:
                     if int(self.veichle.position.x) <= int((self.cell_width * (self.path[actualPos][0]) + self.border_right )):
                         self.veichle.changeDegree(1)
             # Bottom
-            if self.path[beforePos][1] > self.path[actualPos][1]:
-                self.slowing = True
+            elif self.path[beforePos][1] > self.path[actualPos][1]:
+                slowing = True
                 # Bottom to right
                 if self.path[actualPos][0] < self.path[nextPos][0]:
                     if int(self.veichle.position.y) <= int(((self.cell_width * (self.path[actualPos][1])) + self.border_right )):
@@ -140,8 +150,8 @@ class Bot:
                     if int(self.veichle.position.y) <= int(((self.cell_width * (self.path[actualPos][1])) + self.border_left )):
                         self.veichle.changeDegree(4)
             # Left   
-            if self.path[beforePos][0] < self.path[actualPos][0]:
-                self.slowing = True
+            elif self.path[beforePos][0] < self.path[actualPos][0]:
+                slowing = True
                 # Left to top
                 if self.path[actualPos][1] > self.path[nextPos][1]:
                     if int(self.veichle.position.x) >= int(((self.cell_width * (self.path[actualPos][0])) + self.border_right )):
@@ -151,29 +161,72 @@ class Bot:
                     if int(self.veichle.position.x) >= int(((self.cell_width * (self.path[actualPos][0])) + self.border_left )):
                         self.veichle.changeDegree(3)
 
+            if slowing and self.veichle.acceleration > self.speed_to_slow_down:
+                self.slowing = True
+            if not slowing or slowing and self.veichle.acceleration < self.speed_to_slow_down:
+                self.slowing = False
+
 
     def move(self):
         # Slowing down for curves
-        if self.slowing and self.veichle.acceleration > 10:
+        if self.slowing:
+            self.veichle.controls['up'] = False
+        elif self.avoidAccident:
             self.veichle.controls['space'] = True
             self.veichle.controls['up'] = False
         else:
             self.veichle.controls['space'] = False
             self.veichle.controls['up'] = True
 
+    def setViewPoints(self):
+        facing = self.veichle.facing
+        x = self.veichle.position.x
+        y = self.veichle.position.y
+        height = self.veichle.height
+        width = self.veichle.width
+        if facing == 1:
+            x = x - height / 2
+            y = y - width / 2 - self.vision_field_width
+        if facing == 2:
+            x = x + width / 2
+            y = y - height / 2
+        if facing == 3:
+            x = x - height / 2
+            y = y + width / 2
+        if facing == 4:
+            x = x - width / 2 - self.vision_field_width
+            y = y - height / 2
+        
+        self.vision_field_x = x
+        self.vision_field_y = y
+
     def dashcam(self):
-        vW = self.vision_field
-        vH = self.vision_field
+        vW = self.vision_field_width
+        vH = self.vision_field_height
+        if self.veichle.facing == 1 or self.veichle.facing == 3:
+            vW = self.vision_field_height
+            vH = self.vision_field_width
+
+        if self.debug_mode:
+            if self.avoidAccident:
+                self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (226, 0, 0))
+            elif self.slowing:
+                self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 144, 0))
+            else:
+                self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (242, 242, 242))
+
         for bot in self.map_bots:
             if bot.veichle.id != self.veichle.id:
-                if( self.veichle.position.x - vW/2 < bot.veichle.position.x + vW/2 and
-                    self.veichle.position.x + vW/2 > bot.veichle.position.x - vW/2 and
-                    self.veichle.position.y - vH/2 < bot.veichle.position.y + vH/2 and
-                    self.veichle.position.y + vH/2 > bot.veichle.position.y - vH/2):
-                    
-                    if self.veichle.facing == bot.veichle.facing:
-                        print('collisione')
-                        self.veichle.controls['space']
+
+                if( self.vision_field_x <= bot.veichle.position.x + bot.veichle.height / 2 and
+                    self.vision_field_x + vW >= bot.veichle.position.x - bot.veichle.height / 2 and
+                    self.vision_field_y <= bot.veichle.position.y + bot.veichle.height / 2 and
+                    self.vision_field_y + vH >= bot.veichle.position.y - bot.veichle.height / 2):
+
+                    self.avoidAccident = True
+                    return
+
+        self.avoidAccident = False
 
     def checkPath(self):
         # Auto increment pathStatus in relation to x and y and previous path coords
@@ -186,5 +239,3 @@ class Bot:
         else:
             self.pathStatus = self.pathLength - 1
             # print('Il veicolo si trova nelle celle x = {}  y = {}'.format(x, y))
-
-            

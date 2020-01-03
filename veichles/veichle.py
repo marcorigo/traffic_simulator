@@ -15,7 +15,7 @@ class Veichle:
         self.max_acceleration = max_acceleration
         self.max_steering = max_steering
         self.max_velocity = 150
-        self.brake_deceleration = 5
+        self.brake_deceleration = 30
         self.free_deceleration = 5
         self.acceleration = 0.0
         self.steering = 0.0
@@ -82,3 +82,6 @@ class Veichle:
 
         self.position += self.velocity.rotate(-self.angle) * self.dt
         self.angle += degrees(angular_velocity) * self.dt
+
+        if self.velocity.x < 1 and self.velocity.y < 1 and self.acceleration > 1:
+            self.acceleration = 0

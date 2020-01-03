@@ -1,12 +1,12 @@
 from veichle import Veichle
 
 class Car(Veichle):
-    def __init__(self,id, width, heigth, posx, posy, angle = 0):
+    def __init__(self,id, width, height, posx, posy, angle = 0):
         super().__init__(id, posx, posy, angle)
         self.width = width
-        self.heigth = heigth
+        self.height = height
 
     def draw(self, renderEngine):
         x = self.position.x - self.width / 2
-        y = self.position.y - self.heigth / 2
-        renderEngine.drawVeichle(x, y, self.width, self.heigth, self.angle, self.width, self.heigth)
+        y = self.position.y - self.height / 2
+        renderEngine.drawVeichle(x, y, self.width, self.height, self.angle, self.width, self.height)

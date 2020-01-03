@@ -31,9 +31,9 @@ class Map:
                 road = roadBuilder(road_type, x, y, self.cell_width, self.side_walk, rotation = road_type)
                 self.map[y][x] = road
 
-    def addVeichle(self, path, facing = False, autoPilot = True):
+    def addVeichle(self, path, facing = False, active = True):
         # Find degree
-        if autoPilot and not facing:
+        if not facing:
             if path[0][0] < path[1][0]:
                 facing = 2
             if path[0][0] > path[1][0]:
@@ -63,9 +63,9 @@ class Map:
         veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
         # Set car degree
         veichle.changeDegree(facing)
-        # If is bot
-        if autoPilot:
-            self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots, self.map ))
+
+        veichle.acceleration = 10
+        self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots, self.map, self.renderEngine, active ))
 
         return veichle
 
@@ -117,10 +117,11 @@ class Map:
 
         #Update bots
         for bot in self.bots:
-            bot.update()
 
-            bot.veichle.move()
-            bot.veichle.update()
+            if bot.active:
+                bot.update()
+                bot.veichle.move()
+                bot.veichle.update()
             bot.veichle.draw(self.renderEngine)
 
         # Testing deleting ents

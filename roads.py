@@ -1,5 +1,5 @@
 class Road:
-    def __init__(self, cellX, cellY, cell_width, side_walk):
+    def __init__(self, cellX, cellY, cell_width, side_walk, road_type):
         self.cellX = cellX
         self.cellY = cellY
         self.cell_width = cell_width
@@ -7,6 +7,7 @@ class Road:
         self.x = self.cellX * self.cell_width
         self.y = self.cellY * self.cell_width
         self.side_walk_color = (94, 94, 94)
+        self.road_type = road_type
 
         self.road_line_quantity = 5
         self.road_line_height = (self.cell_width - self.border * 2) / 15
@@ -46,8 +47,8 @@ class Road:
             renderEngine.drawRect(self.x + self.cell_width / 2 - self.road_line_height / 2, self.y + self.road_line_section * i, self.road_line_height, self.road_line_width, (242, 242, 242))
 
 class StraightRoad(Road):
-    def __init__(self, cellX, cellY, cell_width, border, rotation = True):
-        super().__init__(cellX, cellY, cell_width, border)
+    def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = True):
+        super().__init__(cellX, cellY, cell_width, border, road_type)
         self.rotation = rotation
 
     def draw(self, renderEngine):
@@ -69,8 +70,9 @@ class StraightRoad(Road):
             self.verticalRoadLines(renderEngine)
 
 class Intersection(Road):
-    def __init__(self, cellX, cellY, cell_width, border):
-        super().__init__(cellX, cellY, cell_width, border)
+    def __init__(self, cellX, cellY, cell_width, border, road_type):
+        super().__init__(cellX, cellY, cell_width, border, road_type)
+
 
     def draw(self, renderEngine):
         x = self.cellX * self.cell_width
@@ -84,8 +86,8 @@ class Intersection(Road):
         self.bottomRightSideWalk(renderEngine)
 
 class Curve(Road):
-    def __init__(self, cellX, cellY, cell_width, border, rotation = 0):
-        super().__init__(cellX, cellY, cell_width, border)
+    def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = 0):
+        super().__init__(cellX, cellY, cell_width, border, road_type)
         self.rotation = rotation
 
     def draw(self, renderEngine):
@@ -122,20 +124,20 @@ class Curve(Road):
 
 
 def roadBuilder(road_type, cellX, cellY, cell_width, border, rotation = True):
-    if road_type == '═' or road_type == '>':
-        return StraightRoad(cellX, cellY, cell_width, border, rotation = True )
-    if road_type == '║':
-        return StraightRoad(cellX, cellY, cell_width, border, rotation = False )
+    if road_type == '═' or road_type == '➡' or road_type == '⬅':
+        return StraightRoad(cellX, cellY, cell_width, border, road_type, rotation = True )
+    if road_type == '║' or road_type == '⬆' or road_type == '⬇':
+        return StraightRoad(cellX, cellY, cell_width, border, road_type, rotation = False )
     if road_type == '╬':
-        return Intersection(cellX, cellY, cell_width, border)
+        return Intersection(cellX, cellY, cell_width, border, road_type)
     if road_type == '╔':
-        return Curve(cellX, cellY, cell_width, border, rotation = 1 )
+        return Curve(cellX, cellY, cell_width, border, road_type, rotation = 1 )
     if road_type == '╚':
-        return Curve(cellX, cellY, cell_width, border, rotation = 2 )
+        return Curve(cellX, cellY, cell_width, border, road_type, rotation = 2 )
     if road_type == '╗':
-        return Curve(cellX, cellY, cell_width, border, rotation = 3 )
+        return Curve(cellX, cellY, cell_width, border, road_type, rotation = 3 )
     if road_type == '╝':
-        return Curve(cellX, cellY, cell_width, border, rotation = 4 )
+        return Curve(cellX, cellY, cell_width, border, road_type, rotation = 4 )
     return 0
 
 

@@ -7,7 +7,6 @@ from bot import Bot
 class Map:
     def __init__(self, renderEngine, road_map, cell_width):
         self.renderEngine = renderEngine
-        self.veichles = []
         self.map = road_map
         self.cell_width = cell_width
         self.map_width = len(self.map[0])
@@ -26,20 +25,15 @@ class Map:
             for x in range(len(road_map[y])):
                 road_type = road_map[y][x]
 
-                if road_type == '>':
-                    spawner = {
-                        'x': x,
-                        'y': y,
-                        'facing': 2
-                    }
-                    self.spawners.append(spawner)
+                # Check if is and create
+                self.createVeichleSpawnPoint(road_type, x, y)
 
                 road = roadBuilder(road_type, x, y, self.cell_width, self.side_walk, rotation = road_type)
                 self.map[y][x] = road
 
-    def addVeichle(self, path, facing = 1, autoPilot = True):
+    def addVeichle(self, path, facing = False, autoPilot = True):
         # Find degree
-        if autoPilot and path:
+        if autoPilot and not facing:
             if path[0][0] < path[1][0]:
                 facing = 2
             if path[0][0] > path[1][0]:
@@ -66,41 +60,52 @@ class Map:
             x = x * self.cell_width + self.cell_width - self.car_width
             y = y * self.cell_width + self.border_right
         
-        veichle = Car(len(self.veichles), self.car_width, self.car_height, x, y)
+        veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
         # Set car degree
         veichle.changeDegree(facing)
-        # Adding to map veichles
-        self.veichles.append(veichle)
         # If is bot
         if autoPilot:
-            self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots ))
+            self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots, self.map ))
 
         return veichle
 
-    def createVeichleSpawnPoint(self):
-        pass
+    def createVeichleSpawnPoint(self, road_type, x, y):
+        if road_type == '➡' or road_type == '⬅' or road_type == '⬆' or road_type == '⬇':
+            spawner = {
+                'x': x,
+                'y': y,
+                'spawned': 0
+                }
+            if road_type == '➡':
+                spawner['facing'] = 2
+
+            if road_type == '⬅':
+                spawner['facing'] = 4
+
+            if road_type == '⬆':
+                spawner['facing'] = 1
+
+            if road_type == '⬇':
+                spawner['facing'] = 3
+
+            self.spawners.append(spawner)
 
     def checkCollision(self):
         vW = self.car_height
         vH = self.car_height
-        for i in range(len(self.veichles)):
-            for j in range(len(self.veichles)):
+        for i in range(len(self.bots)):
+            for j in range(len(self.bots)):
                 # Test
-                self.renderEngine.drawRect( x = self.veichles[i].position.x - vW/2, y = self.veichles[i].position.y - vH/2, width = vW, height = vH, color = (19, 20, 48))
+                self.renderEngine.drawRect( x = self.bots[i].position.x - vW/2, y = self.bots[i].position.y - vH/2, width = vW, height = vH, color = (19, 20, 48))
 
-                if( self.veichles[i].position.x - vW/2 < self.veichles[j].position.x + vW/2 and
-                    self.veichles[i].position.x + vW/2 > self.veichles[j].position.x - vW/2 and
-                    self.veichles[i].position.y - vH/2 < self.veichles[j].position.y + vH/2 and
-                    self.veichles[i].position.y + vH/2 > self.veichles[j].position.y - vH/2):
+                if( self.bots[i].veichle.position.x - vW/2 < self.bots[j].veichle.position.x + vW/2 and
+                    self.bots[i].veichle.position.x + vW/2 > self.bots[j].veichle.position.x - vW/2 and
+                    self.bots[i].veichle.position.y - vH/2 < self.bots[j].veichle.position.y + vH/2 and
+                    self.bots[i].veichle.position.y + vH/2 > self.bots[j].veichle.position.y - vH/2):
                     # del self.veichles[i]    
                     # del self.veichles[j]          
                     print('collisione')
                     # return
-                
-    def outsideEdges(self, veichle):
-        if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or
-            veichle.position.y < - 100 or veichle.position.y > self.map_height * self.cell_width + 100):
-            return True
 
     def update(self):
         #Drawing roads
@@ -113,32 +118,40 @@ class Map:
         #Update bots
         for bot in self.bots:
             bot.update()
-            # Test
-            # self.renderEngine.drawRect( x = bot.veichle.position.x - 50, y = bot.veichle.position.y - 50, width = 100, height = 100, color = (216, 17, 17))
-     
-        #Update cars
-        for veichle in self.veichles:
-            veichle.move()
-            veichle.update()
-            veichle.draw(self.renderEngine)
-            #Testing
-            # self.checkCollision()
 
-        #Testing deleting ents
+            bot.veichle.move()
+            bot.veichle.update()
+            bot.veichle.draw(self.renderEngine)
+
+        # Testing deleting ents
+        self.deleteBotsOutOfEdges()
+
+        # Spawning cars
+        self.checkForSpawn()
+
+    def outsideEdges(self, veichle):
+        if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or
+            veichle.position.y < - 100 or veichle.position.y > self.map_height * self.cell_width + 100):
+            return True
+
+    def deleteBotsOutOfEdges(self):# Testing deleting ents
         for i in range(len(self.bots) - 1):
-            if self.bots[i].pathLength - 1 == self.bots[i].pathStatus:
-                del self.bots[i]
+            if self.outsideEdges(self.bots[i].veichle):
 
-        for i in range(len(self.veichles) - 1):
-            if self.outsideEdges(self.veichles[i]):
-                del self.veichles[i]
-               
+                # Todo -Eliminare quelli con path statica
+                del self.bots[i]
+                return
+    
+    def checkForSpawn(self):
         for spawner in self.spawners:
             occupied = False
             for bot in self.bots:
-                if bot.veichle.facing == spawner['facing'] and bot.path[bot.pathStatus][0] == spawner['x'] and bot.path[bot.pathStatus][1] == spawner['y']:
+                if (bot.veichle.facing == spawner['facing']
+                    and bot.path[bot.pathStatus][0] == spawner['x']
+                    and bot.path[bot.pathStatus][1] == spawner['y']):
+
                     occupied = True
             if not occupied:
-                path = [[spawner['x'], spawner['y']], [spawner['x'] + 1, spawner['y']]]
+                path = [[spawner['x'], spawner['y']]]
                 self.addVeichle(path = path, facing = spawner['facing'])
-
+                spawner['spawned'] += 1

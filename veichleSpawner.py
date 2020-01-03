@@ -1,8 +1,8 @@
 class veichleSpawner:
-    def __init__(self, x, y, interval):
+    def __init__(self, x, y, facing):
         self.x = x
         self.y = y
-        self.interval = interval
+        self.facing = facing
         self.spawned = 0
 
     

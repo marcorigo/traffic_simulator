@@ -7,7 +7,8 @@ from render import RenderEngine
 import pygame
 from veichle import Veichle
 
-ROAD_MAP    =  [[ 0 ,  0,  '╔', '═', '╬' , '═', '╗'],
+ROAD_MAP    =  [[ 0 ,  0,   0,   0,  '⬇' ,  0 ,  0],
+                [ 0 ,  0,  '╔', '═', '╬' , '═', '╗'],
                 [ 0 ,  0,  '║',  0,  '║' ,  0 , '║'],
                 ['➡', '═', '╬', '═', '╬' , '═', '╝'],
                 [ 0 ,  0,  '║',  0,  '║' ,  0 ,  0 ],

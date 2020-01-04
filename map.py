@@ -95,17 +95,14 @@ class Map:
         vH = self.car_height
         for i in range(len(self.bots)):
             for j in range(len(self.bots)):
-                # Test
-                self.renderEngine.drawRect( x = self.bots[i].position.x - vW/2, y = self.bots[i].position.y - vH/2, width = vW, height = vH, color = (19, 20, 48))
 
                 if( self.bots[i].veichle.position.x - vW/2 < self.bots[j].veichle.position.x + vW/2 and
                     self.bots[i].veichle.position.x + vW/2 > self.bots[j].veichle.position.x - vW/2 and
                     self.bots[i].veichle.position.y - vH/2 < self.bots[j].veichle.position.y + vH/2 and
                     self.bots[i].veichle.position.y + vH/2 > self.bots[j].veichle.position.y - vH/2):
-                    # del self.veichles[i]    
-                    # del self.veichles[j]          
-                    print('collisione')
-                    # return
+                    del self.bots[i]
+                    del self.bots[j]
+                    return
 
     def update(self):
         #Drawing roads
@@ -129,6 +126,9 @@ class Map:
 
         # Spawning cars
         self.checkForSpawn()
+
+        # Delete car collided
+        # self.checkCollision()
 
     def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or

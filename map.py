@@ -58,7 +58,7 @@ class Map:
             y = y * self.cell_width
         if facing == 4:
             x = x * self.cell_width + self.cell_width - self.car_width
-            y = y * self.cell_width + self.border_right
+            y = y * self.cell_width + self.border_left
         
         veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
         # Set car degree
@@ -154,5 +154,15 @@ class Map:
                     occupied = True
             if not occupied:
                 path = [[spawner['x'], spawner['y']]]
+
+                if spawner['facing'] == 1:
+                    path.append([spawner['x'], spawner['y'] - 1])
+                if spawner['facing'] == 2:
+                    path.append([spawner['x'] + 1, spawner['y']])
+                if spawner['facing'] == 3:
+                    path.append([spawner['x'], spawner['y'] + 1])
+                if spawner['facing'] == 4:
+                    path.append([spawner['x'] - 1, spawner['y']])
+
                 self.addVeichle(path = path, facing = spawner['facing'])
                 spawner['spawned'] += 1

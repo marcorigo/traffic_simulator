@@ -89,13 +89,18 @@ class Intersection(Road):
             'green': (87, 226, 40)
         }
         self.light_radious = self.cell_width / 15
-        self.change_time = random.randint(5, 10)
+        self.change_time = random.randint(10, 15)
         self.last_change = int(time.time())
         self.yellow_light_time = 2
         self.x_light = 'green'
         self.y_light = 'red'
         self.changing = 1
         self.road_allowed = [1, 3]
+
+    def can(self, veichle):
+        if veichle.facing in self.road_allowed:
+            return True
+        return False
 
     def checkTrafficLight(self):
         now = int(time.time())
@@ -106,19 +111,21 @@ class Intersection(Road):
             if self.changing == 1:
                 self.x_light = 'yellow'
                 self.changing = 2
+                self.road_allowed = [0]
             else:
                 self.y_light = 'yellow'
                 self.changing = 1
+                self.road_allowed = [0]
         
         if self.last_change + self.yellow_light_time < now:
             if self.changing == 1:
                 self.y_light = 'red'
                 self.x_light = 'green'
-                self.road_allowed = [1, 3]
+                self.road_allowed = [2, 4]
             else:
                 self.x_light = 'red'
                 self.y_light = 'green'
-                self.road_allowed = [2, 4]
+                self.road_allowed = [1, 3]
 
 
 

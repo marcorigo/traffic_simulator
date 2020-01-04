@@ -21,13 +21,14 @@ class Bot:
         self.map_bots = bots
         self.map = map
         self.renderEngine = renderEngine
-        self.debug_mode = True
+        self.debug_mode = False
         self.active = active
+        self.slow_for_cross = False
 
         # if the path has not been given
-        self.auto_generate = len(self.path) <= 1
+        self.auto_generate = len(self.path) <= 2
         # For initial after spawn
-        self.generate_path = True
+        self.generate_path = False
 
     def update(self):
         # If path need to be auto-generated
@@ -170,10 +171,20 @@ class Bot:
 
 
     def move(self):
+        # Check for cross roads
+        try:
+            next = self.path[self.pathStatus + 1]
+            if not self.map[next[1]][next[0]].can(self.veichle):
+                self.slow_for_cross = True
+            else:
+                self.slow_for_cross = False
+        except:
+            self.slow_for_cross = False
+
         # Slowing down for curves
         if self.slowing:
             self.veichle.controls['up'] = False
-        elif self.avoidAccident:
+        elif self.avoidAccident or self.slow_for_cross:
             self.veichle.controls['space'] = True
             self.veichle.controls['up'] = False
         else:

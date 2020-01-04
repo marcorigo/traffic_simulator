@@ -36,7 +36,7 @@ class Bot:
         self.pathLength = len(self.path) 
         self.checkPath()
         self.checkMove()
-        self.setViewPoints()
+        self.updateViewPoints()
         self.dashcam()
         self.move()
         
@@ -47,6 +47,8 @@ class Bot:
         # When a veichle exit the map no path update
         try:
             road = self.map[y][x]
+            if road == 0:
+                return
         except:
             return
 
@@ -178,7 +180,7 @@ class Bot:
             self.veichle.controls['space'] = False
             self.veichle.controls['up'] = True
 
-    def setViewPoints(self):
+    def updateViewPoints(self):
         facing = self.veichle.facing
         x = self.veichle.position.x
         y = self.veichle.position.y

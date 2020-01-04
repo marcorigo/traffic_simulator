@@ -1,4 +1,5 @@
 import time
+import random
 
 class Road:
     def __init__(self, cellX, cellY, cell_width, side_walk, road_type):
@@ -88,7 +89,7 @@ class Intersection(Road):
             'green': (87, 226, 40)
         }
         self.light_radious = self.cell_width / 15
-        self.change_time = 10
+        self.change_time = random.randint(5, 10)
         self.last_change = int(time.time())
         self.yellow_light_time = 2
         self.x_light = 'green'

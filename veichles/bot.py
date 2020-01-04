@@ -17,7 +17,7 @@ class Bot:
         self.vision_field_x = 0
         self.vision_field_y = 0
         self.avoidAccident = False
-        self.speed_to_slow_down = 10
+        self.speed_to_slow_down = 15
         self.map_bots = bots
         self.map = map
         self.renderEngine = renderEngine

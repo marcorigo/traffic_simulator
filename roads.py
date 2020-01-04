@@ -89,7 +89,7 @@ class Intersection(Road):
             'green': (87, 226, 40)
         }
         self.light_radious = self.cell_width / 15
-        self.change_time = random.randint(10, 15)
+        self.change_time = random.randint(15, 30)
         self.last_change = int(time.time())
         self.yellow_light_time = 2
         self.x_light = 'green'

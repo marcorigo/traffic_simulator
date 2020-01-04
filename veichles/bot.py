@@ -21,7 +21,7 @@ class Bot:
         self.map_bots = bots
         self.map = map
         self.renderEngine = renderEngine
-        self.debug_mode = False
+        self.debug_mode = True
         self.active = active
         self.slow_for_cross = False
 
@@ -182,7 +182,7 @@ class Bot:
             self.slow_for_cross = False
 
         # Slowing down for curves
-        if self.slowing:
+        if self.slowing and self.veichle.acceleration:
             self.veichle.controls['up'] = False
         elif self.avoidAccident or self.slow_for_cross:
             self.veichle.controls['space'] = True

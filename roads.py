@@ -1,3 +1,5 @@
+import time
+
 class Road:
     def __init__(self, cellX, cellY, cell_width, side_walk, road_type):
         self.cellX = cellX
@@ -46,6 +48,14 @@ class Road:
         for i in range(self.road_line_quantity):
             renderEngine.drawRect(self.x + self.cell_width / 2 - self.road_line_height / 2, self.y + self.road_line_section * i, self.road_line_height, self.road_line_width, (242, 242, 242))
 
+    def topBottomTrafficLight(self, renderEngine, color, radious):
+        renderEngine.drawCircle(self.x + self.cell_width / 2, self.y, radious, color)
+        renderEngine.drawCircle(self.x + self.cell_width / 2, self.y + self.cell_width - radious, radious, color)
+
+    def leftRightTrafficLight(self, renderEngine, color, radious):
+        renderEngine.drawCircle(int(self.x), int(self.y + self.cell_width / 2), radious, color)
+        renderEngine.drawCircle(int(self.x + self.cell_width - radious), int(self.y + self.cell_width / 2), radious, color)
+
 class StraightRoad(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = True):
         super().__init__(cellX, cellY, cell_width, border, road_type)
@@ -72,9 +82,49 @@ class StraightRoad(Road):
 class Intersection(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type):
         super().__init__(cellX, cellY, cell_width, border, road_type)
+        self.colors = {
+            'red' : (255, 0, 0),
+            'yellow': (247, 228, 86),
+            'green': (87, 226, 40)
+        }
+        self.light_radious = self.cell_width / 15
+        self.change_time = 10
+        self.last_change = int(time.time())
+        self.yellow_light_time = 2
+        self.x_light = 'green'
+        self.y_light = 'red'
+        self.changing = 1
+        self.road_allowed = [1, 3]
+
+    def checkTrafficLight(self):
+        now = int(time.time())
+
+        if self.last_change + self.change_time < now:
+            self.last_change = now
+
+            if self.changing == 1:
+                self.x_light = 'yellow'
+                self.changing = 2
+            else:
+                self.y_light = 'yellow'
+                self.changing = 1
+        
+        if self.last_change + self.yellow_light_time < now:
+            if self.changing == 1:
+                self.y_light = 'red'
+                self.x_light = 'green'
+                self.road_allowed = [1, 3]
+            else:
+                self.x_light = 'red'
+                self.y_light = 'green'
+                self.road_allowed = [2, 4]
+
+
 
 
     def draw(self, renderEngine):
+        self.checkTrafficLight()
+
         x = self.cellX * self.cell_width
         y = self.cellY * self.cell_width
         #Background
@@ -84,6 +134,10 @@ class Intersection(Road):
         self.topRightSideWalk(renderEngine)
         self.bottomLeftSideWalk(renderEngine)
         self.bottomRightSideWalk(renderEngine)
+
+        # Draw traffic light
+        self.topBottomTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
+        self.leftRightTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
 
 class Curve(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = 0):

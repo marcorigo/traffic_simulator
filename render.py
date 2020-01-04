@@ -23,5 +23,8 @@ class RenderEngine:
     def drawRect(self, x, y, width, height, color):
         self.pygame.draw.rect(self.canvas, color, (x, y, width, height))
 
+    def drawCircle(self, x, y, radius, color):
+        self.pygame.draw.circle(self.canvas, color, (int(x), int(y)), int(radius))
+
     def move(self, element, x = 0, y = 0):
         self.canvas.move(element, x, y)

@@ -230,11 +230,13 @@ class Bot:
 
         for bot in self.map_bots:
             if bot.veichle.id != self.veichle.id:
+                check_bot_width = bot.veichle.getWidth()
+                check_bot_height = bot.veichle.getHeight()          
 
-                if( self.vision_field_x <= bot.veichle.position.x + bot.veichle.height / 2 and
-                    self.vision_field_x + vW >= bot.veichle.position.x - bot.veichle.height / 2 and
-                    self.vision_field_y <= bot.veichle.position.y + bot.veichle.height / 2 and
-                    self.vision_field_y + vH >= bot.veichle.position.y - bot.veichle.height / 2):
+                if( self.vision_field_x <= bot.veichle.position.x + check_bot_width / 2 and
+                    self.vision_field_x + vW >= bot.veichle.position.x - check_bot_width / 2 and
+                    self.vision_field_y <= bot.veichle.position.y + check_bot_height / 2 and
+                    self.vision_field_y + vH >= bot.veichle.position.y - check_bot_height / 2):
 
                     self.avoidAccident = True
                     return

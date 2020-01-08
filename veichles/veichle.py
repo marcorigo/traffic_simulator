@@ -15,7 +15,7 @@ class Veichle:
         self.max_acceleration = max_acceleration
         self.max_steering = max_steering
         self.max_velocity = 150
-        self.brake_deceleration = 25
+        self.brake_deceleration = 50
         self.free_deceleration = 5
         self.acceleration = 0.0
         self.steering = 0.0

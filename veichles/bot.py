@@ -12,7 +12,7 @@ class Bot:
         self.movingToAngle = self.veichle.angle
         self.border_right = border_right
         self.border_left = border_left
-        self.vision_field_width = 150
+        self.vision_field_width = int(self.cell_width * 1.5)
         self.vision_field_height = self.veichle.height
         self.vision_field_x = 0
         self.vision_field_y = 0

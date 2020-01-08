@@ -100,8 +100,7 @@ class Map:
                     self.bots[i].veichle.position.x + vW/2 > self.bots[j].veichle.position.x - vW/2 and
                     self.bots[i].veichle.position.y - vH/2 < self.bots[j].veichle.position.y + vH/2 and
                     self.bots[i].veichle.position.y + vH/2 > self.bots[j].veichle.position.y - vH/2):
-                    del self.bots[i]
-                    del self.bots[j]
+                    print('collisione')
                     return
 
     def update(self):
@@ -166,3 +165,6 @@ class Map:
 
                 self.addVeichle(path = path, facing = spawner['facing'])
                 spawner['spawned'] += 1
+
+                # Test
+                print(len(self.bots))

@@ -102,7 +102,6 @@ class Map:
                         bot1.veichle.position.y + bot1.veichle.getHeight() / 2 >= bot2.veichle.position.y - bot2.veichle.getHeight() / 2):
                         self.bots.remove(bot1)
                         self.bots.remove(bot2)
-                        return
 
     def update(self):
         #Drawing roads
@@ -136,12 +135,10 @@ class Map:
             return True
 
     def deleteBotsOutOfEdges(self):# Testing deleting ents
-        for i in range(len(self.bots) - 1):
-            if self.outsideEdges(self.bots[i].veichle):
-
+        for bot in self.bots:
+            if self.outsideEdges(bot.veichle):
                 # Todo -Eliminare quelli con path statica
-                del self.bots[i]
-                return
+                self.bots.remove(bot)
     
     def checkForSpawn(self):
         for spawner in self.spawners:

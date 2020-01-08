@@ -22,7 +22,7 @@ class Bot:
         self.map_bots = bots
         self.map = map
         self.renderEngine = renderEngine
-        self.debug_mode = True
+        self.debug_mode = False
         self.active = active
         self.stop_for_cross = False
 

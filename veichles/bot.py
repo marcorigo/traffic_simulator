@@ -8,7 +8,7 @@ class Bot:
         self.pathLength = len(self.path) 
         self.cell_width = cell_width
         self.pathStatus = 0
-        self.slowing = False
+        self.approaching_curve = False
         self.movingToAngle = self.veichle.angle
         self.border_right = border_right
         self.border_left = border_left
@@ -18,12 +18,13 @@ class Bot:
         self.vision_field_y = 0
         self.avoidAccident = False
         self.speed_to_slow_down = 10
+        self.min_acceleration = 7
         self.map_bots = bots
         self.map = map
         self.renderEngine = renderEngine
         self.debug_mode = True
         self.active = active
-        self.slow_for_cross = False
+        self.stop_for_cross = False
 
         # if the path has not been given
         self.auto_generate = len(self.path) <= 2
@@ -115,59 +116,73 @@ class Bot:
             nextPos = self.pathStatus + 1
         else:
             nextPos = actualPos
-        
-        slowing = False
 
         # Top
         if actualPos > 0:
             if self.path[beforePos][1] < self.path[actualPos][1]:
-                slowing = True
                 # Top to right
                 if self.path[actualPos][0] < self.path[nextPos][0]:
+                    self.approaching_curve = True
                     if int(self.veichle.position.y) >= int(((self.cell_width * (self.path[actualPos][1])) + self.border_right )):
                         self.veichle.changeDegree(2)
+                else:
+                    self.approaching_curve = False
                 #top to left
                 if self.path[actualPos][0] > self.path[nextPos][0]:
+                    self.approaching_curve = True
                     if int(self.veichle.position.y) >= int((self.cell_width * (self.path[actualPos][1]) + self.border_left )):
                         self.veichle.changeDegree(4)
+                else:
+                    self.approaching_curve = False
             # # Right
             elif self.path[beforePos][0] > self.path[actualPos][0]:
-                slowing = True
                 # Right to top
                 if self.path[actualPos][1] < self.path[nextPos][1]:
+                    self.approaching_curve = True
                     if int(self.veichle.position.x) <= int((self.cell_width * (self.path[actualPos][0]) + self.border_left )):
                         self.veichle.changeDegree(3)
+                else:
+                    self.approaching_curve = False
                 # Right to bottom
                 if self.path[actualPos][1] > self.path[nextPos][1]:
+                    self.approaching_curve = True
                     if int(self.veichle.position.x) <= int((self.cell_width * (self.path[actualPos][0]) + self.border_right )):
                         self.veichle.changeDegree(1)
+                else:
+                    self.approaching_curve = False
             # Bottom
             elif self.path[beforePos][1] > self.path[actualPos][1]:
-                slowing = True
                 # Bottom to right
                 if self.path[actualPos][0] < self.path[nextPos][0]:
+                    self.approaching_curve = True
                     if int(self.veichle.position.y) <= int(((self.cell_width * (self.path[actualPos][1])) + self.border_right )):
                         self.veichle.changeDegree(2)
+                else:
+                    self.approaching_curve = False
                 # Bottom to left
                 if self.path[actualPos][0] > self.path[nextPos][0]:
+                    self.approaching_curve = True
                     if int(self.veichle.position.y) <= int(((self.cell_width * (self.path[actualPos][1])) + self.border_left )):
                         self.veichle.changeDegree(4)
+                else:
+                    self.approaching_curve = False
             # Left   
             elif self.path[beforePos][0] < self.path[actualPos][0]:
-                slowing = True
                 # Left to top
                 if self.path[actualPos][1] > self.path[nextPos][1]:
+                    self.approaching_curve = True
                     if int(self.veichle.position.x) >= int(((self.cell_width * (self.path[actualPos][0])) + self.border_right )):
                         self.veichle.changeDegree(1)
+                else:
+                    self.approaching_curve = False
                 # Left to bottom
                 if self.path[actualPos][1] < self.path[nextPos][1]:
+                    self.approaching_curve = True
                     if int(self.veichle.position.x) >= int(((self.cell_width * (self.path[actualPos][0])) + self.border_left )):
                         self.veichle.changeDegree(3)
+                else:
+                    self.approaching_curve = False
 
-            if slowing and self.veichle.acceleration > self.speed_to_slow_down:
-                self.slowing = True
-            if not slowing or slowing and self.veichle.acceleration < self.speed_to_slow_down:
-                self.slowing = False
 
 
     def move(self):
@@ -175,19 +190,21 @@ class Bot:
         try:
             next = self.path[self.pathStatus + 1]
             if not self.map[next[1]][next[0]].can(self.veichle):
-                self.slow_for_cross = True
+                self.stop_for_cross = True
             else:
-                self.slow_for_cross = False
+                self.stop_for_cross = False
         except:
-            self.slow_for_cross = False
+            self.stop_for_cross = False
 
-        # Slowing down for curves
-        if self.slowing and self.veichle.acceleration:
-            self.veichle.controls['up'] = False
-        elif self.avoidAccident or self.slow_for_cross:
+        if self.avoidAccident or self.stop_for_cross:
             self.veichle.controls['space'] = True
             self.veichle.controls['up'] = False
+        # Slowing down for curves or max velocity sorpassed
+        elif self.approaching_curve and self.veichle.acceleration >= self.min_acceleration or self.veichle.acceleration >= self.speed_to_slow_down:
+            # self.slowing = True
+            self.veichle.controls['up'] = False
         else:
+            # self.slowing = False
             self.veichle.controls['space'] = False
             self.veichle.controls['up'] = True
 
@@ -223,7 +240,9 @@ class Bot:
         if self.debug_mode:
             if self.avoidAccident:
                 self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (226, 0, 0))
-            elif self.slowing:
+            elif self.stop_for_cross:
+                self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 229, 0))
+            elif self.approaching_curve:
                 self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 144, 0))
             else:
                 self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (242, 242, 242))

@@ -48,16 +48,16 @@ class Map:
         y = path[0][1]
 
         if facing == 1:
-            x = x * self.cell_width + self.border_right
+            x = x * self.cell_width + self.cell_width / 2 + self.road_way / 2
             y = y * self.cell_width + self.cell_width - self.car_height
         if facing == 2:
             x = x * self.cell_width
-            y = y * self.cell_width + self.cell_width - self.car_width 
+            y = y * self.cell_width + self.side_walk + self.road_way / 2
         if facing == 3:
-            x = x * self.cell_width + self.border_left
+            x = x * self.cell_width + self.cell_width / 2 + self.road_way / 2
             y = y * self.cell_width
         if facing == 4:
-            x = x * self.cell_width + self.cell_width - self.car_width
+            x = x * self.cell_width + self.cell_width / 2 + self.road_way / 2
             y = y * self.cell_width + self.border_left
         
         veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)

@@ -91,17 +91,18 @@ class Map:
             self.spawners.append(spawner)
 
     def checkCollision(self):
-        vW = self.car_height
-        vH = self.car_height
         for i in range(len(self.bots)):
             for j in range(len(self.bots)):
-
-                if( self.bots[i].veichle.position.x - vW/2 < self.bots[j].veichle.position.x + vW/2 and
-                    self.bots[i].veichle.position.x + vW/2 > self.bots[j].veichle.position.x - vW/2 and
-                    self.bots[i].veichle.position.y - vH/2 < self.bots[j].veichle.position.y + vH/2 and
-                    self.bots[i].veichle.position.y + vH/2 > self.bots[j].veichle.position.y - vH/2):
-                    print('collisione')
-                    return
+                bot1 = self.bots[i]
+                bot2 = self.bots[j]
+                if self.bots[i].veichle.id != self.bots[j].veichle.id:
+                    if( bot1.veichle.position.x - bot1.veichle.getWidth() / 2 <= bot2.veichle.position.x + bot2.veichle.getWidth() / 2 and
+                        bot1.veichle.position.x + bot1.veichle.getWidth() / 2 >= bot2.veichle.position.x - bot2.veichle.getWidth() / 2 and
+                        bot1.veichle.position.y - bot1.veichle.getHeight() / 2 <= bot2.veichle.position.y + bot2.veichle.getHeight() / 2 and
+                        bot1.veichle.position.y + bot1.veichle.getHeight() / 2 >= bot2.veichle.position.y - bot2.veichle.getHeight() / 2):
+                        self.bots.remove(bot1)
+                        self.bots.remove(bot2)
+                        return
 
     def update(self):
         #Drawing roads
@@ -127,7 +128,7 @@ class Map:
         self.checkForSpawn()
 
         # Delete car collided
-        # self.checkCollision()
+        self.checkCollision()
 
     def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or
@@ -165,6 +166,3 @@ class Map:
 
                 self.addVeichle(path = path, facing = spawner['facing'])
                 spawner['spawned'] += 1
-
-                # Test
-                print(len(self.bots))

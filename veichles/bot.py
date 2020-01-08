@@ -199,7 +199,7 @@ class Bot:
         if self.avoidAccident or self.stop_for_cross:
             self.veichle.controls['space'] = True
             self.veichle.controls['up'] = False
-        # Slowing down for curves or max velocity sorpassed
+        # Slowing down for curves or max velocity
         elif self.approaching_curve and self.veichle.acceleration >= self.min_acceleration or self.veichle.acceleration >= self.speed_to_slow_down:
             # self.slowing = True
             self.veichle.controls['up'] = False
@@ -240,8 +240,8 @@ class Bot:
         if self.debug_mode:
             if self.avoidAccident:
                 self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (226, 0, 0))
-            elif self.stop_for_cross:
-                self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 229, 0))
+            # elif self.stop_for_cross:
+            #     self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 229, 0))
             elif self.approaching_curve:
                 self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 144, 0))
             else:

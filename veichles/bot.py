@@ -22,9 +22,11 @@ class Bot:
         self.map_bots = bots
         self.map = map
         self.renderEngine = renderEngine
-        self.debug_mode = True
+        self.debug_mode = False
         self.active = active
         self.stop_for_cross = False
+        self.check_front_veichles_for_turing = False
+        self.is_on_cross = False
 
         # if the path has not been given
         self.auto_generate = len(self.path) <= 2
@@ -39,8 +41,8 @@ class Bot:
         self.checkPath()
         self.checkMove()
         self.updateViewPoints()
-        self.dashcam()
         self.move()
+        self.dashcam()
         
     def generatePath(self):
         x = self.path[self.pathStatus][0]
@@ -159,8 +161,10 @@ class Bot:
                 # Top to right
                 if self.path[actualPos][0] < self.path[nextPos][0]:
                     self.approaching_curve = True
+                    self.check_front_veichles_for_turing = True
                     if int(self.veichle.position.y) >= int(((self.cell_width * (self.path[actualPos][1])) + self.border_right )):
                         self.veichle.changeDegree(2)
+                        self.check_front_veichles_for_turing = False
                 else:
                     self.approaching_curve = False
                 #top to left
@@ -170,16 +174,18 @@ class Bot:
                         self.veichle.changeDegree(4)
                 else:
                     self.approaching_curve = False
-            # # Right
+            # Right
             elif self.path[beforePos][0] > self.path[actualPos][0]:
-                # Right to top
+                # Right to bottom
                 if self.path[actualPos][1] < self.path[nextPos][1]:
                     self.approaching_curve = True
+                    self.check_front_veichles_for_turing = True
                     if int(self.veichle.position.x) <= int((self.cell_width * (self.path[actualPos][0]) + self.border_left )):
                         self.veichle.changeDegree(3)
+                        self.check_front_veichles_for_turing = False
                 else:
                     self.approaching_curve = False
-                # Right to bottom
+                # Right to top
                 if self.path[actualPos][1] > self.path[nextPos][1]:
                     self.approaching_curve = True
                     if int(self.veichle.position.x) <= int((self.cell_width * (self.path[actualPos][0]) + self.border_right )):
@@ -198,8 +204,10 @@ class Bot:
                 # Bottom to left
                 if self.path[actualPos][0] > self.path[nextPos][0]:
                     self.approaching_curve = True
+                    self.check_front_veichles_for_turing = True
                     if int(self.veichle.position.y) <= int(((self.cell_width * (self.path[actualPos][1])) + self.border_left )):
                         self.veichle.changeDegree(4)
+                        self.check_front_veichles_for_turing = False
                 else:
                     self.approaching_curve = False
             # Left   
@@ -207,8 +215,10 @@ class Bot:
                 # Left to top
                 if self.path[actualPos][1] > self.path[nextPos][1]:
                     self.approaching_curve = True
+                    self.check_front_veichles_for_turing = True
                     if int(self.veichle.position.x) >= int(((self.cell_width * (self.path[actualPos][0])) + self.border_right )):
                         self.veichle.changeDegree(1)
+                        self.check_front_veichles_for_turing = False
                 else:
                     self.approaching_curve = False
                 # Left to bottom
@@ -232,6 +242,17 @@ class Bot:
         except:
             self.stop_for_cross = False
 
+        # If need to check front veichles before turning
+        try:
+            road = self.map[self.path[self.pathStatus][1]][self.path[self.pathStatus][0]]
+
+            if road.road_type == '╬':
+                self.is_on_cross = True
+            else:
+                self.is_on_cross = False
+        except:
+            self.is_on_cross = False
+
         if self.avoidAccident or self.stop_for_cross:
             self.veichle.controls['space'] = True
             self.veichle.controls['up'] = False
@@ -253,9 +274,13 @@ class Bot:
         if facing == 1:
             x = x - height / 2
             y = y - width / 2 - self.vision_field_width
+            if self.is_on_cross and self.check_front_veichles_for_turing:
+                x -= self.veichle.getHeight()
         if facing == 2:
             x = x + width / 2
             y = y - height / 2
+            if self.is_on_cross and self.check_front_veichles_for_turing:
+                y -= self.veichle.getHeight()
         if facing == 3:
             x = x - height / 2
             y = y + width / 2
@@ -269,13 +294,18 @@ class Bot:
     def dashcam(self):
         vW = self.vision_field_width
         vH = self.vision_field_height
+
+        if self.is_on_cross and self.check_front_veichles_for_turing:
+            vH *= 2
+
         if self.veichle.facing == 1 or self.veichle.facing == 3:
-            vW = self.vision_field_height
-            vH = self.vision_field_width
+            temp = vW
+            vW = vH
+            vH = temp
 
         if self.debug_mode:
             if self.avoidAccident:
-                self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (226, 0, 0))
+                self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (226, 0, 0))                   
             elif self.stop_for_cross:
                 self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 229, 0))
             elif self.approaching_curve:

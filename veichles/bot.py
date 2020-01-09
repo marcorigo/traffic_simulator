@@ -12,17 +12,17 @@ class Bot:
         self.movingToAngle = self.veichle.angle
         self.border_right = border_right
         self.border_left = border_left
-        self.vision_field_width = int(self.cell_width * 1.5)
+        self.speed_to_slow_down = 8 / (100 / self.cell_width)
+        self.vision_field_width = int(self.cell_width / (self.speed_to_slow_down / 3))
         self.vision_field_height = self.veichle.height
         self.vision_field_x = 0
         self.vision_field_y = 0
         self.avoidAccident = False
-        self.speed_to_slow_down = 10
-        self.min_acceleration = 7
+        self.min_acceleration = self.speed_to_slow_down / 2
         self.map_bots = bots
         self.map = map
         self.renderEngine = renderEngine
-        self.debug_mode = False
+        self.debug_mode = True
         self.active = active
         self.stop_for_cross = False
         self.check_front_veichles_for_turing = False
@@ -32,6 +32,8 @@ class Bot:
         self.auto_generated_path = len(self.path) <= 2
         # For initial after spawn
         self.generate_path = False
+
+        self.veichle.free_deceleration = self.min_acceleration / 2
 
     def update(self):
         # If path need to be auto-generated
@@ -44,10 +46,10 @@ class Bot:
         self.checkPath()
         # Decide where to move
         self.checkForTurning()
-        # Update view points x and y based on facing
-        self.updateViewPoints()
         # Decide if move or not
         self.move()
+        # Update view points x and y based on facing
+        self.updateViewPoints()
         # Collision detection
         self.dashcam()
         
@@ -259,6 +261,10 @@ class Bot:
                 self.is_on_cross = True
             else:
                 self.is_on_cross = False
+
+            pos = self.path[self.pathStatus]
+            if not self.map[pos[1]][pos[0]].can(self.veichle):
+                self.check_front_veichles_for_turing = False
         except:
             self.is_on_cross = False
 
@@ -331,10 +337,18 @@ class Bot:
                     self.vision_field_y <= bot.veichle.position.y + check_bot_height / 2 and
                     self.vision_field_y + vH >= bot.veichle.position.y - check_bot_height / 2):
 
+                    # If all 2 veichles are waithing the older must go on
+                    if ( self.check_front_veichles_for_turing and self.is_on_cross and
+                         bot.check_front_veichles_for_turing and self.is_on_cross and
+                         self.veichle.id < bot.veichle.id):
+
+                        self.avoidAccident = False
+                        return
+                    
                     self.avoidAccident = True
                     return
-                else:
-                    self.avoidAccident = False
+
+                self.avoidAccident = False
 
     def checkPath(self):
         # Auto increment pathStatus in relation to x and y and previous path step coords

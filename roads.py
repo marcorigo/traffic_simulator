@@ -165,22 +165,22 @@ class TRoad(Road):
         self.changing = 1
 
         if self.rotation == 1:
-            self.road_x_axes = [2, 4]
-            self.road_y_axes = [1]
+            self.facing_x_axes = [2, 4]
+            self.facing_y_axes = [3]
         
         if self.rotation == 2:
-            self.road_x_axes = [2]
-            self.road_y_axes = [1, 3]
+            self.facing_x_axes = [4]
+            self.facing_y_axes = [1, 3]
         
         if self.rotation == 3:
-            self.road_x_axes = [2, 4]
-            self.road_y_axes = [3]
+            self.facing_x_axes = [2, 4]
+            self.facing_y_axes = [1]
         
         if self.rotation == 4:
-            self.road_x_axes = [4]
-            self.road_y_axes = [1, 3]
+            self.facing_x_axes = [2]
+            self.facing_y_axes = [1, 3]
 
-        self.road_allowed = self.road_y_axes
+        self.road_allowed = self.facing_y_axes
 
     def can(self, veichle):
         if veichle.facing in self.road_allowed:
@@ -206,11 +206,11 @@ class TRoad(Road):
             if self.changing == 1:
                 self.y_light = 'red'
                 self.x_light = 'green'
-                self.road_allowed = self.road_x_axes
+                self.road_allowed = self.facing_x_axes
             else:
                 self.x_light = 'red'
                 self.y_light = 'green'
-                self.road_allowed = self.road_y_axes
+                self.road_allowed = self.facing_y_axes
 
 
     def draw(self, renderEngine):

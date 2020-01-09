@@ -22,7 +22,7 @@ class Bot:
         self.map_bots = bots
         self.map = map
         self.renderEngine = renderEngine
-        self.debug_mode = False
+        self.debug_mode = True
         self.active = active
         self.stop_for_cross = False
 
@@ -276,8 +276,8 @@ class Bot:
         if self.debug_mode:
             if self.avoidAccident:
                 self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (226, 0, 0))
-            # elif self.stop_for_cross:
-            #     self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 229, 0))
+            elif self.stop_for_cross:
+                self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 229, 0))
             elif self.approaching_curve:
                 self.renderEngine.drawRect(self.vision_field_x, self.vision_field_y, vW, vH, (255, 144, 0))
             else:

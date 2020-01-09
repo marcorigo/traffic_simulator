@@ -5,10 +5,17 @@ class RenderEngine:
         self.width = width
         self.height = height
         self.car = self.pygame.image.load('car.png').convert_alpha()
+        self.truck = self.pygame.image.load('truck.png')
 
-    def drawVeichle(self, x, y, width, height, angle, fvW, fvH):
-        self.car = self.pygame.transform.scale(self.car, (width, height))
-        image_orig = self.car.convert().convert_alpha()
+    def drawVeichle(self, veichle_name, x, y, width, height, angle, fvW, fvH):
+        veichle = None
+        if veichle_name == 'car':
+            veichle = self.pygame.transform.scale(self.car, (width, height))
+            self.car = veichle
+        if veichle_name == 'truck':
+            veichle = self.pygame.transform.scale(self.truck, (width, height))
+            self.truck = veichle
+        image_orig = veichle.convert().convert_alpha()
         image = image_orig.copy()
 
         rect = image.get_rect()  

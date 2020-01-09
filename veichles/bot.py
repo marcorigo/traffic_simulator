@@ -262,6 +262,7 @@ class Bot:
             else:
                 self.is_on_cross = False
 
+            # If need to check but the traffic light has been switched while car is on cross
             pos = self.path[self.pathStatus]
             if not self.map[pos[1]][pos[0]].can(self.veichle):
                 self.check_front_veichles_for_turing = False

@@ -1,6 +1,8 @@
+import random
 import sys
 sys.path.insert(0, './veichles')
 from car import Car
+from truck import Truck
 from roads import roadBuilder
 from bot import Bot
 
@@ -15,6 +17,8 @@ class Map:
         self.road_way = (self.cell_width - self.side_walk * 2) / 2
         self.car_width = int(self.cell_width / 3)
         self.car_height = int(self.cell_width / 5)
+        self.truck_width = int(self.cell_width / 1.2)
+        self.truck_height = int(self.cell_width / 3)
         self.border_right = self.side_walk + self.road_way + self.road_way / 2
         self.border_left = self.side_walk + self.road_way / 2
         self.bots = []
@@ -65,8 +69,11 @@ class Map:
         y = path[0][1]
 
         x, y = self.getRoadSpawnPoints(facing, x, y)
-        
         veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
+        # if random.randint(0, 5) > 1:
+        #     veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
+        # else:
+        #     veichle = Truck(len(self.bots), self.truck_width, self.truck_height, x, y)
         # Set car degree
         veichle.changeDegree(facing)
 

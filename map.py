@@ -20,16 +20,33 @@ class Map:
         self.bots = []
         self.spawners = []
 
-    def createRoads(self, road_map):
-        for y in range(len(road_map)):
-            for x in range(len(road_map[y])):
-                road_type = road_map[y][x]
+        self.createRoads()
+
+    def createRoads(self):
+        for y in range(len(self.map)):
+            for x in range(len(self.map[y])):
+                road_type = self.map[y][x]
 
                 # Check if is and create
                 self.createVeichleSpawnPoint(road_type, x, y)
 
                 road = roadBuilder(road_type, x, y, self.cell_width, self.side_walk, rotation = road_type)
                 self.map[y][x] = road
+
+    def getRoadSpawnPoints(self, facing, x, y):
+        if facing == 1:
+            x = x * self.cell_width + self.cell_width / 2 + self.road_way / 2
+            y = y * self.cell_width + self.cell_width - self.car_height
+        if facing == 2:
+            x = x * self.cell_width
+            y = y * self.cell_width + self.cell_width / 2 + self.road_way / 2
+        if facing == 3:
+            x = x * self.cell_width + self.side_walk + self.road_way / 2
+            y = y * self.cell_width
+        if facing == 4:
+            x = x * self.cell_width + self.cell_width / 2 + self.road_way / 2
+            y = y * self.cell_width + self.border_left
+        return x, y
 
     def addVeichle(self, path, facing = False, active = True):
         # Find degree
@@ -47,24 +64,12 @@ class Map:
         x = path[0][0]
         y = path[0][1]
 
-        if facing == 1:
-            x = x * self.cell_width + self.cell_width / 2 + self.road_way / 2
-            y = y * self.cell_width + self.cell_width - self.car_height
-        if facing == 2:
-            x = x * self.cell_width
-            y = y * self.cell_width + self.cell_width / 2 + self.road_way / 2
-        if facing == 3:
-            x = x * self.cell_width + self.side_walk + self.road_way / 2
-            y = y * self.cell_width
-        if facing == 4:
-            x = x * self.cell_width + self.cell_width / 2 + self.road_way / 2
-            y = y * self.cell_width + self.border_left
+        x, y = self.getRoadSpawnPoints(facing, x, y)
         
         veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
         # Set car degree
         veichle.changeDegree(facing)
 
-        veichle.acceleration = 10
         self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots, self.map, self.renderEngine, active ))
 
         return veichle
@@ -89,6 +94,8 @@ class Map:
                 spawner['facing'] = 3
 
             self.spawners.append(spawner)
+            return spawner
+        return False
 
     def checkCollision(self):
         for i in range(len(self.bots)):
@@ -102,7 +109,7 @@ class Map:
                         bot1.veichle.position.y + bot1.veichle.height / 2 >= bot2.veichle.position.y + bot2.veichle.height / 2):
                         self.bots.remove(bot1)
                         self.bots.remove(bot2)
-                        return
+                        return True
 
     def update(self):
         #Drawing roads

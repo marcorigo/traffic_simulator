@@ -5,7 +5,7 @@ class Bot:
     def __init__(self, veichle, path, cell_width, border_right, border_left, bots, map, renderEngine, active = True):
         self.veichle = veichle
         self.path = path
-        self.pathLength = len(self.path) 
+        self.pathLenght = len(self.path) 
         self.cell_width = cell_width
         self.pathStatus = 0
         self.approaching_curve = False
@@ -29,22 +29,29 @@ class Bot:
         self.is_on_cross = False
 
         # if the path has not been given
-        self.auto_generate = len(self.path) <= 2
+        self.auto_generated_path = len(self.path) <= 2
         # For initial after spawn
         self.generate_path = False
 
     def update(self):
         # If path need to be auto-generated
-        if self.auto_generate and self.generate_path:
-            self.generatePath()
-        self.pathLength = len(self.path) 
+        if self.auto_generated_path and self.generate_path:
+            self.generateNextPathStep()
+
+        # Update path lenght
+        self.pathLenght = len(self.path)
+        # Update position on path
         self.checkPath()
-        self.checkMove()
+        # Decide where to move
+        self.checkForTurning()
+        # Update view points x and y based on facing
         self.updateViewPoints()
+        # Decide if move or not
         self.move()
+        # Collision detection
         self.dashcam()
         
-    def generatePath(self):
+    def generateNextPathStep(self):
         x = self.path[self.pathStatus][0]
         y = self.path[self.pathStatus][1]
 
@@ -145,12 +152,14 @@ class Bot:
 
         self.generate_path = False
 
-    def checkMove(self):
+    def checkForTurning(self):
+        #This function decide when to turn a car
+
         # This function follow the path, both given or auto-generated
         beforePos = self.pathStatus - 1
         actualPos = self.pathStatus
         nextPos = 0
-        if actualPos + 1 < self.pathLength:
+        if actualPos + 1 < self.pathLenght:
             nextPos = self.pathStatus + 1
         else:
             nextPos = actualPos
@@ -258,10 +267,8 @@ class Bot:
             self.veichle.controls['up'] = False
         # Slowing down for curves or max velocity
         elif self.approaching_curve and self.veichle.acceleration >= self.min_acceleration or self.veichle.acceleration >= self.speed_to_slow_down:
-            # self.slowing = True
             self.veichle.controls['up'] = False
         else:
-            # self.slowing = False
             self.veichle.controls['space'] = False
             self.veichle.controls['up'] = True
 
@@ -295,6 +302,7 @@ class Bot:
         vW = self.vision_field_width
         vH = self.vision_field_height
 
+        # If need to check front veichle the check covers all the lines
         if self.is_on_cross and self.check_front_veichles_for_turing:
             vH *= 2
 
@@ -329,13 +337,13 @@ class Bot:
                     self.avoidAccident = False
 
     def checkPath(self):
-        # Auto increment pathStatus in relation to x and y and previous path coords
-        if self.pathStatus < self.pathLength - 1:
+        # Auto increment pathStatus in relation to x and y and previous path step coords
+        if self.pathStatus < self.pathLenght - 1:
             x = int(self.veichle.position.x / self.cell_width)
             y = int(self.veichle.position.y / self.cell_width)
             if self.path[self.pathStatus + 1][0] == x and self.path[self.pathStatus + 1][1] == y:
                 self.pathStatus += 1
                 self.generate_path = True
         else:
-            self.pathStatus = self.pathLength - 1
+            self.pathStatus = self.pathLenght - 1
             # print('Il veicolo si trova nelle celle x = {}  y = {}'.format(x, y))

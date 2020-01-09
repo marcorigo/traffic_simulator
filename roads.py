@@ -49,12 +49,16 @@ class Road:
         for i in range(self.road_line_quantity):
             renderEngine.drawRect(self.x + self.cell_width / 2 - self.road_line_height / 2, self.y + self.road_line_section * i, self.road_line_height, self.road_line_width, (242, 242, 242))
 
-    def topBottomTrafficLight(self, renderEngine, color, radious):
+    def topTrafficLight(self, renderEngine, color, radious):
         renderEngine.drawCircle(self.x + self.cell_width / 2, self.y, radious, color)
+
+    def bottomTrafficLight(self, renderEngine, color, radious):
         renderEngine.drawCircle(self.x + self.cell_width / 2, self.y + self.cell_width - radious, radious, color)
 
-    def leftRightTrafficLight(self, renderEngine, color, radious):
+    def leftTrafficLight(self, renderEngine, color, radious):
         renderEngine.drawCircle(int(self.x), int(self.y + self.cell_width / 2), radious, color)
+
+    def rightTrafficLight(self, renderEngine, color, radious):
         renderEngine.drawCircle(int(self.x + self.cell_width - radious), int(self.y + self.cell_width / 2), radious, color)
 
 class StraightRoad(Road):
@@ -63,10 +67,9 @@ class StraightRoad(Road):
         self.rotation = rotation
 
     def draw(self, renderEngine):
-        x = self.cellX * self.cell_width
-        y = self.cellY * self.cell_width
+
         #Background
-        renderEngine.drawRect(x, y, self.cell_width, self.cell_width, (170, 170, 170))
+        renderEngine.drawRect(self.x, self.y, self.cell_width, self.cell_width, (170, 170, 170))
 
         # ═
         if self.rotation:
@@ -127,16 +130,11 @@ class Intersection(Road):
                 self.y_light = 'green'
                 self.road_allowed = [1, 3]
 
-
-
-
     def draw(self, renderEngine):
         self.checkTrafficLight()
 
-        x = self.cellX * self.cell_width
-        y = self.cellY * self.cell_width
         #Background
-        renderEngine.drawRect(x, y, self.cell_width, self.cell_width, (170, 170, 170))
+        renderEngine.drawRect(self.x, self.y, self.cell_width, self.cell_width, (170, 170, 170))
 
         self.topLeftSideWalk(renderEngine)
         self.topRightSideWalk(renderEngine)
@@ -144,8 +142,130 @@ class Intersection(Road):
         self.bottomRightSideWalk(renderEngine)
 
         # Draw traffic light
-        self.topBottomTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
-        self.leftRightTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
+        self.topTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
+        self.bottomTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
+        self.leftTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
+        self.rightTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
+
+class TRoad(Road):
+    def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = 0):
+        super().__init__(cellX, cellY, cell_width, border, road_type)
+        self.rotation = rotation
+        self.colors = {
+            'red' : (255, 0, 0),
+            'yellow': (247, 228, 86),
+            'green': (87, 226, 40)
+        }
+        self.light_radious = self.cell_width / 15
+        self.change_time = random.randint(15, 30)
+        self.last_change = int(time.time())
+        self.yellow_light_time = 2
+        self.x_light = 'green'
+        self.y_light = 'red'
+        self.changing = 1
+
+        if self.rotation == 1:
+            self.road_x_axes = [2, 4]
+            self.road_y_axes = [1]
+        
+        if self.rotation == 2:
+            self.road_x_axes = [2]
+            self.road_y_axes = [1, 3]
+        
+        if self.rotation == 3:
+            self.road_x_axes = [2, 4]
+            self.road_y_axes = [3]
+        
+        if self.rotation == 4:
+            self.road_x_axes = [4]
+            self.road_y_axes = [1, 3]
+
+        self.road_allowed = self.road_y_axes
+
+    def can(self, veichle):
+        if veichle.facing in self.road_allowed:
+            return True
+        return False
+
+    def checkTrafficLight(self):
+        now = int(time.time())
+
+        if self.last_change + self.change_time < now:
+            self.last_change = now
+
+            if self.changing == 1:
+                self.x_light = 'yellow'
+                self.changing = 2
+                self.road_allowed = [0]
+            else:
+                self.y_light = 'yellow'
+                self.changing = 1
+                self.road_allowed = [0]
+        
+        if self.last_change + self.yellow_light_time < now:
+            if self.changing == 1:
+                self.y_light = 'red'
+                self.x_light = 'green'
+                self.road_allowed = self.road_x_axes
+            else:
+                self.x_light = 'red'
+                self.y_light = 'green'
+                self.road_allowed = self.road_y_axes
+
+
+    def draw(self, renderEngine):
+        self.checkTrafficLight()
+
+        # Background
+        renderEngine.drawRect(self.x, self.y, self.cell_width, self.cell_width, (170, 170, 170))
+
+        # ╩
+        if self.rotation == 1:
+            self.topLeftSideWalk(renderEngine)
+            self.topRightSideWalk(renderEngine)
+            self.bottomSideWalk(renderEngine)
+            self.orizontalRoadLines(renderEngine)
+
+            # Draw traffic light
+            self.topTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
+            self.leftTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
+            self.rightTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
+
+        # ╠
+        if self.rotation == 2:
+            self.leftSideWalk(renderEngine)
+            self.topRightSideWalk(renderEngine)
+            self.bottomRightSideWalk(renderEngine)
+            self.verticalRoadLines(renderEngine)
+
+            # Draw traffic light
+            self.topTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
+            self.bottomTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
+            self.rightTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
+
+        # ╦
+        if self.rotation == 3:
+            self.topSideWalk(renderEngine)
+            self.bottomRightSideWalk(renderEngine)
+            self.bottomLeftSideWalk(renderEngine)
+            self.orizontalRoadLines(renderEngine)
+
+            # Draw traffic light
+            self.bottomTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
+            self.leftTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
+            self.rightTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
+
+        # ╣
+        if self.rotation == 4:
+            self.rightSideWalk(renderEngine)
+            self.topLeftSideWalk(renderEngine)
+            self.bottomLeftSideWalk(renderEngine)
+            self.verticalRoadLines(renderEngine)
+
+            # Draw traffic light
+            self.topTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
+            self.bottomTrafficLight(renderEngine, self.colors[self.y_light], self.light_radious)
+            self.leftTrafficLight(renderEngine, self.colors[self.x_light], self.light_radious)
 
 class Curve(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = 0):
@@ -153,10 +273,9 @@ class Curve(Road):
         self.rotation = rotation
 
     def draw(self, renderEngine):
-        x = self.cellX * self.cell_width
-        y = self.cellY * self.cell_width
+
         #Background
-        renderEngine.drawRect(x, y, self.cell_width, self.cell_width, (170, 170, 170))
+        renderEngine.drawRect(self.x, self.y, self.cell_width, self.cell_width, (170, 170, 170))
 
         # ╔
         if self.rotation == 1:
@@ -200,6 +319,14 @@ def roadBuilder(road_type, cellX, cellY, cell_width, border, rotation = True):
         return Curve(cellX, cellY, cell_width, border, road_type, rotation = 3 )
     if road_type == '╝':
         return Curve(cellX, cellY, cell_width, border, road_type, rotation = 4 )
+    if road_type == '╩':
+        return TRoad(cellX, cellY, cell_width, border, road_type, rotation = 1 )
+    if road_type == '╠':
+        return TRoad(cellX, cellY, cell_width, border, road_type, rotation = 2 )
+    if road_type == '╦':
+        return TRoad(cellX, cellY, cell_width, border, road_type, rotation = 3 )
+    if road_type == '╣':
+        return TRoad(cellX, cellY, cell_width, border, road_type, rotation = 4 )
     return 0
 
 

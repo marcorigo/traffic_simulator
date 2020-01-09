@@ -71,6 +71,15 @@ class Bot:
             if road.road_type == '╬':
                 choice = random.choice([0, 1, 3])
                 self.path.append(actions[choice])
+            if road.road_type == '╠':
+                choice = random.choice([0, 1])
+                self.path.append(actions[choice])
+            if road.road_type == '╦':
+                choice = random.choice([3, 1])
+                self.path.append(actions[choice])
+            if road.road_type == '╣':
+                choice = random.choice([0, 3])
+                self.path.append(actions[choice])
         
         if self.veichle.facing == 2:
             if road.road_type == '╝':
@@ -81,6 +90,15 @@ class Bot:
                 self.path.append(actions[1])
             if road.road_type == '╬':
                 choice = random.choice([0, 1, 2])
+                self.path.append(actions[choice])
+            if road.road_type == '╠':
+                choice = random.choice([0, 2])
+                self.path.append(actions[choice])
+            if road.road_type == '╦':
+                choice = random.choice([3, 2])
+                self.path.append(actions[choice])
+            if road.road_type == '╩':
+                choice = random.choice([0, 3])
                 self.path.append(actions[choice])
 
         if self.veichle.facing == 3:
@@ -93,6 +111,15 @@ class Bot:
             if road.road_type == '╬':
                 choice = random.choice([1, 2, 3])
                 self.path.append(actions[choice])
+            if road.road_type == '╠':
+                choice = random.choice([1, 2])
+                self.path.append(actions[choice])
+            if road.road_type == '╣':
+                choice = random.choice([2, 3])
+                self.path.append(actions[choice])
+            if road.road_type == '╩':
+                choice = random.choice([1, 3])
+                self.path.append(actions[choice])
 
         if self.veichle.facing == 4:
             if road.road_type == '╔':
@@ -103,6 +130,15 @@ class Bot:
                 self.path.append(actions[3])
             if road.road_type == '╬':
                 choice = random.choice([0, 2, 3])
+                self.path.append(actions[choice])
+            if road.road_type == '╠':
+                choice = random.choice([0, 2])
+                self.path.append(actions[choice])
+            if road.road_type == '╦':
+                choice = random.choice([2, 3])
+                self.path.append(actions[choice])
+            if road.road_type == '╩':
+                choice = random.choice([0, 3])
                 self.path.append(actions[choice])
 
         self.generate_path = False

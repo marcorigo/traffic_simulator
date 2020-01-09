@@ -91,7 +91,7 @@ class Bot:
             if road.road_type == '╬':
                 choice = random.choice([0, 1, 2])
                 self.path.append(actions[choice])
-            if road.road_type == '╠':
+            if road.road_type == '╣':
                 choice = random.choice([0, 2])
                 self.path.append(actions[choice])
             if road.road_type == '╦':
@@ -295,8 +295,8 @@ class Bot:
 
                     self.avoidAccident = True
                     return
-
-        self.avoidAccident = False
+                else:
+                    self.avoidAccident = False
 
     def checkPath(self):
         # Auto increment pathStatus in relation to x and y and previous path coords

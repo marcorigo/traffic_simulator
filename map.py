@@ -96,10 +96,10 @@ class Map:
                 bot1 = self.bots[i]
                 bot2 = self.bots[j]
                 if self.bots[i].veichle.id != self.bots[j].veichle.id:
-                    if( bot1.veichle.position.x - bot1.veichle.getWidth() / 2 <= bot2.veichle.position.x + bot2.veichle.getWidth() / 2 and
-                        bot1.veichle.position.x + bot1.veichle.getWidth() / 2 >= bot2.veichle.position.x - bot2.veichle.getWidth() / 2 and
-                        bot1.veichle.position.y - bot1.veichle.getHeight() / 2 <= bot2.veichle.position.y + bot2.veichle.getHeight() / 2 and
-                        bot1.veichle.position.y + bot1.veichle.getHeight() / 2 >= bot2.veichle.position.y - bot2.veichle.getHeight() / 2):
+                    if( bot1.veichle.position.x - bot1.veichle.getWidth() / 2 <= bot2.veichle.position.x - bot2.veichle.getWidth() / 2 and
+                        bot1.veichle.position.x + bot1.veichle.getWidth() / 2 >= bot2.veichle.position.x + bot2.veichle.getWidth() / 2 and
+                        bot1.veichle.position.y - bot1.veichle.getHeight() / 2 <= bot2.veichle.position.y - bot2.veichle.getHeight() / 2 and
+                        bot1.veichle.position.y + bot1.veichle.getHeight() / 2 >= bot2.veichle.position.y + bot2.veichle.getHeight() / 2):
                         self.bots.remove(bot1)
                         self.bots.remove(bot2)
                         return

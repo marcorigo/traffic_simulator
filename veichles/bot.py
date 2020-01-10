@@ -2,7 +2,7 @@ from render import RenderEngine
 import random
 
 class Bot:
-    def __init__(self, veichle, path, cell_width, border_right, border_left, bots, map, renderEngine, active = True):
+    def __init__(self, veichle, path, cell_width, border_right, border_left, bots, map, renderEngine, debug, active = True):
         self.veichle = veichle
         self.path = path
         self.pathLenght = len(self.path) 
@@ -13,7 +13,8 @@ class Bot:
         self.border_right = border_right
         self.border_left = border_left
         self.speed_to_slow_down = 8 / (100 / self.cell_width)
-        self.vision_field_width = int(self.cell_width / (self.speed_to_slow_down / 3))
+        # self.vision_field_width = int(self.cell_width / (self.speed_to_slow_down / 3))
+        self.vision_field_width = int(self.cell_width / 1.4)
         self.vision_field_height = self.veichle.height
         self.vision_field_x = 0
         self.vision_field_y = 0
@@ -22,7 +23,7 @@ class Bot:
         self.map_bots = bots
         self.map = map
         self.renderEngine = renderEngine
-        self.debug_mode = True
+        self.debug_mode = debug
         self.active = active
         self.stop_for_cross = False
         self.check_front_veichles_for_turing = False
@@ -289,7 +290,7 @@ class Bot:
             x = x - height / 2
             y = y - width / 2 - self.vision_field_width
             if self.is_on_cross and self.check_front_veichles_for_turing:
-                x -= self.veichle.getHeight()
+                x -= self.veichle.getWidth()
         if facing == 2:
             x = x + width / 2
             y = y - height / 2
@@ -333,6 +334,8 @@ class Bot:
                 check_bot_width = bot.veichle.getWidth()
                 check_bot_height = bot.veichle.getHeight()          
 
+                # self.renderEngine.drawRect(bot.veichle.position.x - 2.5 - check_bot_width / 2, bot.veichle.position.y - 2.5 - check_bot_height / 2, 5, 5, (0, 242, 0))
+
                 if( self.vision_field_x <= bot.veichle.position.x + check_bot_width / 2 and
                     self.vision_field_x + vW >= bot.veichle.position.x - check_bot_width / 2 and
                     self.vision_field_y <= bot.veichle.position.y + check_bot_height / 2 and
@@ -340,7 +343,7 @@ class Bot:
 
                     # If all 2 veichles are waithing the older must go on
                     if ( self.check_front_veichles_for_turing and self.is_on_cross and
-                         bot.check_front_veichles_for_turing and self.is_on_cross and
+                         bot.check_front_veichles_for_turing and bot.is_on_cross and
                          self.veichle.id < bot.veichle.id):
 
                         self.avoidAccident = False

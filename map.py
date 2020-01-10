@@ -1,4 +1,5 @@
 import random
+import time
 import sys
 sys.path.insert(0, './veichles')
 from car import Car
@@ -7,10 +8,11 @@ from roads import roadBuilder
 from bot import Bot
 
 class Map:
-    def __init__(self, renderEngine, road_map, cell_width):
+    def __init__(self, renderEngine, road_map, cell_width, debug):
         self.renderEngine = renderEngine
         self.map = road_map
         self.cell_width = cell_width
+        self.debug = debug
         self.map_width = len(self.map[0])
         self.map_height = len(self.map)
         self.side_walk = int(self.cell_width / 7)
@@ -21,8 +23,10 @@ class Map:
         self.truck_height = int(self.cell_width / 3)
         self.border_right = self.side_walk + self.road_way + self.road_way / 2
         self.border_left = self.side_walk + self.road_way / 2
+        self.explosion_persitance = 3
         self.bots = []
         self.spawners = []
+        self.explosions = []
 
         self.createRoads()
 
@@ -69,15 +73,15 @@ class Map:
         y = path[0][1]
 
         x, y = self.getRoadSpawnPoints(facing, x, y)
-        veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
-        # if random.randint(0, 5) > 1:
-        #     veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
-        # else:
-        #     veichle = Truck(len(self.bots), self.truck_width, self.truck_height, x, y)
+        # veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
+        if random.randint(0, 5) > 1:
+            veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
+        else:
+            veichle = Truck(len(self.bots), self.truck_width, self.truck_height, x, y)
         # Set car degree
         veichle.changeDegree(facing)
 
-        self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots, self.map, self.renderEngine, active ))
+        self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots, self.map, self.renderEngine, self.debug, active ))
 
         return veichle
 
@@ -104,6 +108,23 @@ class Map:
             return spawner
         return False
 
+    def createExplosion(self, x, y):
+        explosion = {
+            'x': x,
+            'y': y,
+            'created_time': int(time.time()),
+            'width': int(self.cell_width),
+            'height': int(self.cell_width)
+        }
+        self.explosions.append(explosion)
+    
+    def explosionManager(self):
+        for explosion in self.explosions:
+            if explosion['created_time'] + self.explosion_persitance > int(time.time()):
+                self.renderEngine.drawExplosion(explosion)
+            else:
+                self.explosions.remove(explosion)
+
     def checkCollision(self):
         for i in range(len(self.bots)):
             for j in range(len(self.bots)):
@@ -116,7 +137,10 @@ class Map:
                         bot1.veichle.position.y + bot1.veichle.getHeight() / 2 >= bot2.veichle.position.y - bot2.veichle.getHeight() / 2):
                         self.bots.remove(bot1)
                         self.bots.remove(bot2)
-                        print('Rimossi')
+
+                        self.createExplosion(bot1.veichle.position.x, bot1.veichle.position.y)
+                        # print(  bot1.veichle.facing, bot1.veichle.getWidth(), bot1.veichle.getHeight(),
+                        #         bot2.veichle.facing, bot2.veichle.getWidth(), bot2.veichle.getHeight() )
                         return True
 
     def update(self):
@@ -144,6 +168,8 @@ class Map:
 
         # Delete car collided
         self.checkCollision()
+
+        self.explosionManager()
 
     def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or

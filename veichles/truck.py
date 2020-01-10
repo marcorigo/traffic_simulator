@@ -10,7 +10,7 @@ class Truck(Veichle):
     def getWidth(self):
         if self.facing == 1 or self.facing == 2:
             return int(self.height)
-        return int(self.height)
+        return int(self.width)
 
     def getHeight(self):
         if self.facing == 1 or self.facing == 2:

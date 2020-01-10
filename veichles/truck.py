@@ -8,12 +8,12 @@ class Truck(Veichle):
 
     # Get height and width on orizontal axis for easy collision detection
     def getWidth(self):
-        if self.facing == 1 or self.facing == 2:
+        if self.facing == 1 or self.facing == 3:
             return int(self.height)
         return int(self.width)
 
     def getHeight(self):
-        if self.facing == 1 or self.facing == 2:
+        if self.facing == 1 or self.facing == 3:
             return int(self.width)
         return int(self.height)
 

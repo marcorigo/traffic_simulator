@@ -51,7 +51,7 @@ ROAD_MAP    =  [[ 0,  0,  0,  '⬇',  0,  0,  0,  0,  0,  0,  0, '⬇',  0,  0, 
 
 
 BLOCK_SIZE = config['BLOCK_SIZE']
-DEBUG = False
+DEBUG = config['DEBUG']
 
 WIDTH = len(ROAD_MAP[0]) * BLOCK_SIZE
 HEIGHT = len(ROAD_MAP) * BLOCK_SIZE

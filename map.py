@@ -16,11 +16,12 @@ class Map:
         self.debug = debug
         self.map_width = len(self.map[0])
         self.map_height = len(self.map)
+        self.number_veichles = 1
         self.side_walk = config['SIDE_WALK_SIZE'] or int(self.cell_width / 10)
         self.road_way = int((self.cell_width - self.side_walk * 2) / 2)
         self.car_width = config['CAR_WIDTH'] or int(self.cell_width / 3)
         self.car_height = config['CAR_HEIGHT'] or int(self.cell_width / 5)
-        self.truck_width = config['TRUCK_WIDTH'] or int(self.cell_width / 1.2)
+        self.truck_width = config['TRUCK_WIDTH'] or int(self.cell_width / 1.7)
         self.truck_height = config['TRUCK_HEIGHT'] or int(self.cell_width / 3)
         self.border_right = self.side_walk + self.road_way + self.road_way / 2
         self.border_left = self.side_walk + self.road_way / 2
@@ -77,15 +78,16 @@ class Map:
 
         x, y = self.getRoadSpawnPoints(facing, x, y)
         # veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
+
         if random.randint(0, 5) > 1:
-            veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
+            veichle = Car(self.number_veichles, self.car_width, self.car_height, x, y)
         else:
-            veichle = Truck(len(self.bots), self.truck_width, self.truck_height, x, y)
+            veichle = Truck(self.number_veichles, self.truck_width, self.truck_height, x, y)
         # Set car degree
         veichle.changeDegree(facing)
 
         self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots, self.map, self.renderEngine, self.debug, active ))
-
+        self.number_veichles += 1
         return veichle
 
     def createVeichleSpawnPoint(self, road_type, x, y):
@@ -134,7 +136,7 @@ class Map:
             for j in range(len(self.bots)):
                 bot1 = self.bots[i]
                 bot2 = self.bots[j]
-                if self.bots[i].veichle.id != self.bots[j].veichle.id:
+                if bot1.veichle.id != bot2.veichle.id:
                     if( bot1.veichle.position.x - bot1.veichle.getWidth() / 2 <= bot2.veichle.position.x + bot2.veichle.getWidth() / 2 and
                         bot1.veichle.position.x + bot1.veichle.getWidth() / 2 >= bot2.veichle.position.x - bot2.veichle.getWidth() / 2 and
                         bot1.veichle.position.y - bot1.veichle.getHeight() / 2 <= bot2.veichle.position.y + bot2.veichle.getHeight() / 2 and
@@ -143,8 +145,8 @@ class Map:
                         self.bots.remove(bot2)
 
                         self.createExplosion(bot1.veichle.position.x, bot1.veichle.position.y)
-                        # print(  bot1.veichle.facing, bot1.veichle.getWidth(), bot1.veichle.getHeight(),
-                        #         bot2.veichle.facing, bot2.veichle.getWidth(), bot2.veichle.getHeight() )
+                        print(  bot1.veichle.facing, bot1.veichle.getWidth(), bot1.veichle.getHeight(),
+                                bot2.veichle.facing, bot2.veichle.getWidth(), bot2.veichle.getHeight() )
                         return True
 
     def update(self):

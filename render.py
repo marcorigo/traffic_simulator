@@ -4,7 +4,7 @@ class RenderEngine:
         self.canvas = canvas
         self.width = width
         self.height = height
-        self.car = self.pygame.image.load('car.png').convert_alpha()
+        self.car = self.pygame.image.load('car1.png').convert_alpha()
         self.truck = self.pygame.image.load('truck.png')
         self.explosion = self.pygame.image.load('explosion.png')
 
@@ -34,8 +34,10 @@ class RenderEngine:
     def drawRect(self, x, y, width, height, color):
         self.pygame.draw.rect(self.canvas, color, (x, y, width, height))
 
-    def drawCircle(self, x, y, radius, color):
+    def drawCircle(self, x, y, radius, color, border_size = 0, color_border = None):
         self.pygame.draw.circle(self.canvas, color, (int(x), int(y)), int(radius))
+        if border_size and color_border:
+            self.pygame.draw.circle(self.canvas, color_border, (int(x), int(y)), int(radius) + border_size, border_size)
 
     def move(self, element, x = 0, y = 0):
         self.canvas.move(element, x, y)

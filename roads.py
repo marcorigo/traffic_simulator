@@ -16,6 +16,8 @@ class Road:
         self.road_line_height = (self.cell_width - self.border * 2) / 15
         self.road_line_section = int(self.cell_width / self.road_line_quantity)
         self.road_line_width = int((self.cell_width / self.road_line_quantity) / 2)
+        self.traffic_light_border_size = 1
+        self.traffic_light_border_color = (96, 96, 96)
     
     def leftSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x, self.y, self.border, self.cell_width, self.side_walk_color)
@@ -50,16 +52,16 @@ class Road:
             renderEngine.drawRect(self.x + self.cell_width / 2 - self.road_line_height / 2, self.y + self.road_line_section * i, self.road_line_height, self.road_line_width, (242, 242, 242))
 
     def topTrafficLight(self, renderEngine, color, radious):
-        renderEngine.drawCircle(self.x + self.cell_width / 2, self.y, radious, color)
+        renderEngine.drawCircle(self.x + self.cell_width / 2, self.y + self.traffic_light_border_size, radious, color, self.traffic_light_border_size, self.traffic_light_border_color)
 
     def bottomTrafficLight(self, renderEngine, color, radious):
-        renderEngine.drawCircle(self.x + self.cell_width / 2, self.y + self.cell_width - radious, radious, color)
+        renderEngine.drawCircle(self.x + self.cell_width / 2, self.y + self.cell_width - radious - self.traffic_light_border_size, radious, color, self.traffic_light_border_size, self.traffic_light_border_color)
 
     def leftTrafficLight(self, renderEngine, color, radious):
-        renderEngine.drawCircle(int(self.x), int(self.y + self.cell_width / 2), radious, color)
+        renderEngine.drawCircle(int(self.x + self.traffic_light_border_size), int(self.y + self.cell_width / 2), radious, color, self.traffic_light_border_size, self.traffic_light_border_color)
 
     def rightTrafficLight(self, renderEngine, color, radious):
-        renderEngine.drawCircle(int(self.x + self.cell_width - radious), int(self.y + self.cell_width / 2), radious, color)
+        renderEngine.drawCircle(int(self.x + self.cell_width - radious - self.traffic_light_border_size), int(self.y + self.cell_width / 2), radious, color, self.traffic_light_border_size, self.traffic_light_border_color)
 
 class StraightRoad(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = True):

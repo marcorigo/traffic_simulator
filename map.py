@@ -15,7 +15,7 @@ class Map:
         self.debug = debug
         self.map_width = len(self.map[0])
         self.map_height = len(self.map)
-        self.side_walk = int(self.cell_width / 7)
+        self.side_walk = int(self.cell_width / 10)
         self.road_way = (self.cell_width - self.side_walk * 2) / 2
         self.car_width = int(self.cell_width / 3)
         self.car_height = int(self.cell_width / 5)

@@ -1,5 +1,6 @@
 import random
 import time
+from config import config
 import sys
 sys.path.insert(0, './veichles')
 from car import Car
@@ -15,15 +16,17 @@ class Map:
         self.debug = debug
         self.map_width = len(self.map[0])
         self.map_height = len(self.map)
-        self.side_walk = int(self.cell_width / 10)
-        self.road_way = (self.cell_width - self.side_walk * 2) / 2
-        self.car_width = int(self.cell_width / 3)
-        self.car_height = int(self.cell_width / 5)
-        self.truck_width = int(self.cell_width / 1.2)
-        self.truck_height = int(self.cell_width / 3)
+        self.side_walk = config['SIDE_WALK_SIZE'] or int(self.cell_width / 10)
+        self.road_way = int((self.cell_width - self.side_walk * 2) / 2)
+        self.car_width = config['CAR_WIDTH'] or int(self.cell_width / 3)
+        self.car_height = config['CAR_HEIGHT'] or int(self.cell_width / 5)
+        self.truck_width = config['TRUCK_WIDTH'] or int(self.cell_width / 1.2)
+        self.truck_height = config['TRUCK_HEIGHT'] or int(self.cell_width / 3)
         self.border_right = self.side_walk + self.road_way + self.road_way / 2
         self.border_left = self.side_walk + self.road_way / 2
-        self.explosion_persitance = 3
+        self.explosion_persitance = config['EXPLOSION_PERSISTANCE']
+        self.max_veichles_on_map = config['MAX_VEICHLE_NUMBER']
+        self.veichle_spawn_time = config['VEICHLES_SPAWN_INTERVAL']
         self.bots = []
         self.spawners = []
         self.explosions = []
@@ -90,7 +93,8 @@ class Map:
             spawner = {
                 'x': x,
                 'y': y,
-                'spawned': 0
+                'spawned': 0,
+                'last_spawned_time': 0
                 }
             if road_type == '➡':
                 spawner['facing'] = 2
@@ -192,7 +196,7 @@ class Map:
                     and bot.path[bot.pathStatus][1] == spawner['y']):
 
                     occupied = True
-            if not occupied:
+            if not occupied and len(self.bots) <= self.max_veichles_on_map and spawner['last_spawned_time'] + self.veichle_spawn_time < int(time.time()):
                 path = [[spawner['x'], spawner['y']]]
 
                 if spawner['facing'] == 1:
@@ -206,3 +210,4 @@ class Map:
 
                 self.addVeichle(path = path, facing = spawner['facing'])
                 spawner['spawned'] += 1
+                spawner['last_spawned_time'] = int(time.time())

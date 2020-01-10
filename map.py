@@ -16,7 +16,8 @@ class Map:
         self.debug = debug
         self.map_width = len(self.map[0])
         self.map_height = len(self.map)
-        self.number_veichles = 1
+        self.number_veichles_spawned = 1
+        self.accidents = 0
         self.side_walk = config['SIDE_WALK_SIZE'] or int(self.cell_width / 10)
         self.road_way = int((self.cell_width - self.side_walk * 2) / 2)
         self.car_width = config['CAR_WIDTH'] or int(self.cell_width / 3)
@@ -80,14 +81,14 @@ class Map:
         # veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
 
         if random.randint(0, 5) > 1:
-            veichle = Car(self.number_veichles, self.car_width, self.car_height, x, y)
+            veichle = Car(self.number_veichles_spawned, self.car_width, self.car_height, x, y)
         else:
-            veichle = Truck(self.number_veichles, self.truck_width, self.truck_height, x, y)
+            veichle = Truck(self.number_veichles_spawned, self.truck_width, self.truck_height, x, y)
         # Set car degree
         veichle.changeDegree(facing)
 
-        self.bots.append( Bot(veichle, path, self.cell_width, self.border_right, self.border_left, self.bots, self.map, self.renderEngine, self.debug, active ))
-        self.number_veichles += 1
+        self.bots.append( Bot(veichle, path, self.cell_width, self.road_way, self.border_right, self.border_left, self.bots, self.map, self.renderEngine, self.debug, active ))
+        self.number_veichles_spawned += 1
         return veichle
 
     def createVeichleSpawnPoint(self, road_type, x, y):
@@ -143,10 +144,12 @@ class Map:
                         bot1.veichle.position.y + bot1.veichle.getHeight() / 2 >= bot2.veichle.position.y - bot2.veichle.getHeight() / 2):
                         self.bots.remove(bot1)
                         self.bots.remove(bot2)
-
+                        self.accidents += 1
+                        
                         self.createExplosion(bot1.veichle.position.x, bot1.veichle.position.y)
                         print(  bot1.veichle.facing, bot1.veichle.getWidth(), bot1.veichle.getHeight(),
                                 bot2.veichle.facing, bot2.veichle.getWidth(), bot2.veichle.getHeight() )
+                        print(self.number_veichles_spawned, self.accidents)
                         return True
 
     def update(self):

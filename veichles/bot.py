@@ -2,11 +2,12 @@ from render import RenderEngine
 import random
 
 class Bot:
-    def __init__(self, veichle, path, cell_width, border_right, border_left, bots, map, renderEngine, debug, active = True):
+    def __init__(self, veichle, path, cell_width, road_way, border_right, border_left, bots, map, renderEngine, debug, active = True):
         self.veichle = veichle
         self.path = path
         self.pathLenght = len(self.path) 
         self.cell_width = cell_width
+        self.road_way = road_way
         self.pathStatus = 0
         self.approaching_curve = False
         self.movingToAngle = self.veichle.angle
@@ -15,6 +16,7 @@ class Bot:
         self.speed_to_slow_down = 8 / (100 / self.cell_width)
         # self.vision_field_width = int(self.cell_width / (self.speed_to_slow_down / 3))
         self.vision_field_width = int(self.cell_width / 1.4)
+        # self.vision_field_height = self.road_way
         self.vision_field_height = self.veichle.height
         self.vision_field_x = 0
         self.vision_field_y = 0
@@ -284,6 +286,7 @@ class Bot:
         facing = self.veichle.facing
         x = self.veichle.position.x
         y = self.veichle.position.y
+        # height = self.road_way
         height = self.veichle.height
         width = self.veichle.width
         if facing == 1:

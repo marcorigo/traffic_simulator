@@ -126,6 +126,7 @@ class Map:
             'width': int(self.cell_width),
             'height': int(self.cell_width)
         }
+
         self.explosions.append(explosion)
     
     def explosionManager(self):
@@ -150,9 +151,6 @@ class Map:
                         self.accidents += 1
                         
                         self.createExplosion(bot1.veichle.position.x, bot1.veichle.position.y)
-                        print(  bot1.veichle.facing, bot1.veichle.getWidth(), bot1.veichle.getHeight(),
-                                bot2.veichle.facing, bot2.veichle.getWidth(), bot2.veichle.getHeight() )
-                        print(self.number_veichles_spawned, self.accidents)
                         return True
 
     def update(self):
@@ -182,6 +180,9 @@ class Map:
         self.checkCollision()
 
         self.explosionManager()
+
+        self.renderEngine.drawText('Veicoli spawnati: ' + str(self.number_veichles_spawned), (0, 0, 0), 20, 40)
+        self.renderEngine.drawText('Incidenti: ' + str(self.accidents), (0, 0, 0), 20, 60)
 
     def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or

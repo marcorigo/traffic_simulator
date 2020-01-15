@@ -80,9 +80,12 @@ class Map:
         x, y = self.getRoadSpawnPoints(facing, x, y)
         # veichle = Car(len(self.bots), self.car_width, self.car_height, x, y)
 
-        if random.randint(0, 5) > 1:
-            veichle = Car(self.number_veichles_spawned, self.car_width, self.car_height, x, y)
-        else:
+        num = random.randint(0, 5)
+        if num <= 2:
+            veichle = Car(self.number_veichles_spawned, 'car', self.car_width, self.car_height, x, y)
+        if num > 3:
+            veichle = Car(self.number_veichles_spawned, 'taxi', self.car_width, self.car_height, x, y)
+        if num == 3:
             veichle = Truck(self.number_veichles_spawned, self.truck_width, self.truck_height, x, y)
         # Set car degree
         veichle.changeDegree(facing)

@@ -6,6 +6,7 @@ class RenderEngine:
         self.height = height
         self.car = self.pygame.image.load('./sprites/car1.png').convert_alpha()
         self.truck = self.pygame.image.load('./sprites/truck.png')
+        self.taxi = self.pygame.image.load('./sprites/taxi.png')
         self.explosion = self.pygame.image.load('./sprites/explosion.png')
 
     def drawVeichle(self, veichle_name, x, y, width, height, angle, fvW, fvH):
@@ -16,6 +17,9 @@ class RenderEngine:
         if veichle_name == 'truck':
             veichle = self.pygame.transform.scale(self.truck, (width, height))
             self.truck = veichle
+        if veichle_name == 'taxi':
+            veichle = self.pygame.transform.scale(self.taxi, (width, height))
+            self.taxi = veichle
         if veichle_name == 'explosion':
             veichle = self.pygame.transform.scale(self.explosion, (width, height))
             self.explosion = veichle

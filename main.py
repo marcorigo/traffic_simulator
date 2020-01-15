@@ -89,13 +89,14 @@ WIDTH = len(ROAD_MAP[0]) * BLOCK_SIZE
 HEIGHT = len(ROAD_MAP) * BLOCK_SIZE
 
 BACKGROUND_COLOR = config['BACKGROUND_COLOR']
+TEXT_COLOR = (0, 0, 0)
 
 def game():
     pygame.init()
     clock = pygame.time.Clock()
     canvas = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Traffic Simulation')
-    font = pygame.font.Font(None, 30)
+    FONT = pygame.font.SysFont("Bizarre-Ass Font Sans Serif", 30)
 
     renderEngine = RenderEngine(canvas, pygame, WIDTH, HEIGHT)
 
@@ -107,6 +108,9 @@ def game():
                 pygame.quit()
                     
         canvas.fill(BACKGROUND_COLOR)
+
+        message = 'Time: ' + str(int(pygame.time.get_ticks() / 1000))
+        canvas.blit(FONT.render(message, True, TEXT_COLOR), (20, 20))
 
         Veichle.dt = clock.get_time() / 1000
 

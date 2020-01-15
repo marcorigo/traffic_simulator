@@ -4,9 +4,9 @@ class RenderEngine:
         self.canvas = canvas
         self.width = width
         self.height = height
-        self.car = self.pygame.image.load('car1.png').convert_alpha()
-        self.truck = self.pygame.image.load('truck.png')
-        self.explosion = self.pygame.image.load('explosion.png')
+        self.car = self.pygame.image.load('./sprites/car1.png').convert_alpha()
+        self.truck = self.pygame.image.load('./sprites/truck.png')
+        self.explosion = self.pygame.image.load('./sprites/explosion.png')
 
     def drawVeichle(self, veichle_name, x, y, width, height, angle, fvW, fvH):
         veichle = None

@@ -273,7 +273,9 @@ class Bot:
             self.is_on_cross = False
 
         if self.avoidAccident or self.stop_for_cross:
-            self.veichle.controls['space'] = True
+            # self.veichle.controls['space'] = True
+            self.veichle.velocity.x = 0
+            self.veichle.velocity.y = 0
             self.veichle.controls['up'] = False
         # Slowing down for curves or max velocity
         elif self.approaching_curve and self.veichle.acceleration >= self.min_acceleration or self.veichle.acceleration >= self.speed_to_slow_down:
@@ -287,21 +289,21 @@ class Bot:
         x = self.veichle.position.x
         y = self.veichle.position.y
         # height = self.road_way
-        height = self.veichle.height
-        width = self.veichle.width
+        height = self.veichle.getHeight()
+        width = self.veichle.getWidth()
         if facing == 1:
-            x = x - height / 2
-            y = y - width / 2 - self.vision_field_width
+            x = x - width / 2
+            y = y - height / 2 - self.vision_field_width
             if self.is_on_cross and self.check_front_veichles_for_turing:
-                x -= self.veichle.getWidth()
+                x -= height + (self.road_way - height)
         if facing == 2:
             x = x + width / 2
             y = y - height / 2
             if self.is_on_cross and self.check_front_veichles_for_turing:
-                y -= self.veichle.getHeight()
+                y -= height + (self.road_way - height)
         if facing == 3:
-            x = x - height / 2
-            y = y + width / 2
+            x = x - width / 2
+            y = y + height / 2 
         if facing == 4:
             x = x - width / 2 - self.vision_field_width
             y = y - height / 2
@@ -315,6 +317,7 @@ class Bot:
 
         # If need to check front veichle the check covers all the lines
         if self.is_on_cross and self.check_front_veichles_for_turing:
+            vH += (self.road_way - self.veichle.height) / 2
             vH *= 2
 
         if self.veichle.facing == 1 or self.veichle.facing == 3:

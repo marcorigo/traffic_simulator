@@ -13,6 +13,10 @@ class Road:
         self.side_walk_color = config['SIDE_WALK_COLOR']
         self.road_type = road_type
 
+        self.yellow_light_time = config['TRAFFIC_LIGHT_YELLOW_TIME']
+        self.min_traffic_light_interval = config['TRAFFIC_LIGHT_MIN_TIME_CHANGING']
+        self.max_traffic_light_interval = config['TRAFFIC_LIGHT_MAX_TIME_CHANGING']
+
         self.road_line_quantity = config['ROAD_LINE_QUANTITY']
         self.road_line_height = (self.cell_width - self.border * 2) / 15
         self.road_line_section = int(self.cell_width / self.road_line_quantity)
@@ -93,12 +97,14 @@ class Intersection(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type):
         super().__init__(cellX, cellY, cell_width, border, road_type)
         self.light_radious = self.cell_width / 15
-        self.change_time = random.randint(15, 30)
+        self.change_time = random.randint(self.min_traffic_light_interval, self.max_traffic_light_interval)
         self.last_change = int(time.time())
-        self.yellow_light_time = 2
-        self.x_light = 'green'
-        self.y_light = 'red'
-        self.changing = 1
+        # Get first green roads randomly
+        self.changing = random.randint(1,2)
+        self.init_colors = ['green', 'red']
+        self.x_light = self.init_colors.pop(self.changing - 1)
+        self.y_light = self.init_colors[0]
+
         self.road_allowed = [1, 3]
 
     def can(self, veichle):
@@ -153,12 +159,13 @@ class TRoad(Road):
         super().__init__(cellX, cellY, cell_width, border, road_type)
         self.rotation = rotation
         self.light_radious = self.cell_width / 15
-        self.change_time = random.randint(15, 30)
+        self.change_time = random.randint(self.min_traffic_light_interval, self.max_traffic_light_interval)
         self.last_change = int(time.time())
-        self.yellow_light_time = 2
-        self.x_light = 'green'
-        self.y_light = 'red'
-        self.changing = 1
+        # Get first green roads randomly
+        self.changing = random.randint(1,2)
+        self.init_colors = ['green', 'red']
+        self.x_light = self.init_colors.pop(self.changing - 1)
+        self.y_light = self.init_colors[0]
 
         if self.rotation == 1:
             self.facing_x_axes = [2, 4]

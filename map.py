@@ -16,7 +16,7 @@ class Map:
         self.debug = debug
         self.map_width = len(self.map[0])
         self.map_height = len(self.map)
-        self.number_veichles_spawned = 1
+        self.number_veichles_spawned = 0
         self.accidents = 0
         self.side_walk = config['SIDE_WALK_SIZE'] or int(self.cell_width / 10)
         self.road_way = int((self.cell_width - self.side_walk * 2) / 2)
@@ -181,8 +181,8 @@ class Map:
 
         self.explosionManager()
 
-        self.renderEngine.drawText('Veicoli spawnati: ' + str(self.number_veichles_spawned), (0, 0, 0), 20, 40)
-        self.renderEngine.drawText('Incidenti: ' + str(self.accidents), (0, 0, 0), 20, 60)
+        self.renderEngine.drawText('Veicoli spawnati: ' + str(self.number_veichles_spawned), (0, 0, 0), 20, 60)
+        self.renderEngine.drawText('Incidenti: ' + str(self.accidents), (0, 0, 0), 20, 80)
 
     def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or
@@ -205,7 +205,7 @@ class Map:
                     and bot.path[bot.pathStatus][1] == spawner['y']):
 
                     occupied = True
-            if not occupied and len(self.bots) <= self.max_veichles_on_map and spawner['last_spawned_time'] + self.veichle_spawn_time < int(time.time()):
+            if not occupied and len(self.bots) < self.max_veichles_on_map and spawner['last_spawned_time'] + self.veichle_spawn_time < int(time.time()):
                 path = [[spawner['x'], spawner['y']]]
 
                 if spawner['facing'] == 1:

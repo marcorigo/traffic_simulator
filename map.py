@@ -83,10 +83,10 @@ class Map:
         num = random.randint(0, 5)
         if num <= 2:
             veichle = Car(self.number_veichles_spawned, 'car', self.car_width, self.car_height, x, y)
-        if num > 3:
+        if num >= 3:
             veichle = Car(self.number_veichles_spawned, 'taxi', self.car_width, self.car_height, x, y)
-        if num == 3:
-            veichle = Truck(self.number_veichles_spawned, self.truck_width, self.truck_height, x, y)
+        # if num == 3:
+        #     veichle = Truck(self.number_veichles_spawned, self.truck_width, self.truck_height, x, y)
         # Set car degree
         veichle.changeDegree(facing)
 
@@ -120,11 +120,11 @@ class Map:
 
     def createExplosion(self, x, y):
         explosion = {
-            'x': x,
-            'y': y,
             'created_time': int(time.time()),
             'width': int(self.cell_width),
-            'height': int(self.cell_width)
+            'height': int(self.cell_width),
+            'x': x - int(self.cell_width / 2),
+            'y': y - int(self.cell_width / 2),
         }
 
         self.explosions.append(explosion)
@@ -150,7 +150,15 @@ class Map:
                         self.bots.remove(bot2)
                         self.accidents += 1
                         
-                        self.createExplosion(bot1.veichle.position.x, bot1.veichle.position.y)
+                        explosion_x = (bot1.veichle.position.x+bot2.veichle.position.x)/2
+                        explosion_y = (bot1.veichle.position.y+bot2.veichle.position.y)/2
+                        self.createExplosion(explosion_x, explosion_y)
+
+                        # print('-----------')
+                        # print(bot1.veichle.position.x - bot1.veichle.getWidth() / 2,bot1.veichle.position.x + bot1.veichle.getWidth() / 2, bot1.veichle.position.y - bot1.veichle.getHeight() / 2, bot1.veichle.position.y + bot1.veichle.getHeight() / 2)
+                        # print(bot2.veichle.position.x - bot2.veichle.getWidth() / 2,bot2.veichle.position.x + bot2.veichle.getWidth() / 2, bot2.veichle.position.y - bot2.veichle.getHeight() / 2, bot2.veichle.position.y + bot2.veichle.getHeight() / 2)
+                        # print('-----------')
+
                         return True
 
     def update(self):
@@ -182,7 +190,8 @@ class Map:
         self.explosionManager()
 
         self.renderEngine.drawText('Veicoli spawnati: ' + str(self.number_veichles_spawned), (0, 0, 0), 20, 60)
-        self.renderEngine.drawText('Incidenti: ' + str(self.accidents), (0, 0, 0), 20, 80)
+        self.renderEngine.drawText('Veicoli attivi: ' + str(len(self.bots)), (0, 0, 0), 20, 80)
+        self.renderEngine.drawText('Incidenti: ' + str(self.accidents), (0, 0, 0), 20, 100)
 
     def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or

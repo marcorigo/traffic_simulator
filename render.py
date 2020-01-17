@@ -51,4 +51,4 @@ class RenderEngine:
         self.canvas.move(element, x, y)
 
     def drawExplosion(self, explosion):
-        self.drawVeichle('explosion', explosion['x'], explosion['y'], explosion['width'], explosion['height'] , 0, 0, 0)
+        self.drawVeichle('explosion', explosion['x'], explosion['y'], explosion['width'], explosion['height'], 0, 0, 0)

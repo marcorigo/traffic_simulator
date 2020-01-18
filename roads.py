@@ -21,7 +21,7 @@ class Road:
         self.traffic_light_colors = config['TRAFFIC_LIGHT_COLORS']
 
         self.road_line_quantity = config['ROAD_LINE_QUANTITY']
-        self.road_line_height = (self.cell_width - self.border * 2) / 15
+        self.road_line_heigth = (self.cell_width - self.border * 2) / 15
         self.road_line_section = int(self.cell_width / self.road_line_quantity)
         self.road_line_width = int((self.cell_width / self.road_line_quantity) / 2)
         self.road_background = config['ROAD_COLOR']
@@ -54,11 +54,11 @@ class Road:
 
     def orizontalRoadLines(self, renderEngine):
         for i in range(self.road_line_quantity):
-            renderEngine.drawRect(self.x + self.road_line_section * i, self.y + self.cell_width / 2 - self.road_line_height / 2, self.road_line_width, self.road_line_height, (242, 242, 242))
+            renderEngine.drawRect(self.x + self.road_line_section * i, self.y + self.cell_width / 2 - self.road_line_heigth / 2, self.road_line_width, self.road_line_heigth, (242, 242, 242))
         
     def verticalRoadLines(self, renderEngine):
         for i in range(self.road_line_quantity):
-            renderEngine.drawRect(self.x + self.cell_width / 2 - self.road_line_height / 2, self.y + self.road_line_section * i, self.road_line_height, self.road_line_width, (242, 242, 242))
+            renderEngine.drawRect(self.x + self.cell_width / 2 - self.road_line_heigth / 2, self.y + self.road_line_section * i, self.road_line_heigth, self.road_line_width, (242, 242, 242))
 
     def topTrafficLight(self, renderEngine, color, radious):
         renderEngine.drawCircle(self.x + self.cell_width / 2, self.y + self.traffic_light_border_size, radious, color, self.traffic_light_border_size, self.traffic_light_border_color)

@@ -16,8 +16,8 @@ class Bot:
         self.speed_to_slow_down = 8 / (100 / self.cell_width)
         # self.vision_field_width = int(self.cell_width / (self.speed_to_slow_down / 3))
         self.vision_field_width = int(self.cell_width / 1.4)
-        # self.vision_field_height = self.road_way
-        self.vision_field_height = self.veichle.height
+        # self.vision_field_heigth = self.road_way
+        self.vision_field_heigth = self.veichle.heigth
         self.vision_field_x = 0
         self.vision_field_y = 0
         self.avoidAccident = False
@@ -288,36 +288,36 @@ class Bot:
         facing = self.veichle.facing
         x = self.veichle.position.x
         y = self.veichle.position.y
-        # height = self.road_way
-        height = self.veichle.getHeight()
+        # heigth = self.road_way
+        heigth = self.veichle.getHeigth()
         width = self.veichle.getWidth()
         if facing == 1:
             x = x - width / 2
-            y = y - height / 2 - self.vision_field_width
+            y = y - heigth / 2 - self.vision_field_width
             if self.is_on_cross and self.check_front_veichles_for_turing:
-                x -= height + (self.road_way - height)
+                x -= heigth + (self.road_way - heigth)
         if facing == 2:
             x = x + width / 2
-            y = y - height / 2
+            y = y - heigth / 2
             if self.is_on_cross and self.check_front_veichles_for_turing:
-                y -= height + (self.road_way - height)
+                y -= heigth + (self.road_way - heigth)
         if facing == 3:
             x = x - width / 2
-            y = y + height / 2 
+            y = y + heigth / 2 
         if facing == 4:
             x = x - width / 2 - self.vision_field_width
-            y = y - height / 2
+            y = y - heigth / 2
         
         self.vision_field_x = x
         self.vision_field_y = y
 
     def dashcam(self):
         vW = self.vision_field_width
-        vH = self.vision_field_height
+        vH = self.vision_field_heigth
 
         # If need to check front veichle the check covers all the lines
         if self.is_on_cross and self.check_front_veichles_for_turing:
-            vH += (self.road_way - self.veichle.height) / 2
+            vH += (self.road_way - self.veichle.heigth) / 2
             vH *= 2
 
         if self.veichle.facing == 1 or self.veichle.facing == 3:
@@ -338,14 +338,14 @@ class Bot:
         for bot in self.map_bots:
             if bot.veichle.id != self.veichle.id:
                 check_bot_width = bot.veichle.getWidth()
-                check_bot_height = bot.veichle.getHeight()          
+                check_bot_heigth = bot.veichle.getHeigth()          
 
-                # self.renderEngine.drawRect(bot.veichle.position.x - 2.5 - check_bot_width / 2, bot.veichle.position.y - 2.5 - check_bot_height / 2, 5, 5, (0, 242, 0))
+                # self.renderEngine.drawRect(bot.veichle.position.x - 2.5 - check_bot_width / 2, bot.veichle.position.y - 2.5 - check_bot_heigth / 2, 5, 5, (0, 242, 0))
 
                 if( self.vision_field_x <= bot.veichle.position.x + check_bot_width / 2 and
                     self.vision_field_x + vW >= bot.veichle.position.x - check_bot_width / 2 and
-                    self.vision_field_y <= bot.veichle.position.y + check_bot_height / 2 and
-                    self.vision_field_y + vH >= bot.veichle.position.y - check_bot_height / 2):
+                    self.vision_field_y <= bot.veichle.position.y + check_bot_heigth / 2 and
+                    self.vision_field_y + vH >= bot.veichle.position.y - check_bot_heigth / 2):
 
                     # If all 2 veichles are waithing the older must go on
                     if ( self.check_front_veichles_for_turing and self.is_on_cross and

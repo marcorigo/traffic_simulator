@@ -105,7 +105,7 @@ def game():
     pygame.display.set_caption('Traffic Simulation')
     FONT = pygame.font.SysFont("Bizarre-Ass Font Sans Serif", 25)
 
-    renderEngine = RenderEngine(canvas, pygame, WIDTH, HEIGHT, FONT)
+    renderEngine = RenderEngine(canvas, pygame, BLOCK_SIZE, WIDTH, HEIGHT, FONT)
 
     map = Map(renderEngine, ROAD_MAP, BLOCK_SIZE, DEBUG)
 
@@ -116,13 +116,13 @@ def game():
                     
         canvas.fill(BACKGROUND_COLOR)
 
-        message = 'Time: ' + str(int(pygame.time.get_ticks() / 1000))
-        renderEngine.drawText(message, TEXT_COLOR, 20, 20)
-        renderEngine.drawText('Fps: ' + str(int(clock.get_fps())), TEXT_COLOR, 20, 40)
-
         Veichle.dt = clock.get_time() / 1000
 
         map.update()
+
+        message = 'Time: ' + str(int(pygame.time.get_ticks() / 1000))
+        renderEngine.drawText(message, TEXT_COLOR, 20, 20)
+        renderEngine.drawText('Fps: ' + str(int(clock.get_fps())), TEXT_COLOR, 20, 40)
 
         pygame.display.update()
         pygame.display.flip()

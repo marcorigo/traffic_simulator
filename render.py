@@ -1,15 +1,67 @@
 class RenderEngine:
-    def __init__(self, canvas, pygame, width, height, font):
+    def __init__(self, canvas, pygame, cell_width, width, height, font):
         self.pygame = pygame
         self.canvas = canvas
+        self.cell_width = cell_width
         self.width = width
         self.height = height
         self.font = font
-        self.car = self.pygame.image.load('./sprites/car1.png').convert_alpha()
-        self.truck = self.pygame.image.load('./sprites/truck.png')
-        self.taxi = self.pygame.image.load('./sprites/taxi.png')
-        self.explosion = self.pygame.image.load('./sprites/explosion.png')
+        self.car = self.pygame.image.load('./sprites/veichles/car1.png').convert_alpha()
+        self.truck = self.pygame.image.load('./sprites/veichles/truck.png').convert_alpha()
+        self.taxi = self.pygame.image.load('./sprites/veichles/taxi.png').convert_alpha()
+        self.explosion = self.pygame.image.load('./sprites/explosion.png').convert_alpha()
 
+        self.roadSprites = {
+            '═':    self.pygame.image.load('./sprites/map/roadHorizontal.png').convert_alpha(), 
+
+            '║':    self.pygame.image.load('./sprites/map/roadVertical.png').convert_alpha(),
+
+            '╬':    self.pygame.image.load('./sprites/map/roadIntersection.png').convert_alpha(),
+
+            '╔':    self.pygame.image.load('./sprites/map/roadCurveES.png').convert_alpha(),
+
+            '╚':    self.pygame.image.load('./sprites/map/roadCurveNE.png').convert_alpha(),
+
+            '╗':    self.pygame.image.load('./sprites/map/roadCurveSO.png').convert_alpha(),
+
+            '╝':    self.pygame.image.load('./sprites/map/roadCurveNO.png').convert_alpha(),
+
+            '➡':   self.pygame.image.load('./sprites/map/roadHorizontalSpawn2.png').convert_alpha(),
+
+            '⬅':   self.pygame.image.load('./sprites/map/roadHorizontalSpawn4.png').convert_alpha(),
+
+            '⬆':    self.pygame.image.load('./sprites/map/roadVerticalSpawn1.png').convert_alpha(),
+
+            '⬇':    self.pygame.image.load('./sprites/map/roadVerticalSPawn3.png').convert_alpha(),
+
+            '╩':    self.pygame.image.load('./sprites/map/TRoad1.png').convert_alpha(),
+
+            '╠':    self.pygame.image.load('./sprites/map/TRoad2.png').convert_alpha(),
+
+            '╦':    self.pygame.image.load('./sprites/map/TRoad3.png').convert_alpha(),
+
+            '╣':    self.pygame.image.load('./sprites/map/TRoad4.png').convert_alpha(),
+
+             0:     self.pygame.image.load('./sprites/map/grass.png').convert_alpha(),
+        }
+
+        self.resize(self.roadSprites)
+
+    def resize(self, sprites):
+        for key in sprites.keys():
+            sprites[key] = self.pygame.transform.scale(sprites[key], (self.cell_width, self.cell_width))
+
+
+    def drawRoadTile(self,x, y, road_type):
+        roadTile = self.roadSprites[road_type]
+        if roadTile:
+
+            imagerect = roadTile.get_rect()
+            imagerect.center = ( x + (self.cell_width // 2) , y + ( self.cell_width // 2))   
+            self.canvas.blit(roadTile, imagerect)
+            return True
+        else:
+            return False
     def drawVeichle(self, veichle_name, x, y, width, height, angle, fvW, fvH):
         veichle = None
         if veichle_name == 'car':

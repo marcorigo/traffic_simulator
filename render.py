@@ -32,7 +32,7 @@ class RenderEngine:
 
             '⬆':    self.pygame.image.load('./sprites/map/roadVerticalSpawn1.png').convert_alpha(),
 
-            '⬇':    self.pygame.image.load('./sprites/map/roadVerticalSPawn3.png').convert_alpha(),
+            '⬇':    self.pygame.image.load('./sprites/map/roadVerticalSpawn3.png').convert_alpha(),
 
             '╩':    self.pygame.image.load('./sprites/map/TRoad1.png').convert_alpha(),
 

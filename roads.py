@@ -150,6 +150,8 @@ class Intersection(Road):
         self.checkTrafficLight()
 
         if self.drawRoadTile(renderEngine):
+            # Draw traffic lights
+            self.drawTrafficLights(renderEngine)
             return
 
         #Background
@@ -160,7 +162,10 @@ class Intersection(Road):
         self.bottomLeftSideWalk(renderEngine)
         self.bottomRightSideWalk(renderEngine)
 
-        # Draw traffic light
+        # Draw traffic lights
+        self.drawTrafficLights(renderEngine)
+
+    def drawTrafficLights(self, renderEngine):
         self.topTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
         self.bottomTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
         self.leftTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
@@ -232,6 +237,7 @@ class TRoad(Road):
         self.checkTrafficLight()
 
         if self.drawRoadTile(renderEngine):
+            self.drawTrafficLights(renderEngine)
             return
 
         # Background
@@ -244,22 +250,12 @@ class TRoad(Road):
             self.bottomSideWalk(renderEngine)
             self.orizontalRoadLines(renderEngine)
 
-            # Draw traffic light
-            self.topTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.leftTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-            self.rightTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-
         # ╠
         if self.rotation == 2:
             self.leftSideWalk(renderEngine)
             self.topRightSideWalk(renderEngine)
             self.bottomRightSideWalk(renderEngine)
             self.verticalRoadLines(renderEngine)
-
-            # Draw traffic light
-            self.topTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.bottomTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.rightTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
 
         # ╦
         if self.rotation == 3:
@@ -268,11 +264,6 @@ class TRoad(Road):
             self.bottomLeftSideWalk(renderEngine)
             self.orizontalRoadLines(renderEngine)
 
-            # Draw traffic light
-            self.bottomTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.leftTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-            self.rightTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-
         # ╣
         if self.rotation == 4:
             self.rightSideWalk(renderEngine)
@@ -280,12 +271,9 @@ class TRoad(Road):
             self.bottomLeftSideWalk(renderEngine)
             self.verticalRoadLines(renderEngine)
 
-            # Draw traffic light
-            self.topTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.bottomTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.leftTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
+        self.drawTrafficLights(renderEngine)
 
-    def drawTrafficLight(self, renderEngine):
+    def drawTrafficLights(self, renderEngine):
         # ╩
         if self.rotation == 1:
             # Draw traffic light

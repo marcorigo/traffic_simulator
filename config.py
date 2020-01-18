@@ -1,12 +1,12 @@
 AUTO = False
 
 config = {
-    'BLOCK_SIZE': 30,
-    'DEBUG': False,
+    'BLOCK_SIZE': 50,
+    'DEBUG': True,
     'MAX_VEICHLE_NUMBER': 200,
     'VEICHLES_SPAWN_INTERVAL': AUTO,
     'BACKGROUND_COLOR': (120, 226, 104),
-    'SIDE_WALK_SIZE': 1,
+    'SIDE_WALK_SIZE': AUTO,
     'ROAD_COLOR': (170, 170, 170),
     'SIDE_WALK_COLOR': (94, 94, 94),
     'ROAD_LINE_QUANTITY': 5,

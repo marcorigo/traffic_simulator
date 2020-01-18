@@ -1,5 +1,6 @@
 from render import RenderEngine
 import random
+from config import config
 
 class Bot:
     def __init__(self, veichle, path, cell_width, road_way, border_right, border_left, bots, map, renderEngine, debug, active = True):
@@ -15,9 +16,9 @@ class Bot:
         self.border_left = border_left
         self.speed_to_slow_down = 8 / (100 / self.cell_width)
         # self.vision_field_width = int(self.cell_width / (self.speed_to_slow_down / 3))
-        self.vision_field_width = int(self.cell_width / 1.4)
+        self.vision_field_width = config['VEICHLE_VISION_FIELD_WIDTH'] or int(self.cell_width / 1.4)
         # self.vision_field_heigth = self.road_way
-        self.vision_field_heigth = self.veichle.heigth
+        self.vision_field_heigth = config['VEICHLE_VISION_FIELD_HEIGTH'] or self.veichle.heigth
         self.vision_field_x = 0
         self.vision_field_y = 0
         self.avoidAccident = False
@@ -249,7 +250,9 @@ class Bot:
         # Check for cross roads
         try:
             next = self.path[self.pathStatus + 1]
-            if not self.map[next[1]][next[0]].can(self.veichle):
+            now = self.path[self.pathStatus]
+            road_class = self.map[now[1]][now[0]].__class__.__name__
+            if not self.map[next[1]][next[0]].can(self.veichle) and ( road_class != 'Intersection' or road_class != 'TRoad' ):
                 self.stop_for_cross = True
             else:
                 self.stop_for_cross = False
@@ -260,7 +263,8 @@ class Bot:
         try:
             road = self.map[self.path[self.pathStatus][1]][self.path[self.pathStatus][0]]
 
-            if road.road_type == '╬':
+            road_class = road.__class__.__name__
+            if road_class == 'Intersection' or road_class == 'TRoad':
                 self.is_on_cross = True
             else:
                 self.is_on_cross = False
@@ -357,6 +361,15 @@ class Bot:
                     
                     self.avoidAccident = True
                     return
+                
+                # Check difference between width and height when on intersection or TRoad
+                elif self.is_on_cross and self.check_front_veichles_for_turing:
+                    if (self.veichle.position.x - self.veichle.getWidth() / 2 <= bot.veichle.position.x + bot.veichle.getWidth() / 2 and
+                        self.veichle.position.x + self.veichle.getWidth() / 2 >= bot.veichle.position.x - bot.veichle.getWidth() / 2 and
+                        self.veichle.position.y - self.veichle.getWidth() / 2 <= bot.veichle.position.y + bot.veichle.getHeigth() / 2 and
+                        self.veichle.position.y + self.veichle.getWidth() / 2 >= bot.veichle.position.y - bot.veichle.getHeigth() / 2):
+                        self.avoidAccident = True
+                        return
 
                 self.avoidAccident = False
 

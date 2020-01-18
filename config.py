@@ -1,12 +1,12 @@
 AUTO = False
 
 config = {
-    'BLOCK_SIZE': 50,
-    'DEBUG': True,
+    'BLOCK_SIZE': 30,
+    'DEBUG': False,
     'MAX_VEICHLE_NUMBER': 200,
     'VEICHLES_SPAWN_INTERVAL': AUTO,
     'BACKGROUND_COLOR': (120, 226, 104),
-    'SIDE_WALK_SIZE': 0,
+    'SIDE_WALK_SIZE': 1,
     'ROAD_COLOR': (170, 170, 170),
     'SIDE_WALK_COLOR': (94, 94, 94),
     'ROAD_LINE_QUANTITY': 5,
@@ -20,11 +20,19 @@ config = {
     'TRUCK_WIDTH': AUTO,
     'TRUCK_HEIGTH': AUTO,
 
+    'CAR_SPAWN_RATE': 70,       # p
+    'TRUCK_SPAWN_RATE' : 30,    # q
+    # 'INTERSECTION_TOP_RATE': 25,   # p_uA
+    # 'INTERSECTION_TOP_RIGTH': 25,  # p_uB
+    # 'INTERSECTION_TOP_LEFT':   25, # p_uC
+    # 'INTERSECTION_TOP_BOTTOM':  25,# p_ud
+
     'EXPLOSION_PERSISTANCE': 3,
 
     'USE_TEXTURES': True,
 
     'VEICHLE_VISION_FIELD_WIDTH': AUTO,
+    'VEICHLE_VISION_FIELD_HEIGTH': AUTO,
 
     'TRAFFIC_LIGHT_COLORS': {
         'red' : (255, 0, 0),

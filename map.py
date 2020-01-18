@@ -22,13 +22,15 @@ class Map:
         self.road_way = int((self.cell_width - self.side_walk * 2) / 2)
         self.car_width = config['CAR_WIDTH'] or int(self.cell_width / 3)
         self.car_heigth = config['CAR_HEIGTH'] or int(self.cell_width / 5)
-        self.truck_width = config['TRUCK_WIDTH'] or int(self.cell_width / 1.7)
-        self.truck_heigth = config['TRUCK_HEIGTH'] or int(self.cell_width / 3)
+        self.truck_width = config['TRUCK_WIDTH'] or int(self.cell_width / 2)
+        self.truck_heigth = config['TRUCK_HEIGTH'] or int(self.cell_width / 3.5)
         self.border_right = self.side_walk + self.road_way + self.road_way / 2
         self.border_left = self.side_walk + self.road_way / 2
         self.explosion_persitance = config['EXPLOSION_PERSISTANCE']
         self.max_veichles_on_map = config['MAX_VEICHLE_NUMBER']
         self.veichle_spawn_time = config['VEICHLES_SPAWN_INTERVAL']
+        self.car_spawn_rate = config['CAR_SPAWN_RATE'] or 50
+        self.truck_spawn_rate = config['CAR_SPAWN_RATE'] or 50
         self.bots = []
         self.spawners = []
         self.explosions = []
@@ -80,13 +82,13 @@ class Map:
         x, y = self.getRoadSpawnPoints(facing, x, y)
         # veichle = Car(len(self.bots), self.car_width, self.car_heigth, x, y)
 
-        num = random.randint(0, 5)
-        if num <= 2:
-            veichle = Car(self.number_veichles_spawned, 'car', self.car_width, self.car_heigth, x, y)
-        if num >= 3:
-            veichle = Car(self.number_veichles_spawned, 'taxi', self.car_width, self.car_heigth, x, y)
-        # if num == 3:
-        #     veichle = Truck(self.number_veichles_spawned, self.truck_width, self.truck_heigth, x, y)
+        num = random.randint(0, 100)
+        if num <= self.car_spawn_rate:
+            car_type = random.choice(['car', 'taxi'])
+            veichle = Car(self.number_veichles_spawned, car_type, self.car_width, self.car_heigth, x, y)
+        if num > self.truck_spawn_rate:
+            veichle = Truck(self.number_veichles_spawned, self.truck_width, self.truck_heigth, x, y)
+
         # Set car degree
         veichle.changeDegree(facing)
 

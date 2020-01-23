@@ -11,8 +11,6 @@ from maps import maps
 ROAD_MAP = maps[map_selected]
 
 sys.path.insert(0, './veichles')
-from tkinter import Tk, Canvas
-from threading import Timer
 from map import Map
 from render import RenderEngine
 import pygame
@@ -27,7 +25,6 @@ WIDTH = len(ROAD_MAP[0]) * BLOCK_SIZE
 HEIGHT = len(ROAD_MAP) * BLOCK_SIZE
 
 BACKGROUND_COLOR = config['BACKGROUND_COLOR']
-TEXT_COLOR = (0, 0, 0)
 
 def game():
     pygame.init()
@@ -52,8 +49,8 @@ def game():
         map.update()
 
         message = 'Time: ' + str(int(pygame.time.get_ticks() / 1000))
-        renderEngine.drawText(message, TEXT_COLOR, 20, 20)
-        renderEngine.drawText('Fps: ' + str(int(clock.get_fps())), TEXT_COLOR, 20, 40)
+        renderEngine.drawText(message, 20, 20)
+        renderEngine.drawText('Fps: ' + str(int(clock.get_fps())), 20, 40)
 
         pygame.display.update()
         pygame.display.flip()

@@ -5,7 +5,7 @@ from pygame.math import Vector2
 
 class Veichle:
     dt = 0
-    def __init__(self,id, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=30.0):
+    def __init__(self,id, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=200.0):
         self.id = id
         self.model = None
         self.position = Vector2(posx, posy)
@@ -15,7 +15,7 @@ class Veichle:
         self.max_acceleration = max_acceleration
         self.max_steering = max_steering
         self.max_velocity = 150
-        self.brake_deceleration = 50
+        self.brake_deceleration = 100
         self.free_deceleration = 5
         self.acceleration = 0.0
         self.steering = 0.0

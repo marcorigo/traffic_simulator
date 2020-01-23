@@ -20,12 +20,11 @@ config = {
     'TRUCK_WIDTH': AUTO,
     'TRUCK_HEIGTH': AUTO,
 
+    #'DT': 0.5,
+    'TEXT_COLOR': (255, 255, 255),
+
     'CAR_SPAWN_RATE': 70,       # p
     'TRUCK_SPAWN_RATE' : 30,    # q
-    # 'INTERSECTION_TOP_RATE': 25,   # p_uA
-    # 'INTERSECTION_TOP_RIGTH': 25,  # p_uB
-    # 'INTERSECTION_TOP_LEFT':   25, # p_uC
-    # 'INTERSECTION_TOP_BOTTOM':  25,# p_ud
 
     'EXPLOSION_PERSISTANCE': 3,
 

@@ -1,3 +1,5 @@
+from config import config
+
 class RenderEngine:
     def __init__(self, canvas, pygame, cell_width, width, heigth, font):
         self.pygame = pygame
@@ -6,6 +8,7 @@ class RenderEngine:
         self.width = width
         self.heigth = heigth
         self.font = font
+        self.font_color = config['TEXT_COLOR']
         self.car = self.pygame.image.load('./sprites/veichles/car1.png').convert_alpha()
         self.truck = self.pygame.image.load('./sprites/veichles/truck.png').convert_alpha()
         self.taxi = self.pygame.image.load('./sprites/veichles/taxi.png').convert_alpha()
@@ -96,8 +99,8 @@ class RenderEngine:
         if border_size and color_border:
             self.pygame.draw.circle(self.canvas, color_border, (int(x), int(y)), int(radius) + border_size, border_size)
 
-    def drawText(self, message, color, x, y):
-        self.canvas.blit(self.font.render(message, True, color), (x, y))
+    def drawText(self, message, x, y):
+        self.canvas.blit(self.font.render(message, True, self.font_color), (x, y))
 
     def move(self, element, x = 0, y = 0):
         self.canvas.move(element, x, y)

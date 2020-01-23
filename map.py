@@ -191,9 +191,9 @@ class Map:
 
         self.explosionManager()
 
-        self.renderEngine.drawText('Veicoli spawnati: ' + str(self.number_veichles_spawned), (0, 0, 0), 20, 60)
-        self.renderEngine.drawText('Veicoli attivi: ' + str(len(self.bots)), (0, 0, 0), 20, 80)
-        self.renderEngine.drawText('Incidenti: ' + str(self.accidents), (0, 0, 0), 20, 100)
+        self.renderEngine.drawText('Veicoli spawnati: ' + str(self.number_veichles_spawned), 20, 60)
+        self.renderEngine.drawText('Veicoli attivi: ' + str(len(self.bots)), 20, 80)
+        self.renderEngine.drawText('Incidenti: ' + str(self.accidents), 20, 100)
 
     def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or

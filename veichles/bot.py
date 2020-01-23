@@ -277,9 +277,9 @@ class Bot:
             self.is_on_cross = False
 
         if self.avoidAccident or self.stop_for_cross:
-            # self.veichle.controls['space'] = True
-            self.veichle.velocity.x = 0
-            self.veichle.velocity.y = 0
+            self.veichle.controls['space'] = True
+            # self.veichle.velocity.x = 0
+            # self.veichle.velocity.y = 0
             self.veichle.controls['up'] = False
         # Slowing down for curves or max velocity
         elif self.approaching_curve and self.veichle.acceleration >= self.min_acceleration or self.veichle.acceleration >= self.speed_to_slow_down:

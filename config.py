@@ -1,7 +1,7 @@
 AUTO = False
 
 config = {
-    'BLOCK_SIZE': 50,
+    'BLOCK_SIZE': 120,
     'DEBUG': True,
     'MAX_VEICHLE_NUMBER': 200,
     'VEICHLES_SPAWN_INTERVAL': AUTO,
@@ -16,9 +16,9 @@ config = {
     'TRAFFIC_LIGHT_MIN_TIME_CHANGING': 50,
     'TRAFFIC_LIGHT_MAX_TIME_CHANGING': 90,
     'CAR_WIDTH': AUTO,
-    'CAR_HEIGTH': AUTO,
+    'CAR_HEIGHT': AUTO,
     'TRUCK_WIDTH': AUTO,
-    'TRUCK_HEIGTH': AUTO,
+    'TRUCK_HEIGHT': AUTO,
 
     #'DT': 0.5,
     'TEXT_COLOR': (255, 255, 255),
@@ -31,7 +31,7 @@ config = {
     'USE_TEXTURES': True,
 
     'VEICHLE_VISION_FIELD_WIDTH': AUTO,
-    'VEICHLE_VISION_FIELD_HEIGTH': AUTO,
+    'VEICHLE_VISION_FIELD_HEIGHT': AUTO,
 
     'TRAFFIC_LIGHT_COLORS': {
         'red' : (255, 0, 0),

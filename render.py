@@ -1,12 +1,12 @@
 from config import config
 
 class RenderEngine:
-    def __init__(self, canvas, pygame, cell_width, width, heigth, font):
+    def __init__(self, canvas, pygame, cell_width, width, height, font):
         self.pygame = pygame
         self.canvas = canvas
         self.cell_width = cell_width
         self.width = width
-        self.heigth = heigth
+        self.height = height
         self.font = font
         self.font_color = config['TEXT_COLOR']
         self.car = self.pygame.image.load('./sprites/veichles/car1.png').convert_alpha()
@@ -57,9 +57,9 @@ class RenderEngine:
 
         self.resize(self.roadSprites, self.cell_width, self.cell_width)
 
-    def resize(self, sprites, width, heigth):
+    def resize(self, sprites, width, height):
         for key in sprites.keys():
-            sprites[key] = self.pygame.transform.scale(sprites[key], (width, heigth))
+            sprites[key] = self.pygame.transform.scale(sprites[key], (width, height))
 
 
     def drawRoadTile(self,x, y, road_type):
@@ -72,18 +72,18 @@ class RenderEngine:
             return True
         else:
             return False
-    def drawVeichle(self, veichle_name, x, y, width, heigth, angle, fvW, fvH):
+    def drawVeichle(self, veichle_name, x, y, width, height, angle, fvW, fvH):
 
         # Resize texture for first time
         if not self.veichlesSprites[veichle_name][1]:
-            self.veichlesSprites[veichle_name][0] = self.pygame.transform.scale(self.veichlesSprites[veichle_name][0], (width, heigth))
+            self.veichlesSprites[veichle_name][0] = self.pygame.transform.scale(self.veichlesSprites[veichle_name][0], (width, height))
             self.veichlesSprites[veichle_name][1] = True
 
         image_orig = self.veichlesSprites[veichle_name][0]
         image = image_orig.copy()
 
         rect = image.get_rect()  
-        rect.center = ( x + (width // 2) , y + ( heigth // 2))   
+        rect.center = ( x + (width // 2) , y + ( height // 2))   
         old_center = rect.center  
         rot = angle
         new_image = self.pygame.transform.rotate(image_orig , rot)  
@@ -91,8 +91,8 @@ class RenderEngine:
         rect.center = old_center   
         self.canvas.blit(new_image , rect)  
 
-    def drawRect(self, x, y, width, heigth, color):
-        self.pygame.draw.rect(self.canvas, color, (x, y, width, heigth))
+    def drawRect(self, x, y, width, height, color):
+        self.pygame.draw.rect(self.canvas, color, (x, y, width, height))
 
     def drawCircle(self, x, y, radius, color, border_size = 0, color_border = None):
         self.pygame.draw.circle(self.canvas, color, (int(x), int(y)), int(radius))
@@ -106,4 +106,4 @@ class RenderEngine:
         self.canvas.move(element, x, y)
 
     def drawExplosion(self, explosion):
-        self.drawVeichle('explosion', explosion['x'], explosion['y'], explosion['width'], explosion['heigth'], 0, 0, 0)
+        self.drawVeichle('explosion', explosion['x'], explosion['y'], explosion['width'], explosion['height'], 0, 0, 0)

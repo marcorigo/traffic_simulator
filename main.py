@@ -31,7 +31,7 @@ def game():
     clock = pygame.time.Clock()
     canvas = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Traffic Simulation')
-    FONT = pygame.font.SysFont("Bizarre-Ass Font Sans Serif", 20)
+    FONT = pygame.font.SysFont("Bizarre-Ass Font Sans Serif", int(BLOCK_SIZE / 4))
 
     renderEngine = RenderEngine(canvas, pygame, BLOCK_SIZE, WIDTH, HEIGHT, FONT)
 

@@ -12,6 +12,7 @@ class Map:
     def __init__(self, renderEngine, road_map, cell_width, debug):
         self.renderEngine = renderEngine
         self.map = road_map
+        self.background = None
         self.cell_width = cell_width
         self.debug = debug
         self.map_width = len(self.map[0])
@@ -29,6 +30,7 @@ class Map:
         self.explosion_persitance = config['EXPLOSION_PERSISTANCE']
         self.max_veichles_on_map = config['MAX_VEICHLE_NUMBER']
         self.veichle_spawn_time = config['VEICHLES_SPAWN_INTERVAL']
+        self.useTextures = config['USE_TEXTURES']
         self.car_spawn_rate = config['CAR_SPAWN_RATE'] or 50
         self.truck_spawn_rate = config['CAR_SPAWN_RATE'] or 50
         self.bots = []
@@ -165,11 +167,7 @@ class Map:
 
     def update(self):
         #Drawing roads
-        for y in range(len(self.map)):
-            for x in range(len(self.map[y])):
-                road = self.map[y][x]
-                if road:
-                    road.draw(self.renderEngine)
+        self.drawRoads()
 
         #Update bots
         for bot in self.bots:
@@ -194,6 +192,25 @@ class Map:
         self.renderEngine.drawText('Veicoli spawnati: ' + str(self.number_veichles_spawned), 20, 60)
         self.renderEngine.drawText('Veicoli attivi: ' + str(len(self.bots)), 20, 80)
         self.renderEngine.drawText('Incidenti: ' + str(self.accidents), 20, 100)
+
+
+    def drawRoads(self):
+        if not self.background:
+            self.background = self.renderEngine.createBackgroundFromTiles(self.map, width = self.getMapWidth(), height = self.getMapHeight())
+        
+        self.renderEngine.drawImage(self.background, 0, 0)
+
+        for y in range(len(self.map)):
+            for x in range(len(self.map[y])):
+                road = self.map[y][x]
+                if road:
+                    road.draw(self.renderEngine)
+
+    def getMapWidth(self):
+        return self.map_width * self.cell_width
+
+    def getMapHeight(self):
+        return self.map_height * self.cell_width
 
     def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or

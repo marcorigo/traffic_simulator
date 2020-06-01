@@ -1,9 +1,9 @@
 AUTO = False
 
 config = {
-    'BLOCK_SIZE': 20, 
-    'DEBUG': True,
-    'MAX_VEICHLE_NUMBER': 200,
+    'BLOCK_SIZE': 50, 
+    'DEBUG': False,
+    'MAX_VEICHLE_NUMBER': 30,
     'VEICHLES_SPAWN_INTERVAL': AUTO,
     'BACKGROUND_COLOR': (120, 226, 104),
     'SIDE_WALK_SIZE': AUTO,

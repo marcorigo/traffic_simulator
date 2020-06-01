@@ -72,11 +72,6 @@ class Road:
     def rightTrafficLight(self, renderEngine, color, radious):
         renderEngine.drawCircle(int(self.x + self.cell_width - radious - self.traffic_light_border_size), int(self.y + self.cell_width / 2), radious, color, self.traffic_light_border_size, self.traffic_light_border_color)
 
-    def drawRoadTile(self, renderEngine):
-        if not self.useTextures:
-            return False
-        return renderEngine.drawRoadTile(self.x, self.y, self.road_type)
-
 class StraightRoad(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = True):
         super().__init__(cellX, cellY, cell_width, border, road_type)
@@ -84,7 +79,7 @@ class StraightRoad(Road):
 
     def draw(self, renderEngine):
 
-        if self.drawRoadTile(renderEngine):
+        if self.useTextures:
             return
 
         #Background
@@ -149,8 +144,7 @@ class Intersection(Road):
     def draw(self, renderEngine):
         self.checkTrafficLight()
 
-        if self.drawRoadTile(renderEngine):
-            # Draw traffic lights
+        if self.useTextures:
             self.drawTrafficLights(renderEngine)
             return
 
@@ -236,7 +230,7 @@ class TRoad(Road):
     def draw(self, renderEngine):
         self.checkTrafficLight()
 
-        if self.drawRoadTile(renderEngine):
+        if self.useTextures:
             self.drawTrafficLights(renderEngine)
             return
 
@@ -309,7 +303,7 @@ class Curve(Road):
 
     def draw(self, renderEngine):
 
-        if self.drawRoadTile(renderEngine):
+        if self.useTextures:
             return
 
         #Background
@@ -346,7 +340,7 @@ class Grass(Road):
 
     def draw(self, renderEngine):
 
-        if self.drawRoadTile(renderEngine):
+        if self.useTextures:
             return
         
 

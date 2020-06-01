@@ -41,8 +41,9 @@ def game():
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
                 pygame.quit()
-                    
-        canvas.fill(BACKGROUND_COLOR)
+
+        if not config['USE_TEXTURES']:     
+            canvas.fill(BACKGROUND_COLOR)
 
         Veichle.dt = clock.get_time() / 1000
 

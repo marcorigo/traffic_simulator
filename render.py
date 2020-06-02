@@ -114,7 +114,7 @@ class RenderEngine:
     def drawExplosion(self, explosion):
         self.drawVeichle('explosion', explosion['x'], explosion['y'], explosion['width'], explosion['height'], 0, 0, 0)
 
-    def createBackgroundFromTiles(self, map, width, height):
+    def createSurfaceFromMap(self, map, width, height):
         screen = self.pygame.Surface((width, height))
         for y in range(len(map)):
             for x in range(len(map[y])):

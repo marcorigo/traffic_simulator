@@ -5,34 +5,35 @@ from pygame.math import Vector2
 
 class Veichle:
     dt = 0
-    def __init__(self,id, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=200.0):
+    def __init__(self,id, posx, posy, angle = 0.0, length=30, max_steering=30, max_acceleration=200.0, boost = 2):
         self.id = id
-        self.model = None
         self.position = Vector2(posx, posy)
         self.velocity = Vector2(0.0, 0.0)
         self.angle = angle
         self.length = length
         self.max_acceleration = max_acceleration
         self.max_steering = max_steering
-        self.max_velocity = 150
-        self.brake_deceleration = 100
+        self.max_velocity = 120
+        self.brake_deceleration = 100 * boost
         self.free_deceleration = 5
         self.acceleration = 0.0
         self.steering = 0.0
         self.controls = { "up": False, "down": False, "left": False, "right": False, "space": False }
         self.facing = 1
+        self.boost = boost
+        self.boost = self.boost * self.max_acceleration
     
     def move(self):
         if self.controls['up']:
             if self.velocity.x < 0:
                 self.acceleration = self.brake_deceleration
             else:
-                self.acceleration += 1 * self.dt
+                self.acceleration += (1 * self.boost) * self.dt
         elif self.controls['down']:
             if self.velocity.x > 0:
                 self.acceleration = -self.brake_deceleration
             else:
-                self.acceleration -= 1 * self.dt
+                self.acceleration -= (1 * self.boost) * self.dt
         elif self.controls['space']:
             if abs(self.velocity.x) > self.dt * self.brake_deceleration:
                 self.acceleration = -copysign(self.brake_deceleration, self.velocity.x)
@@ -46,9 +47,9 @@ class Veichle:
                     self.acceleration = -self.velocity.x / self.dt
         self.acceleration = max(-self.max_acceleration, min(self.acceleration, self.max_acceleration))
         if self.controls['left']:
-            self.steering += 30 * self.dt
+            self.steering += (30 * self.boost) * self.dt
         elif self.controls['right']:
-            self.steering -= 30 * self.dt
+            self.steering -= (30 * self.boost) * self.dt
         else:
             self.steering = 0
 

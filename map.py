@@ -12,7 +12,7 @@ class Map:
     def __init__(self, renderEngine, road_map, cell_width, debug):
         self.renderEngine = renderEngine
         self.map = road_map
-        self.background = None
+        self.tileMap = None
         self.cell_width = cell_width
         self.debug = debug
         self.map_width = len(self.map[0])
@@ -195,10 +195,10 @@ class Map:
 
 
     def drawRoads(self):
-        if not self.background:
-            self.background = self.renderEngine.createBackgroundFromTiles(self.map, width = self.getMapWidth(), height = self.getMapHeight())
+        if not self.tileMap:
+            self.tileMap = self.renderEngine.createSurfaceFromMap(self.map, width = self.getMapWidth(), height = self.getMapHeight())
         
-        self.renderEngine.drawImage(self.background, 0, 0)
+        self.renderEngine.drawImage(self.tileMap, 0, 0)
 
         for y in range(len(self.map)):
             for x in range(len(self.map[y])):

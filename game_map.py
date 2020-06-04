@@ -231,8 +231,8 @@ class Map:
                 if (bot.veichle.facing == spawner['facing']
                     and bot.path[bot.pathStatus][0] == spawner['x']
                     and bot.path[bot.pathStatus][1] == spawner['y']):
-
                     occupied = True
+
             if not occupied and len(self.bots) < self.max_veichles_on_map and spawner['last_spawned_time'] + self.veichle_spawn_time < int(time.time()):
                 path = [[spawner['x'], spawner['y']]]
 

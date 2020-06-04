@@ -11,7 +11,7 @@ from maps import maps
 ROAD_MAP = maps[map_selected]
 
 sys.path.insert(0, './veichles')
-from map import Map
+from game_map import Map
 from render import RenderEngine
 import pygame
 from veichle import Veichle
@@ -35,7 +35,7 @@ def game():
 
     renderEngine = RenderEngine(canvas, pygame, BLOCK_SIZE, WIDTH, HEIGHT, FONT)
 
-    map = Map(renderEngine, ROAD_MAP, BLOCK_SIZE, DEBUG)
+    game_map = Map(renderEngine, ROAD_MAP, BLOCK_SIZE, DEBUG)
 
     while True:
         for ev in pygame.event.get():
@@ -47,7 +47,7 @@ def game():
 
         Veichle.dt = clock.get_time() / 1000
 
-        map.update()
+        game_map.update()
 
         message = 'Time: ' + str(int(pygame.time.get_ticks() / 1000))
         renderEngine.drawText(message, 20, 20)

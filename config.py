@@ -28,7 +28,7 @@ config = {
 
     'EXPLOSION_PERSISTANCE': 3,
 
-    'USE_TEXTURES': True,
+    'USE_TEXTURES': False,
 
     'VEICHLE_VISION_FIELD_WIDTH': AUTO,
     'VEICHLE_VISION_FIELD_HEIGHT': AUTO,
@@ -37,5 +37,8 @@ config = {
         'red' : (255, 0, 0),
         'yellow': (247, 228, 86),
         'green': (87, 226, 40)
-    }
+    },
+
+    'EVENTHUB_CONN_STRING' : "Endpoint=sb://trafficdata.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=pUIYQI9hyvxomayRApe7eBhmXaB4/Dbux4wRmJnBNo8=",
+    'EVENTHUB_NAME' : "data"
 }

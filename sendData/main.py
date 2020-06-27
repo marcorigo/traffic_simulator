@@ -7,12 +7,27 @@ import logging
 import uuid
 from azure.eventhub import EventData, EventHubProducerClient
 from config import config
+import threading
 
 from logger import get_logger
 logger = get_logger(logging.INFO)
 
 CONN_STRING = config['EVENTHUB_CONN_STRING']
 NAME = config['EVENTHUB_NAME']
+
+
+class SendDataThread (threading.Thread):
+    def __init__(self, name):
+        threading.Thread.__init__(self)
+        self.name = name
+
+    def run(self, bots = []):
+        if not bots:
+           logger.info('Started send data thread')
+        #   Metti la funzione che manda i dati qui
+        #  es sendData(bots)
+
+        logger.info('Bots data successfully sended')
 
 
 try:

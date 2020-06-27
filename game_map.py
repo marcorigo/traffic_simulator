@@ -7,6 +7,7 @@ from car import Car
 from truck import Truck
 from roads import roadBuilder
 from bot import Bot
+from sendData import SendDataThread
 
 class Map:
     def __init__(self, renderEngine, road_map, cell_width, debug):
@@ -36,6 +37,7 @@ class Map:
         self.bots = []
         self.spawners = []
         self.explosions = []
+        self.sendDataThread = SendDataThread.start()
 
         self.createRoads()
 
@@ -189,6 +191,8 @@ class Map:
 
         self.explosionManager()
 
+        self.sendData()
+
         self.renderEngine.drawText('Veicoli spawnati: ' + str(self.number_veichles_spawned), 20, 60)
         self.renderEngine.drawText('Veicoli attivi: ' + str(len(self.bots)), 20, 80)
         self.renderEngine.drawText('Incidenti: ' + str(self.accidents), 20, 100)
@@ -248,3 +252,8 @@ class Map:
                 self.addVeichle(path = path, facing = spawner['facing'])
                 spawner['spawned'] += 1
                 spawner['last_spawned_time'] = int(time.time())
+    
+
+    def sendData(self):
+        if not self.sendDataThread.is_alive():
+            self.sendDataThread.run(self.bots)

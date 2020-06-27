@@ -1,4 +1,3 @@
-from tkinter import Canvas
 from random import Random
 from math import sin, radians, degrees, copysign
 from pygame.math import Vector2

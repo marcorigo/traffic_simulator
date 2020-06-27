@@ -12,8 +12,6 @@ class RenderEngine:
         self.car = self.pygame.image.load('./sprites/veichles/car1.png').convert_alpha()
         self.truck = self.pygame.image.load('./sprites/veichles/truck.png').convert_alpha()
         self.taxi = self.pygame.image.load('./sprites/veichles/taxi.png').convert_alpha()
-        self.explosion = self.pygame.image.load('./sprites/explosion.png').convert_alpha()
-
         self.roadSprites = {
             '═' :self.pygame.image.load('./sprites/map/roadHorizontal.png').convert_alpha(), 
 
@@ -52,7 +50,7 @@ class RenderEngine:
             'car'       :   [   self.pygame.image.load('./sprites/veichles/car1.png').convert_alpha(),  False   ],
             'truck'     :   [   self.pygame.image.load('./sprites/veichles/truck.png').convert_alpha(), False   ],
             'taxi'      :   [   self.pygame.image.load('./sprites/veichles/taxi.png').convert_alpha(),  False   ],
-            'explosion' :   [   self.pygame.image.load('./sprites/explosion.png').convert_alpha(),      False   ],
+            'explosion' :   [   self.pygame.image.load('./sprites/other/explosion.png').convert_alpha(),      False   ],
         }
 
         self.resize(self.roadSprites, self.cell_width, self.cell_width)

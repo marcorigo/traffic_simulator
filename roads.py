@@ -1,5 +1,6 @@
-import time
-import random
+#import time
+#import random
+import traffic_light as tf
 from config import config
 
 class Road:
@@ -12,21 +13,13 @@ class Road:
         self.y = self.cellY * self.cell_width
         self.side_walk_color = config['SIDE_WALK_COLOR']
         self.road_type = road_type
-
-        self.yellow_light_time = config['TRAFFIC_LIGHT_YELLOW_TIME']
-        self.min_traffic_light_interval = config['TRAFFIC_LIGHT_MIN_TIME_CHANGING']
-        self.max_traffic_light_interval = config['TRAFFIC_LIGHT_MAX_TIME_CHANGING']
-        self.traffic_light_border_size = config['TRAFFIC_LIGHT_BORDER_SIZE']
-        self.traffic_light_border_color = config['TRAFFIC_LIGHT_BORDER_COLOR']
-        self.traffic_light_colors = config['TRAFFIC_LIGHT_COLORS']
-
         self.road_line_quantity = config['ROAD_LINE_QUANTITY']
         self.road_line_height = (self.cell_width - self.border * 2) / 15
         self.road_line_section = int(self.cell_width / self.road_line_quantity)
         self.road_line_width = int((self.cell_width / self.road_line_quantity) / 2)
         self.road_background = config['ROAD_COLOR']
-
         self.useTextures = config['USE_TEXTURES']
+
 
     def leftSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x, self.y, self.border, self.cell_width, self.side_walk_color)
@@ -60,17 +53,6 @@ class Road:
         for i in range(self.road_line_quantity):
             renderEngine.drawRect(self.x + self.cell_width / 2 - self.road_line_height / 2, self.y + self.road_line_section * i, self.road_line_height, self.road_line_width, (242, 242, 242))
 
-    def topTrafficLight(self, renderEngine, color, radious):
-        renderEngine.drawCircle(self.x + self.cell_width / 2, self.y + self.traffic_light_border_size, radious, color, self.traffic_light_border_size, self.traffic_light_border_color)
-
-    def bottomTrafficLight(self, renderEngine, color, radious):
-        renderEngine.drawCircle(self.x + self.cell_width / 2, self.y + self.cell_width - radious - self.traffic_light_border_size, radious, color, self.traffic_light_border_size, self.traffic_light_border_color)
-
-    def leftTrafficLight(self, renderEngine, color, radious):
-        renderEngine.drawCircle(int(self.x + self.traffic_light_border_size), int(self.y + self.cell_width / 2), radious, color, self.traffic_light_border_size, self.traffic_light_border_color)
-
-    def rightTrafficLight(self, renderEngine, color, radious):
-        renderEngine.drawCircle(int(self.x + self.cell_width - radious - self.traffic_light_border_size), int(self.y + self.cell_width / 2), radious, color, self.traffic_light_border_size, self.traffic_light_border_color)
 
 class StraightRoad(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = True):
@@ -100,16 +82,10 @@ class StraightRoad(Road):
 class Intersection(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type):
         super().__init__(cellX, cellY, cell_width, border, road_type)
-        self.light_radious = self.cell_width / 15
-        self.change_time = random.randint(self.min_traffic_light_interval, self.max_traffic_light_interval)
-        self.last_change = int(time.time())
-        # Get first green roads randomly
-        self.changing = random.randint(1,2)
-        self.init_colors = ['green', 'red']
-        self.x_light = self.init_colors.pop(self.changing - 1)
-        self.y_light = self.init_colors[0]
-
         self.road_allowed = [1, 3]
+        self.traffic_light = tf.TrafficLight(cell_width)
+
+
 
     def can(self, veichle):
         if veichle.facing in self.road_allowed:
@@ -117,29 +93,7 @@ class Intersection(Road):
         return False
 
     def checkTrafficLight(self):
-        now = int(time.time())
-
-        if self.last_change + self.change_time < now:
-            self.last_change = now
-
-            if self.changing == 1:
-                self.x_light = 'yellow'
-                self.changing = 2
-                self.road_allowed = [0]
-            else:
-                self.y_light = 'yellow'
-                self.changing = 1
-                self.road_allowed = [0]
-        
-        if self.last_change + self.yellow_light_time < now:
-            if self.changing == 1:
-                self.y_light = 'red'
-                self.x_light = 'green'
-                self.road_allowed = [2, 4]
-            else:
-                self.x_light = 'red'
-                self.y_light = 'green'
-                self.road_allowed = [1, 3]
+        self.traffic_light.update()
 
     def draw(self, renderEngine):
         self.checkTrafficLight()
@@ -160,24 +114,17 @@ class Intersection(Road):
         self.drawTrafficLights(renderEngine)
 
     def drawTrafficLights(self, renderEngine):
-        self.topTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-        self.bottomTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-        self.leftTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-        self.rightTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
+        self.traffic_light.draw(renderEngine,self)
+    #     self.traffic_light.top(renderEngine, self.traffic_light.colors[self.traffic_light.y_light], self.traffic_light.radius)
+    #     self.traffic_light.bottom(renderEngine, self.traffic_light.colors[self.traffic_light.y_light], self.traffic_light.radius)
+    #     self.traffic_light.left(renderEngine, self.traffic_light.colors[self.traffic_light.x_light], self.traffic_light.radius)
+    #     self.traffic_light.right(renderEngine, self.traffic_light.colors[self.traffic_light.x_light], self.traffic_light.radius)
 
 class TRoad(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = 0):
         super().__init__(cellX, cellY, cell_width, border, road_type)
         self.rotation = rotation
-        self.light_radious = self.cell_width / 15
-        self.change_time = random.randint(self.min_traffic_light_interval, self.max_traffic_light_interval)
-        self.last_change = int(time.time())
-        # Get first green roads randomly
-        self.changing = random.randint(1,2)
-        self.init_colors = ['green', 'red']
-        self.x_light = self.init_colors.pop(self.changing - 1)
-        self.y_light = self.init_colors[0]
-
+        self.traffic_light = tf.TrafficLight(cell_width)
         if self.rotation == 1:
             self.facing_x_axes = [2, 4]
             self.facing_y_axes = [3]
@@ -202,30 +149,7 @@ class TRoad(Road):
         return False
 
     def checkTrafficLight(self):
-        now = int(time.time())
-
-        if self.last_change + self.change_time < now:
-            self.last_change = now
-
-            if self.changing == 1:
-                self.x_light = 'yellow'
-                self.changing = 2
-                self.road_allowed = [0]
-            else:
-                self.y_light = 'yellow'
-                self.changing = 1
-                self.road_allowed = [0]
-        
-        if self.last_change + self.yellow_light_time < now:
-            if self.changing == 1:
-                self.y_light = 'red'
-                self.x_light = 'green'
-                self.road_allowed = self.facing_x_axes
-            else:
-                self.x_light = 'red'
-                self.y_light = 'green'
-                self.road_allowed = self.facing_y_axes
-
+        self.traffic_light.update()
 
     def draw(self, renderEngine):
         self.checkTrafficLight()
@@ -268,33 +192,7 @@ class TRoad(Road):
         self.drawTrafficLights(renderEngine)
 
     def drawTrafficLights(self, renderEngine):
-        # ╩
-        if self.rotation == 1:
-            # Draw traffic light
-            self.topTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.leftTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-            self.rightTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-
-        # ╠
-        if self.rotation == 2:
-            # Draw traffic light
-            self.topTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.bottomTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.rightTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-
-        # ╦
-        if self.rotation == 3:
-            # Draw traffic light
-            self.bottomTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.leftTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-            self.rightTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
-
-        # ╣
-        if self.rotation == 4:
-            # Draw traffic light
-            self.topTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.bottomTrafficLight(renderEngine, self.traffic_light_colors[self.y_light], self.light_radious)
-            self.leftTrafficLight(renderEngine, self.traffic_light_colors[self.x_light], self.light_radious)
+        self.traffic_light.draw(renderEngine,self,self.rotation)
 
 class Curve(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = 0):

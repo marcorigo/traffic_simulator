@@ -39,6 +39,8 @@ config = {
         'green': (87, 226, 40)
     },
 
+    'USE_AZURE' : True,
+    'SEND_INTERVAL' : 2,
     'EVENTHUB_CONN_STRING' : "",
     'EVENTHUB_NAME' : "data"
 }

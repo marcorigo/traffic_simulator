@@ -7,7 +7,7 @@ from car import Car
 from truck import Truck
 from roads import roadBuilder
 from bot import Bot
-from sendData import SendDataThread
+from sendData import SendVehicleDataThread
 
 
 class Map:
@@ -40,10 +40,10 @@ class Map:
         self.explosions = []
 
         if config['USE_AZURE']:
-            self.sendDataThread = SendDataThread('Data-Sender')
-            self.sendDataThread.start()
+            self.SendVehicleDataThread = SendVehicleDataThread('Data-Sender')
+            self.SendVehicleDataThread.start()
         else:
-            self.sendDataThread = None
+            self.SendVehicleDataThread = None
 
         self.createRoads()
 
@@ -274,8 +274,8 @@ class Map:
     
 
     def sendData(self):
-        if not self.sendDataThread:
+        if not self.SendVehicleDataThread:
             return
 
-        if not self.sendDataThread.is_alive():
-            self.sendDataThread.run(self.bots)
+        if not self.SendVehicleDataThread.is_alive():
+            self.SendVehicleDataThread.run(self.bots)

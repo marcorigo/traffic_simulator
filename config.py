@@ -41,6 +41,6 @@ config = {
 
     'USE_AZURE' : True,
     'SEND_INTERVAL' : 2,
-    'EVENTHUB_CONN_STRING' : "",
+    'EVENTHUB_CONN_STRING' : "Endpoint=sb://trafficdata.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=cODwjfyYur0tnz0RNfWgRByplNYPLrNlEkiEmS7ykag=",
     'EVENTHUB_NAME' : "data"
 }

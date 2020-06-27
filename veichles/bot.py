@@ -384,3 +384,6 @@ class Bot:
         else:
             self.pathStatus = self.pathLenght - 1
             # print('Il veicolo si trova nelle celle x = {}  y = {}'.format(x, y))
+
+    def getCurrentRoad(self):
+        return self.path[self.pathStatus]

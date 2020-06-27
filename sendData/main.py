@@ -2,56 +2,83 @@ import time
 import os
 import random
 import json
-import datetime
 import logging
-import uuid
 from azure.eventhub import EventData, EventHubProducerClient
 from config import config
 import threading
+import math
+import atexit
 
-from logger import get_logger
+from .logger import get_logger
 logger = get_logger(logging.INFO)
 
+SEND_INTERVAL = config['SEND_INTERVAL']
 CONN_STRING = config['EVENTHUB_CONN_STRING']
 NAME = config['EVENTHUB_NAME']
 
 
 class SendDataThread (threading.Thread):
     def __init__(self, name):
-        threading.Thread.__init__(self)
+        threading.Thread.__init__(self, daemon=True)
         self.name = name
+        self.client = None
+        self.init()
+        atexit.register(self.closeConnection)
+
+
+    def init(self):
+        if not CONN_STRING or not NAME:
+            raise ValueError("No EventHubs URL or name supplied.")
+
+        self.client = EventHubProducerClient.from_connection_string(conn_str = CONN_STRING, eventhub_name = NAME)
+
 
     def run(self, bots = []):
         if not bots:
            logger.info('Started send data thread')
-        #   Metti la funzione che manda i dati qui
-        #  es sendData(bots)
+
+        self.sendData(bots)
 
         logger.info('Bots data successfully sended')
 
 
-try:
-    if not CONN_STRING or not NAME:
-        raise ValueError("No EventHubs URL or name supplied.")
+    def createBatch(self, event_data_batch, bots):
+        for bot in bots:
+            reading_vehicle = self.createJson(bot)
+            event_data_batch.add(EventData(json.dumps(reading_vehicle)))
 
-    devices = []
-    for x in range(0, 10):
-        devices.append(str(uuid.uuid4()))
+        return event_data_batch
 
-    client = EventHubProducerClient.from_connection_string(conn_str = CONN_STRING, eventhub_name = NAME)
 
-    while True:    # For each device, produce 20 events. 
-        event_data_batch = client.create_batch() # Create a batch. You will add events to the batch later. 
-        for dev in devices:
-            # Create a dummy reading.
-            reading = {'id': dev, 'timestamp': str(datetime.datetime.utcnow()), 'uv': random.random(), 'temperature': random.randint(70, 100), 'humidity': random.randint(70, 100)}
-            s = json.dumps(reading) # Convert the reading into a JSON string.
-            logger.info(s)
-            event_data_batch.add(EventData(s)) # Add event data to the batch.
-            time.sleep(1)
-        client.send_batch(event_data_batch) # Send the batch of events to the event hub.
+    def sendData(self, bots):
+        if not bots:
+            logger.info('No bots passed')
+            return
 
-    client.close()
+        event_data_batch = self.client.create_batch()
 
-except KeyboardInterrupt:
-    pass
+        event_data_batch = self.createBatch(event_data_batch, bots)
+
+        self.client.send_batch(event_data_batch)
+
+        time.sleep(SEND_INTERVAL)
+
+
+    def closeConnection(self):
+        self.client.close()
+
+
+class  SendVehicleDataThread (SendDataThread):
+    def __init__(self, name):
+        super().__init__(name)
+        
+    def createJson(self, bot):
+        return {'id': bot.veichle.id, 'road': bot.getCurrentRoad(), 'velocity': math.sqrt((math.pow(float(bot.veichle.velocity.x), 2)) + (math.pow(float(bot.veichle.velocity.y), 2)))}
+
+
+class  SendTrafficLightDataThread (SendDataThread):
+    def __init__(self, name):
+        super().__init__(name)
+        
+    def createJson(self, bot):
+        pass

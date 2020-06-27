@@ -1,1 +1,1 @@
-from main import SendDataThread
+from sendData.main import SendVehicleDataThread

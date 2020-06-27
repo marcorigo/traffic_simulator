@@ -9,6 +9,7 @@ from roads import roadBuilder
 from bot import Bot
 from sendData import SendDataThread
 
+
 class Map:
     def __init__(self, renderEngine, road_map, cell_width, debug):
         self.renderEngine = renderEngine
@@ -37,9 +38,15 @@ class Map:
         self.bots = []
         self.spawners = []
         self.explosions = []
-        self.sendDataThread = SendDataThread.start()
+
+        if config['USE_AZURE']:
+            self.sendDataThread = SendDataThread('Data-Sender')
+            self.sendDataThread.start()
+        else:
+            self.sendDataThread = None
 
         self.createRoads()
+
 
     def createRoads(self):
         for y in range(len(self.map)):
@@ -51,6 +58,7 @@ class Map:
 
                 road = roadBuilder(road_type, x, y, self.cell_width, self.side_walk, rotation = road_type)
                 self.map[y][x] = road
+
 
     def getRoadSpawnPoints(self, facing, x, y):
         if facing == 1:
@@ -66,6 +74,7 @@ class Map:
             x = x * self.cell_width + self.cell_width / 2 + self.road_way / 2
             y = y * self.cell_width + self.border_left
         return x, y
+
 
     def addVeichle(self, path, facing = False, active = True):
         # Find degree
@@ -100,6 +109,7 @@ class Map:
         self.number_veichles_spawned += 1
         return veichle
 
+
     def createVeichleSpawnPoint(self, road_type, x, y):
         if road_type == '➡' or road_type == '⬅' or road_type == '⬆' or road_type == '⬇':
             spawner = {
@@ -124,6 +134,7 @@ class Map:
             return spawner
         return False
 
+
     def createExplosion(self, x, y):
         explosion = {
             'created_time': int(time.time()),
@@ -135,12 +146,14 @@ class Map:
 
         self.explosions.append(explosion)
     
+
     def explosionManager(self):
         for explosion in self.explosions:
             if explosion['created_time'] + self.explosion_persitance > int(time.time()):
                 self.renderEngine.drawExplosion(explosion)
             else:
                 self.explosions.remove(explosion)
+
 
     def checkCollision(self):
         for i in range(len(self.bots)):
@@ -166,6 +179,7 @@ class Map:
                         # print('-----------')
 
                         return True
+
 
     def update(self):
         #Drawing roads
@@ -210,16 +224,20 @@ class Map:
                 if road:
                     road.draw(self.renderEngine)
 
+
     def getMapWidth(self):
         return self.map_width * self.cell_width
 
+
     def getMapHeight(self):
         return self.map_height * self.cell_width
+
 
     def outsideEdges(self, veichle):
         if (veichle.position.x < - 100 or veichle.position.x > self.map_width * self.cell_width + 100 or
             veichle.position.y < - 100 or veichle.position.y > self.map_height * self.cell_width + 100):
             return True
+
 
     def deleteBotsOutOfEdges(self):# Testing deleting ents
         for bot in self.bots:
@@ -228,6 +246,7 @@ class Map:
                 self.bots.remove(bot)
                 return
     
+
     def checkForSpawn(self):
         for spawner in self.spawners:
             occupied = False
@@ -255,5 +274,8 @@ class Map:
     
 
     def sendData(self):
+        if not self.sendDataThread:
+            return
+
         if not self.sendDataThread.is_alive():
             self.sendDataThread.run(self.bots)

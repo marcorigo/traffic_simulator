@@ -10,12 +10,10 @@ from maps import maps
 
 ROAD_MAP = maps[map_selected]
 
-sys.path.insert(0, './veichles')
 from game_map import Map
 from render import RenderEngine
 import pygame
 from veichle import Veichle
-
 
 
 BLOCK_SIZE = config['BLOCK_SIZE']

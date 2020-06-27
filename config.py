@@ -39,6 +39,6 @@ config = {
         'green': (87, 226, 40)
     },
 
-    'EVENTHUB_CONN_STRING' : "Endpoint=sb://trafficdata.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=pUIYQI9hyvxomayRApe7eBhmXaB4/Dbux4wRmJnBNo8=",
+    'EVENTHUB_CONN_STRING' : "",
     'EVENTHUB_NAME' : "data"
 }

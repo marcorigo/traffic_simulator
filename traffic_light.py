@@ -89,8 +89,8 @@ class TrafficLight():
 
 
     def update(self):
-        self.change_time *= dt
-        self.yellow_light_time *= dt
+        self.change_time *= self.dt
+        self.yellow_light_time *= self.dt
 
         now = int(time.time())
 

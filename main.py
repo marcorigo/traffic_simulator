@@ -18,6 +18,7 @@ from veichle import Veichle
 
 BLOCK_SIZE = config['BLOCK_SIZE']
 DEBUG = config['DEBUG']
+SPEED_TIME_MULTIPLIER = config['SPEED_TIME_MULTIPLIER']
 
 WIDTH = len(ROAD_MAP[0]) * BLOCK_SIZE
 HEIGHT = len(ROAD_MAP) * BLOCK_SIZE
@@ -43,7 +44,7 @@ def game():
         if not config['USE_TEXTURES']:     
             canvas.fill(BACKGROUND_COLOR)
 
-        Veichle.dt = clock.get_time() / 1000
+        Veichle.dt = clock.get_time() / 1000 * SPEED_TIME_MULTIPLIER
 
         game_map.update()
 

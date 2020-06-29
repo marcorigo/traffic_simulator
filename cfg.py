@@ -1,8 +1,6 @@
 import json
 import os
 
-from src.const.app import APP_NAME
-
 CFG =   {}
 
 def load(workdir = None):

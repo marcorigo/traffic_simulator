@@ -41,7 +41,7 @@ def game():
             if ev.type == pygame.QUIT:
                 pygame.quit()
 
-        if not config.USE_TEXTURES
+        if not config.USE_TEXTURES:
             canvas.fill(BACKGROUND_COLOR)
 
         Veichle.dt = clock.get_time() / 1000 * SPEED_TIME_MULTIPLIER

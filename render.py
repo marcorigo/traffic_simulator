@@ -47,20 +47,23 @@ class RenderEngine:
         }
 
         self.veichlesSprites = {
-            'car'       :   [   self.pygame.image.load('./sprites/veichles/car1.png').convert_alpha(),  False   ],
-            'truck'     :   [   self.pygame.image.load('./sprites/veichles/truck.png').convert_alpha(), False   ],
-            'taxi'      :   [   self.pygame.image.load('./sprites/veichles/taxi.png').convert_alpha(),  False   ],
-            'explosion' :   [   self.pygame.image.load('./sprites/other/explosion.png').convert_alpha(),      False   ],
+            'car'       :   [   self.pygame.image.load('./sprites/veichles/car1.png').convert_alpha()   ,   False   ],
+            'truck'     :   [   self.pygame.image.load('./sprites/veichles/truck.png').convert_alpha()  ,   False   ],
+            'taxi'      :   [   self.pygame.image.load('./sprites/veichles/taxi.png').convert_alpha()   ,   False   ],
+            'explosion' :   [   self.pygame.image.load('./sprites/other/explosion.png').convert_alpha() ,   False   ],
         }
 
         self.resize(self.roadSprites, self.cell_width, self.cell_width)
+
 
     def resize(self, sprites, width, height):
         for key in sprites.keys():
             sprites[key] = self.pygame.transform.scale(sprites[key], (width, height))
 
+
     def getRoadTile(self, road_type):
         return self.roadSprites[road_type]
+
 
     def drawRoadTile(self,x, y, road_type):
         roadTile = self.getRoadTile(road_type)
@@ -72,6 +75,7 @@ class RenderEngine:
             return True
         else:
             return False
+
 
     def drawVeichle(self, veichle_name, x, y, width, height, angle, fvW, fvH, image = None):
 
@@ -92,25 +96,32 @@ class RenderEngine:
         rect.center = old_center   
         self.canvas.blit(new_image , rect)  
 
+
     def drawImage(self, image, x, y):
         self.canvas.blit(image, (x, y)) 
 
+
     def drawRect(self, x, y, width, height, color):
         self.pygame.draw.rect(self.canvas, color, (x, y, width, height))
+
 
     def drawCircle(self, x, y, radius, color, border_size = 0, color_border = None):
         self.pygame.draw.circle(self.canvas, color, (int(x), int(y)), int(radius))
         if border_size and color_border:
             self.pygame.draw.circle(self.canvas, color_border, (int(x), int(y)), int(radius) + border_size, border_size)
 
+
     def drawText(self, message, x, y):
         self.canvas.blit(self.font.render(message, True, self.font_color), (x, y))
+
 
     def move(self, element, x = 0, y = 0):
         self.canvas.move(element, x, y)
 
+
     def drawExplosion(self, explosion):
         self.drawVeichle('explosion', explosion['x'], explosion['y'], explosion['width'], explosion['height'], 0, 0, 0)
+
 
     def createSurfaceFromMap(self, map, width, height):
         screen = self.pygame.Surface((width, height))

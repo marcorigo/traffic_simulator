@@ -1,5 +1,4 @@
-import cfg as cfg
-config =   cfg.load()
+from const import config
 
 import sys
 map_selected = 0
@@ -17,14 +16,14 @@ import pygame
 from veichle import Veichle
 
 
-BLOCK_SIZE = config['BLOCK_SIZE']
-DEBUG = config['DEBUG']
-SPEED_TIME_MULTIPLIER = config['SPEED_TIME_MULTIPLIER']
+BLOCK_SIZE = config.BLOCK_SIZE
+DEBUG = config.DEBUG
+SPEED_TIME_MULTIPLIER = config.SPEED_TIME_MULTIPLIER
 
 WIDTH = len(ROAD_MAP[0]) * BLOCK_SIZE
 HEIGHT = len(ROAD_MAP) * BLOCK_SIZE
 
-BACKGROUND_COLOR = config['BACKGROUND_COLOR']
+BACKGROUND_COLOR = config.BACKGROUND_COLOR
 
 def game():
     pygame.init()
@@ -42,7 +41,7 @@ def game():
             if ev.type == pygame.QUIT:
                 pygame.quit()
 
-        if not config['USE_TEXTURES']:     
+        if not config.USE_TEXTURES'     
             canvas.fill(BACKGROUND_COLOR)
 
         Veichle.dt = clock.get_time() / 1000 * SPEED_TIME_MULTIPLIER

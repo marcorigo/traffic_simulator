@@ -1,7 +1,6 @@
 import random
 import time
-import cfg as cfg
-config =   cfg.load()
+from const import config
 import sys
 sys.path.insert(0, './veichles')
 from car import Car
@@ -22,25 +21,25 @@ class Map:
         self.map_height = len(self.map)
         self.number_veichles_spawned = 0
         self.accidents = 0
-        self.side_walk = config['SIDE_WALK_SIZE'] or int(self.cell_width / 10)
+        self.side_walk = config.SIDE_WALK_SIZE or int(self.cell_width / 10)
         self.road_way = int((self.cell_width - self.side_walk * 2) / 2)
-        self.car_width = config['CAR_WIDTH'] or int(self.cell_width / 3)
-        self.car_height = config['CAR_HEIGHT'] or int(self.cell_width / 5)
-        self.truck_width = config['TRUCK_WIDTH'] or int(self.cell_width / 2)
-        self.truck_height = config['TRUCK_HEIGHT'] or int(self.cell_width / 3.5)
+        self.car_width = config.CAR_WIDTH or int(self.cell_width / 3)
+        self.car_height = config.CAR_HEIGHT or int(self.cell_width / 5)
+        self.truck_width = config.TRUCK_WIDTH or int(self.cell_width / 2)
+        self.truck_height = config.TRUCK_HEIGHT or int(self.cell_width / 3.5)
         self.border_right = self.side_walk + self.road_way + self.road_way / 2
         self.border_left = self.side_walk + self.road_way / 2
-        self.explosion_persitance = config['EXPLOSION_PERSISTANCE']
-        self.max_veichles_on_map = config['MAX_VEICHLE_NUMBER']
-        self.veichle_spawn_time = config['VEICHLES_SPAWN_INTERVAL']
-        self.useTextures = config['USE_TEXTURES']
-        self.car_spawn_rate = config['CAR_SPAWN_RATE'] or 50
-        self.truck_spawn_rate = config['CAR_SPAWN_RATE'] or 50
+        self.explosion_persitance = config.EXPLOSION_PERSISTANCE
+        self.max_veichles_on_map = config.MAX_VEICHLE_NUMBER
+        self.veichle_spawn_time = config.VEICHLES_SPAWN_INTERVAL
+        self.useTextures = config.USE_TEXTURES
+        self.car_spawn_rate = config.CAR_SPAWN_RATE or 50
+        self.truck_spawn_rate = config.CAR_SPAWN_RATE or 50
         self.bots = []
         self.spawners = []
         self.explosions = []
 
-        if config['USE_AZURE']:
+        if config.USE_AZURE'
             self.SendVehicleDataThread = SendVehicleDataThread('Data-Sender')
             self.SendVehicleDataThread.start()
         else:

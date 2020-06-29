@@ -22,14 +22,14 @@ class config():
     DT = 0.5
     TEXT_COLOR = (255, 255, 255)
     CAR_SPAWN_RATE = 70       # p
-    TRUCK_SPAWN_RATE =: 30    # q
+    TRUCK_SPAWN_RATE = 30    # q
     EXPLOSION_PERSISTANCE = 3
     USE_TEXTURES = False
     VEICHLE_VISION_FIELD_WIDTH = AUTO
     VEICHLE_VISION_FIELD_HEIGHT = AUTO
     TRAFFIC_LIGHT_COLORS = {
-        'red'   : (255, 0, 0)
-        'yellow': (247, 228, 86)
-        'green' : (87, 226, 40)
+        'red'   : (255, 0, 0),
+        'yellow': (247, 228, 86),
+        'green' : (87, 226, 40),
     }  
     SPEED_TIME_MULTIPLIER = 1

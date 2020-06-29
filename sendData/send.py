@@ -4,8 +4,7 @@ import random
 import json
 import logging
 from azure.eventhub import EventData, EventHubProducerClient
-import cfg as cfg
-config =   cfg.load()
+from config import config
 import threading
 import math
 import atexit
@@ -74,7 +73,7 @@ class  SendVehicleDataThread (SendDataThread):
         super().__init__(name)
         
     def createJson(self, bot):
-        return {'id': bot.veichle.id, 'road': bot.getCurrentRoad(), 'velocity': math.sqrt((math.pow(float(bot.veichle.velocity.x), 2)) + (math.pow(float(bot.veichle.velocity.y), 2)))}
+        return {'id': bot.veichle.id, 'type': type(bot.veichle).__name__, 'road': bot.getCurrentRoad(), 'velocity': math.sqrt((math.pow(float(bot.veichle.velocity.x), 2)) + (math.pow(float(bot.veichle.velocity.y), 2)))}
 
 
 class  SendTrafficLightDataThread (SendDataThread):

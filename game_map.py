@@ -1,6 +1,8 @@
 import random
 import time
 from const import config
+import cfg as cfg
+cfg =   cfg.load()
 import sys
 sys.path.insert(0, './veichles')
 from car import Car
@@ -39,7 +41,7 @@ class Map:
         self.spawners = []
         self.explosions = []
 
-        if config.USE_AZURE'
+        if cfg['USE_AZURE']:
             self.SendVehicleDataThread = SendVehicleDataThread('Data-Sender')
             self.SendVehicleDataThread.start()
         else:

@@ -4,6 +4,7 @@ from const import config
 
 
 class TrafficLight():
+    dt = 0
     def __init__(self, cell_width):
         self.yellow_light_time = config.TRAFFIC_LIGHT_YELLOW_TIME
         self.min_interval = config.TRAFFIC_LIGHT_MIN_TIME_CHANGING
@@ -20,6 +21,7 @@ class TrafficLight():
         self.x_light = self.init_colors.pop(self.changing - 1)
         self.y_light = self.init_colors[0]
         self.cell_width = cell_width
+
 
     def draw(self,renderEngine,road,rotation=0):
         if rotation == 0:
@@ -56,23 +58,12 @@ class TrafficLight():
             self.left(renderEngine,road)
 
 
-
-    #
-    # def drawTrafficLights(self, renderEngine):
-    #     self.traffic_light.top(renderEngine, self.traffic_light.colors[self.traffic_light.y_light],
-    #                            self.traffic_light.radius)
-    #     self.traffic_light.bottom(renderEngine, self.traffic_light.colors[self.traffic_light.y_light],
-    #                               self.traffic_light.radius)
-    #     self.traffic_light.left(renderEngine, self.traffic_light.colors[self.traffic_light.x_light],
-    #                             self.traffic_light.radius)
-    #     self.traffic_light.right(renderEngine, self.traffic_light.colors[self.traffic_light.x_light],
-    #                              self.traffic_light.radius)
-    #
     def top(self, renderEngine,road):
         renderEngine.drawCircle(road.x + self.cell_width / 2, road.y + self.border_size,
                                 self.radius,
                                 self.colors[self.y_light],
                                 self.border_size, self.border_color)
+
 
     def bottom(self, renderEngine,road):
         renderEngine.drawCircle(road.x + self.cell_width / 2,
@@ -81,11 +72,13 @@ class TrafficLight():
                                 self.colors[self.y_light],
                                 self.border_size, self.border_color)
 
+
     def left(self, renderEngine, road):
         renderEngine.drawCircle(int(road.x + self.border_size), int(road.y + self.cell_width / 2),
                                 self.radius,
                                 self.colors[self.x_light],
                                 self.border_size, self.border_color)
+
 
     def right(self, renderEngine, road):
         renderEngine.drawCircle(int(road.x + self.cell_width - self.radius - self.border_size),
@@ -94,7 +87,11 @@ class TrafficLight():
                                 self.colors[self.x_light],
                                 self.border_size, self.border_color)
 
+
     def update(self):
+        self.change_time *= dt
+        self.yellow_light_time *= dt
+
         now = int(time.time())
 
         if self.last_change + self.change_time < now:

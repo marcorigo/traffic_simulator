@@ -19,7 +19,6 @@ class config():
     CAR_HEIGHT = AUTO
     TRUCK_WIDTH = AUTO
     TRUCK_HEIGHT = AUTO
-    DT = 0.5
     TEXT_COLOR = (255, 255, 255)
     CAR_SPAWN_RATE = 70       # p
     TRUCK_SPAWN_RATE = 30    # q

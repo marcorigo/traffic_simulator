@@ -1,4 +1,5 @@
-from config import config
+import cfg as cfg
+config =   cfg.load()
 
 class RenderEngine:
     def __init__(self, canvas, pygame, cell_width, width, height, font):

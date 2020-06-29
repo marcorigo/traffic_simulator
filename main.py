@@ -1,4 +1,5 @@
-from config import config
+import cfg as cfg
+config =   cfg.load()
 
 import sys
 map_selected = 0

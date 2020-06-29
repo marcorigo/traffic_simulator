@@ -1,6 +1,7 @@
 import random
 import time
-from config import config
+import cfg as cfg
+config =   cfg.load()
 import sys
 sys.path.insert(0, './veichles')
 from car import Car

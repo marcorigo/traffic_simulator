@@ -1,6 +1,7 @@
 from render import RenderEngine
 import random
-from config import config
+import cfg as cfg
+config =   cfg.load()
 
 class Bot:
     def __init__(self, veichle, path, cell_width, road_way, border_right, border_left, bots, map, renderEngine, debug, active = True):

@@ -1,7 +1,8 @@
 #import time
 #import random
 import traffic_light as tf
-from config import config
+import cfg as cfg
+config =   cfg.load()
 
 class Road:
     def __init__(self, cellX, cellY, cell_width, side_walk, road_type):

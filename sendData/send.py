@@ -4,7 +4,8 @@ import random
 import json
 import logging
 from azure.eventhub import EventData, EventHubProducerClient
-from config import config
+import cfg as cfg
+config =   cfg.load()
 import threading
 import math
 import atexit

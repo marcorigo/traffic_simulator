@@ -1,0 +1,46 @@
+{
+    "BLOCK_SIZE"    : 50, 
+    "DEBUG" : false,
+    "MAX_VEICHLE_NUMBER"    : 30,
+    "VEICHLES_SPAWN_INTERVAL"   : false,
+    "BACKGROUND_COLOR"  : "(120, 226, 104)",
+    "SIDE_WALK_SIZE"    : false,
+    "ROAD_COLOR"    : "(170, 170, 170)",
+    "SIDE_WALK_COLOR"   : "(94, 94, 94)",
+    "ROAD_LINE_QUANTITY"    : 5,
+    "TRAFFIC_LIGHT_BORDER_SIZE" : 0,
+    "TRAFFIC_LIGHT_BORDER_COLOR"    : "(96, 96, 96)",
+    "TRAFFIC_LIGHT_YELLOW_TIME" : 10,
+    "TRAFFIC_LIGHT_MIN_TIME_CHANGING"   : 50,
+    "TRAFFIC_LIGHT_MAX_TIME_CHANGING"   : 90,
+    "CAR_WIDTH" : false,
+    "CAR_HEIGHT"    : false,
+    "TRUCK_WIDTH"   : false,
+    "TRUCK_HEIGHT"  : false,
+
+    "DT": 0.5,
+    "TEXT_COLOR": "(255, 255, 255)",
+
+    "CAR_SPAWN_RATE": 70,
+    "TRUCK_SPAWN_RATE" : 30,
+
+    "EXPLOSION_PERSISTANCE": 3,
+
+    "USE_TEXTURES": false,
+
+    "VEICHLE_VISION_FIELD_WIDTH": false,
+    "VEICHLE_VISION_FIELD_HEIGHT": false,
+
+    "TRAFFIC_LIGHT_COLORS": {
+        "red"   :    "(255, 0, 0)",
+        "yellow":   "(247, 228, 86)",
+        "green" :   "(87, 226, 40)"
+    },
+
+    "SPEED_TIME_MULTIPLIER": 1,
+
+    "USE_AZURE" : true,
+    "SEND_INTERVAL" : 2,
+    "EVENTHUB_CONN_STRING" : "",
+    "EVENTHUB_NAME" : "data"
+}

@@ -1,6 +1,7 @@
 import time
 import random
-from config import config
+import cfg as cfg
+config =   cfg.load()
 
 
 class TrafficLight():

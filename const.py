@@ -1,4 +1,4 @@
-class config():
+class const():
     AUTO = False
 
     BLOCK_SIZE = 50

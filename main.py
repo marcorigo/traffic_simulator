@@ -1,4 +1,4 @@
-from const import config
+from const import const
 
 import sys
 map_selected = 0
@@ -17,14 +17,14 @@ from veichle import Veichle
 from traffic_light import TrafficLight
 
 
-BLOCK_SIZE = config.BLOCK_SIZE
-DEBUG = config.DEBUG
-SPEED_TIME_MULTIPLIER = config.SPEED_TIME_MULTIPLIER
+BLOCK_SIZE = const.BLOCK_SIZE
+DEBUG = const.DEBUG
+SPEED_TIME_MULTIPLIER = const.SPEED_TIME_MULTIPLIER
 
 WIDTH = len(ROAD_MAP[0]) * BLOCK_SIZE
 HEIGHT = len(ROAD_MAP) * BLOCK_SIZE
 
-BACKGROUND_COLOR = config.BACKGROUND_COLOR
+BACKGROUND_COLOR = const.BACKGROUND_COLOR
 
 def game():
     pygame.init()
@@ -42,7 +42,7 @@ def game():
             if ev.type == pygame.QUIT:
                 pygame.quit()
 
-        if not config.USE_TEXTURES:
+        if not const.USE_TEXTURES:
             canvas.fill(BACKGROUND_COLOR)
 
         DT = clock.get_time() / 1000 * SPEED_TIME_MULTIPLIER

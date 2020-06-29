@@ -1,4 +1,4 @@
-from const import config
+from const import const
 
 class RenderEngine:
     def __init__(self, canvas, pygame, cell_width, width, height, font):
@@ -8,7 +8,7 @@ class RenderEngine:
         self.width = width
         self.height = height
         self.font = font
-        self.font_color = config.TEXT_COLOR
+        self.font_color = const.TEXT_COLOR
         self.car = self.pygame.image.load('./sprites/veichles/car1.png').convert_alpha()
         self.truck = self.pygame.image.load('./sprites/veichles/truck.png').convert_alpha()
         self.taxi = self.pygame.image.load('./sprites/veichles/taxi.png').convert_alpha()

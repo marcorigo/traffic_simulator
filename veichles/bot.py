@@ -1,6 +1,6 @@
 from render import RenderEngine
 import random
-from const import config
+from const import const
 
 class Bot:
     def __init__(self, veichle, path, cell_width, road_way, border_right, border_left, bots, map, renderEngine, debug, active = True):
@@ -16,9 +16,9 @@ class Bot:
         self.border_left = border_left
         self.speed_to_slow_down = 8 / (100 / self.cell_width)
         # self.vision_field_width = int(self.cell_width / (self.speed_to_slow_down / 3))
-        self.vision_field_width = config.VEICHLE_VISION_FIELD_WIDTH or int(self.cell_width / 1.4)
+        self.vision_field_width = const.VEICHLE_VISION_FIELD_WIDTH or int(self.cell_width / 1.4)
         # self.vision_field_height = self.road_way
-        self.vision_field_height = config.VEICHLE_VISION_FIELD_HEIGHT or self.veichle.height
+        self.vision_field_height = const.VEICHLE_VISION_FIELD_HEIGHT or self.veichle.height
         self.vision_field_x = 0
         self.vision_field_y = 0
         self.avoidAccident = False

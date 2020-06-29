@@ -1,7 +1,7 @@
 #import time
 #import random
 import traffic_light as tf
-from const import config
+from const import const
 
 class Road:
     def __init__(self, cellX, cellY, cell_width, side_walk, road_type):
@@ -11,14 +11,14 @@ class Road:
         self.border = side_walk
         self.x = self.cellX * self.cell_width
         self.y = self.cellY * self.cell_width
-        self.side_walk_color = config.SIDE_WALK_COLOR
+        self.side_walk_color = const.SIDE_WALK_COLOR
         self.road_type = road_type
-        self.road_line_quantity = config.ROAD_LINE_QUANTITY
+        self.road_line_quantity = const.ROAD_LINE_QUANTITY
         self.road_line_height = (self.cell_width - self.border * 2) / 15
         self.road_line_section = int(self.cell_width / self.road_line_quantity)
         self.road_line_width = int((self.cell_width / self.road_line_quantity) / 2)
-        self.road_background = config.ROAD_COLOR
-        self.useTextures = config.USE_TEXTURES
+        self.road_background = const.ROAD_COLOR
+        self.useTextures = const.USE_TEXTURES
 
 
     def leftSideWalk(self, renderEngine):

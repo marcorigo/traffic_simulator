@@ -1,17 +1,17 @@
 import time
 import random
-from const import config
+from const import const
 
 
 class TrafficLight():
     dt = 0
     def __init__(self, cell_width):
-        self.yellow_light_time = config.TRAFFIC_LIGHT_YELLOW_TIME
-        self.min_interval = config.TRAFFIC_LIGHT_MIN_TIME_CHANGING
-        self.max_interval = config.TRAFFIC_LIGHT_MAX_TIME_CHANGING
-        self.border_size = config.TRAFFIC_LIGHT_BORDER_SIZE
-        self.border_color = config.TRAFFIC_LIGHT_BORDER_COLOR
-        self.colors = config.TRAFFIC_LIGHT_COLORS
+        self.yellow_light_time = const.TRAFFIC_LIGHT_YELLOW_TIME
+        self.min_interval = const.TRAFFIC_LIGHT_MIN_TIME_CHANGING
+        self.max_interval = const.TRAFFIC_LIGHT_MAX_TIME_CHANGING
+        self.border_size = const.TRAFFIC_LIGHT_BORDER_SIZE
+        self.border_color = const.TRAFFIC_LIGHT_BORDER_COLOR
+        self.colors = const.TRAFFIC_LIGHT_COLORS
         self.init_colors = ['green', 'red']
         self.radius = cell_width / 15
         self.change_time = random.randint(self.min_interval, self.max_interval)

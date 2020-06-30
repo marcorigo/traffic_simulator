@@ -1,5 +1,5 @@
 {
-    "USE_AZURE" : true,
+    "USE_AZURE" : false,
     "SEND_INTERVAL" : 2,
     "EVENTHUB_CONN_STRING" : "",
     "EVENTHUB_NAME" : "data"

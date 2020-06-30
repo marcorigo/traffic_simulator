@@ -31,7 +31,7 @@ class const():
         'yellow': (247, 228, 86),
         'green' : (87, 226, 40),
     }  
-    SPEED_TIME_MULTIPLIER = 10
+    SPEED_TIME_MULTIPLIER = 1
 
 
     TRAFFIC_LIGHT_YELLOW_TIME /= SPEED_TIME_MULTIPLIER

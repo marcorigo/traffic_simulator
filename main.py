@@ -14,7 +14,6 @@ from game_map import Map
 from render import RenderEngine
 import pygame
 from veichle import Veichle
-from traffic_light import TrafficLight
 
 
 BLOCK_SIZE = const.BLOCK_SIZE
@@ -40,15 +39,16 @@ def game():
     while True:
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
-                pygame.quit()
+                try:
+                    pygame.quit()
+                except:
+                    pass
 
         if not const.USE_TEXTURES:
             canvas.fill(BACKGROUND_COLOR)
 
         DT = clock.get_time() / 1000 * SPEED_TIME_MULTIPLIER
         Veichle.dt = DT
-        TrafficLight.dt = DT
-        
 
         game_map.update()
 

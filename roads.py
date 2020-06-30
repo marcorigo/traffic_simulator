@@ -1,7 +1,8 @@
 #import time
 #import random
-import traffic_light as tf
+from traffic_light import TrafficLight
 from const import const
+
 
 class Road:
     def __init__(self, cellX, cellY, cell_width, side_walk, road_type):
@@ -24,31 +25,40 @@ class Road:
     def leftSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x, self.y, self.border, self.cell_width, self.side_walk_color)
 
+
     def rightSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x + self.cell_width - self.border, self.y, self.border, self.cell_width, self.side_walk_color)
 
+
     def topSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x, self.y, self.cell_width, self.border, self.side_walk_color)
-    
+
+
     def bottomSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x, self.y + self.cell_width - self.border, self.cell_width, self.border, self.side_walk_color)
+
 
     def topLeftSideWalk(self,renderEngine):
         renderEngine.drawRect(self.x, self.y, self.border, self.border, self.side_walk_color)
 
+
     def topRightSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x + self.cell_width - self.border, self.y, self.border, self.border, self.side_walk_color)
+
 
     def bottomLeftSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x, self.y + self.cell_width - self.border, self.border, self.border, self.side_walk_color)
 
+
     def bottomRightSideWalk(self, renderEngine):
         renderEngine.drawRect(self.x + self.cell_width  - self.border, self.y + self.cell_width - self.border, self.border, self.border, self.side_walk_color)
+
 
     def orizontalRoadLines(self, renderEngine):
         for i in range(self.road_line_quantity):
             renderEngine.drawRect(self.x + self.road_line_section * i, self.y + self.cell_width / 2 - self.road_line_height / 2, self.road_line_width, self.road_line_height, (242, 242, 242))
-        
+
+
     def verticalRoadLines(self, renderEngine):
         for i in range(self.road_line_quantity):
             renderEngine.drawRect(self.x + self.cell_width / 2 - self.road_line_height / 2, self.y + self.road_line_section * i, self.road_line_height, self.road_line_width, (242, 242, 242))
@@ -58,6 +68,7 @@ class StraightRoad(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = True):
         super().__init__(cellX, cellY, cell_width, border, road_type)
         self.rotation = rotation
+
 
     def draw(self, renderEngine):
 
@@ -79,24 +90,26 @@ class StraightRoad(Road):
             self.leftSideWalk(renderEngine)
             self.verticalRoadLines(renderEngine)
 
+
 class Intersection(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type):
         super().__init__(cellX, cellY, cell_width, border, road_type)
         self.road_allowed = [1, 3]
-        self.traffic_light = tf.TrafficLight(cell_width)
-
+        self.traffic_light = TrafficLight(cell_width)
 
 
     def can(self, veichle):
-        if veichle.facing in self.road_allowed:
+        if veichle.facing in self.traffic_light.road_allowed:
             return True
         return False
 
-    def checkTrafficLight(self):
+
+    def updateTrafficLight(self):
         self.traffic_light.update()
 
+
     def draw(self, renderEngine):
-        self.checkTrafficLight()
+        self.updateTrafficLight()
 
         if self.useTextures:
             self.drawTrafficLights(renderEngine)
@@ -113,18 +126,20 @@ class Intersection(Road):
         # Draw traffic lights
         self.drawTrafficLights(renderEngine)
 
+
     def drawTrafficLights(self, renderEngine):
-        self.traffic_light.draw(renderEngine,self)
+        self.traffic_light.draw(renderEngine, self)
     #     self.traffic_light.top(renderEngine, self.traffic_light.colors[self.traffic_light.y_light], self.traffic_light.radius)
     #     self.traffic_light.bottom(renderEngine, self.traffic_light.colors[self.traffic_light.y_light], self.traffic_light.radius)
     #     self.traffic_light.left(renderEngine, self.traffic_light.colors[self.traffic_light.x_light], self.traffic_light.radius)
     #     self.traffic_light.right(renderEngine, self.traffic_light.colors[self.traffic_light.x_light], self.traffic_light.radius)
 
+
 class TRoad(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = 0):
         super().__init__(cellX, cellY, cell_width, border, road_type)
         self.rotation = rotation
-        self.traffic_light = tf.TrafficLight(cell_width)
+        self.traffic_light = TrafficLight(cell_width)
         if self.rotation == 1:
             self.facing_x_axes = [2, 4]
             self.facing_y_axes = [3]
@@ -143,16 +158,19 @@ class TRoad(Road):
 
         self.road_allowed = self.facing_y_axes
 
+
     def can(self, veichle):
-        if veichle.facing in self.road_allowed:
+        if veichle.facing in self.traffic_light.road_allowed:
             return True
         return False
 
-    def checkTrafficLight(self):
+
+    def updateTrafficLight(self):
         self.traffic_light.update()
 
+
     def draw(self, renderEngine):
-        self.checkTrafficLight()
+        self.updateTrafficLight()
 
         if self.useTextures:
             self.drawTrafficLights(renderEngine)
@@ -194,6 +212,7 @@ class TRoad(Road):
     def drawTrafficLights(self, renderEngine):
         self.traffic_light.draw(renderEngine,self,self.rotation)
 
+
 class Curve(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type, rotation = 0):
         super().__init__(cellX, cellY, cell_width, border, road_type)
@@ -232,6 +251,7 @@ class Curve(Road):
             self.bottomSideWalk(renderEngine)
             self.topLeftSideWalk(renderEngine)
 
+
 class Grass(Road):
     def __init__(self, cellX, cellY, cell_width, border, road_type):
         super().__init__(cellX, cellY, cell_width, border, road_type)
@@ -241,8 +261,6 @@ class Grass(Road):
         if self.useTextures:
             return
         
-
-
 
 def roadBuilder(road_type, cellX, cellY, cell_width, border, rotation = True):
     if road_type == '═' or road_type == '➡' or road_type == '⬅':

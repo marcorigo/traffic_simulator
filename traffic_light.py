@@ -4,7 +4,6 @@ from const import const
 
 
 class TrafficLight():
-    dt = 0
     def __init__(self, cell_width):
         self.yellow_light_time = const.TRAFFIC_LIGHT_YELLOW_TIME
         self.min_interval = const.TRAFFIC_LIGHT_MIN_TIME_CHANGING
@@ -89,11 +88,8 @@ class TrafficLight():
 
 
     def update(self):
-        self.change_time *= self.dt
-        self.yellow_light_time *= self.dt
-
         now = int(time.time())
-
+    
         if self.last_change + self.change_time < now:
             self.last_change = now
 

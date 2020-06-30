@@ -215,10 +215,11 @@ class Map:
 
 
     def drawRoads(self):
-        if not self.tileMap:
-            self.tileMap = self.renderEngine.createSurfaceFromMap(self.map, width = self.getMapWidth(), height = self.getMapHeight())
-        
-        self.renderEngine.drawImage(self.tileMap, 0, 0)
+        if self.useTextures:
+            if not self.tileMap:
+                self.tileMap = self.renderEngine.createSurfaceFromMap(self.map, width = self.getMapWidth(), height = self.getMapHeight())
+            
+            self.renderEngine.drawImage(self.tileMap, 0, 0)
 
         for y in range(len(self.map)):
             for x in range(len(self.map[y])):

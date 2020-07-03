@@ -40,10 +40,10 @@ class Map:
         self.bots = []
         self.spawners = []
         self.explosions = []
+        # self.map_with_roads_id = []
 
         if cfg['USE_AZURE']:
             self.SendVehicleDataThread = SendVehicleDataThread('Data-Sender')
-            self.SendVehicleDataThread.start()
         else:
             self.SendVehicleDataThread = None
 
@@ -51,6 +51,7 @@ class Map:
 
 
     def createRoads(self):
+        # self.identifyRoad(self.map)
         for y in range(len(self.map)):
             for x in range(len(self.map[y])):
                 road_type = self.map[y][x]
@@ -281,4 +282,5 @@ class Map:
             return
 
         if not self.SendVehicleDataThread.is_alive():
-            self.SendVehicleDataThread.run(self.bots)
+            self.SendVehicleDataThread = SendVehicleDataThread('Data-Sender', self.bots)
+            self.SendVehicleDataThread.start()

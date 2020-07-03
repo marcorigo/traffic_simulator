@@ -17,12 +17,17 @@ SEND_INTERVAL = config['SEND_INTERVAL']
 CONN_STRING = config['EVENTHUB_CONN_STRING']
 NAME = config['EVENTHUB_NAME']
 
+client = None
+
+if config['USE_AZURE']:
+    client = EventHubProducerClient.from_connection_string(conn_str = CONN_STRING, eventhub_name = NAME)
 
 class SendDataThread (threading.Thread):
-    def __init__(self, name):
+    def __init__(self, name, data):
         threading.Thread.__init__(self, daemon=True)
         self.name = name
-        self.client = None
+        self.data = data
+        self.client = client
         self.init()
         atexit.register(self.closeConnection)
 
@@ -31,14 +36,12 @@ class SendDataThread (threading.Thread):
         if not CONN_STRING or not NAME:
             raise ValueError("No EventHubs URL or name supplied.")
 
-        self.client = EventHubProducerClient.from_connection_string(conn_str = CONN_STRING, eventhub_name = NAME)
 
-
-    def run(self, bots = []):
-        if not bots:
+    def run(self):
+        if not self.data:
            logger.info('Started send data thread')
 
-        self.sendData(bots)
+        self.sendData(self.data)
 
         logger.info('Bots data successfully sended')
 
@@ -70,16 +73,16 @@ class SendDataThread (threading.Thread):
 
 
 class  SendVehicleDataThread (SendDataThread):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, data = []):
+        super().__init__(name, data)
         
     def createJson(self, bot):
         return {'id': bot.veichle.id, 'type': type(bot.veichle).__name__, 'road': bot.getCurrentRoad(), 'velocity': math.sqrt((math.pow(float(bot.veichle.velocity.x), 2)) + (math.pow(float(bot.veichle.velocity.y), 2)))}
 
 
 class  SendTrafficLightDataThread (SendDataThread):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, data = []):
+        super().__init__(name, data)
         
     def createJson(self, bot):
         pass

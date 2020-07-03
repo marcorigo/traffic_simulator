@@ -129,10 +129,6 @@ class Intersection(Road):
 
     def drawTrafficLights(self, renderEngine):
         self.traffic_light.draw(renderEngine, self)
-    #     self.traffic_light.top(renderEngine, self.traffic_light.colors[self.traffic_light.y_light], self.traffic_light.radius)
-    #     self.traffic_light.bottom(renderEngine, self.traffic_light.colors[self.traffic_light.y_light], self.traffic_light.radius)
-    #     self.traffic_light.left(renderEngine, self.traffic_light.colors[self.traffic_light.x_light], self.traffic_light.radius)
-    #     self.traffic_light.right(renderEngine, self.traffic_light.colors[self.traffic_light.x_light], self.traffic_light.radius)
 
 
 class TRoad(Road):

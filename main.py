@@ -52,11 +52,12 @@ def game():
 
         game_map.update()
 
-        message = 'Time: ' + str(int(pygame.time.get_ticks() / 1000))
+        message = 'Time: ' + str(int(pygame.time.get_ticks() / 1000 * SPEED_TIME_MULTIPLIER))
         renderEngine.drawText(message, 20, 20)
         renderEngine.drawText('Fps: ' + str(int(clock.get_fps())), 20, 40)
 
         pygame.display.update()
         pygame.display.flip()
         clock.tick(180)
+
 game()
